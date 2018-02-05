@@ -111,3 +111,134 @@ This will create a new folder caller `HTTPTrigger` so that the whole tree looks 
 ├── host.json
 └── local.settings.json
 ```
+
+### function.json configuration
+
+The `function.json` is the configuration of the Azure Function. It defines the bindings of the function which will trigger execution. The default contents of this looks like:
+
+```json
+{
+  "disabled": false,
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "route": "HttpTriggerJS/name/{name}",
+      "methods": [
+        "get"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    }
+  ]
+}
+```
+
+The `disabled` property allows you control whether the function is active (`false`) or inactive (`true`). The `bindings` property contains an array triggers and bindings. All bindings must have a `name`, `type` and `direction` property.
+
+The first binding, called `req`, is an inbound (`"direction": "in",`) HTTP trigger (`"type": "httpTrigger",`). The `name` property should be equal to the variable name used to hold the incoing connection.
+
+The default `authLevel` requires a function-specific API-key to be given to allow execution. There are three valid values for this property: `anonymous`, `function`, `admin`. If not present, then the default is `function`. Admin access requires the functions "master" key, which cannot be revoke and provides access to the runtime APIs. This should not be shared with third parties and used with caution. In this case all I need is anonymous access.
+
+The `methods` property is an array of acceptable HTTP verbs. By default it is set to allow only GET requests. If the property is not present then the function will allow all verbs. For this case, GET is all I need.
+
+The `route` property specifies the routes that the function will be invoked on. If not present it will trigger on `<FunctionName>`. 
+
+The second binding is the outbound http response. This must always be present and the name must be the property name on the `context` used in the code for the response. The adjust file looks like:
+
+```json
+{
+  "disabled": false,
+  "bindings": [
+    {
+      "direction": "in",
+      "name": "req",
+      "type": "httpTrigger",
+      "authLevel": "anonymous",
+      "methods": ["get"]
+    },
+    {
+      "direction": "out",
+      "name": "res",
+      "type": "http"
+    }
+  ]
+}
+```
+
+### index.js script
+
+This is the actual executable of the function. You need to export a function using the standard `module.exports` syntax, which will be executed when the function is triggered. The `func new` method will create a starting point. Following a little tidying, the code for my function looks like:
+
+```javascript
+module.exports = (context, req) => {
+  context.log('JavaScript HTTP trigger function processed a request.')
+  context.bindings.res = {
+    body: `<html><body>The time is ${new Date().toISOString().replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}).*/,'$1 $2')}</body></html>`,
+    headers: { 'content-type': 'text/html' }
+  }
+  context.done()
+}
+```
+
+This is a simple function which will return a basic HTML page displaying the current time. 
+
+The arguments of the function always start with a `context` object. The other arguments passed represent each of the bindings defined in the `function.json`. As always with JavaScript, you can just ignore these if you don't need them.
+
+The context object provides a set of useful properties for interacting with the runtime environment. The first property `context.log` allows you to log messages from the function. The standard `console.log` method is not available. In addition the log function has `error`, `warn`, `info` and `verbose` methods you can use for different severity. The severity of the default method can be controlled in the `host.json` file.
+
+The bindings are also exposed via the `context` object as a `bindings` property. Here all the bindings are stored by their name allowing for easy access. For example, the incoming request can be accessed as `context.bindings.req` for this example. The outgoing bindings can also be set using this context (as in the code above).
+
+Finally, the `context.done` method tells the runtime that execution has completed. This method allows for the development of asyncronous functions, calling back once everything is done. The method takes two optional arguments. The first allows you to pass back an error to the runtime. THe second allows you to pass an object whose properties will be used to populate the outgoing bindings.
+
+## Configuring host.json
+
+Now we need to set up the `host.json`. There is a massive amount of [options](https://docs.microsoft.com/en-gb/azure/azure-functions/functions-host-json) on this file. For this case we need to configure only a few:
+
+```json
+{ 
+    "functions": [ "HTTPTrigger" ],
+    "id": "3adb8c2ca78f4171bab74dfc9c600a2f",
+    "functionTimeout": "00:00:30",
+    "http": {
+        "routePrefix": ""
+    },
+    "tracing": {
+        "consoleLevel": "verbose"
+    }
+}
+```
+
+The first two properties are only needed for local execution. When running within Azure they are not needed. The `functions` is just an array list of all the functions to run. The `id` property is a random unique id. I generated this one using a simple PowerShell command - `(New-Guid).ToString().Replace("-","").ToLower()`.
+
+The `functionTimeout` specifies how long execution is allowed to take. Any value from 1 second to 10 minutes is allowed. 
+
+The `http` settings control the HTTP binding. In this case I am removing the `/api` default prefix so the function root url is used.
+
+Finally, the `tracing` settings specify that `context.log` is as the `trace` level.
+
+## Running locally and attaching VS Code
+
+We now have a function ready to test. All we need to do is run `func host start` and the process will run. 
+
+![Running Function](assets/azure-functions/running-locally.jpg)
+
+You can access the output of the function via the first displayed Uri in a browser, if all is working it will display the current time:
+
+![Local Output](assets/azure-functions/result-locally.jpg)
+
+Note in the console output above, there is a debugger sat listening. The `func init` command set up for VS Code to be able to connect to this. If you go to the Debug tab (Crtl-Shift-D) within VS Code there should be an entry `Attach to Azure Functions`. Click play and you will be able to set a break point inside `index.js` and debug:
+
+![Debugging Locallay](assets/azure-functions/debugging-locally.jpg)
+
+## Publishing to Azure
+
+While the Functions Core Tools allow for the updating of a function they don't support the initial publishing of a function. To do that from the command line you will need to install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/overview?view=azure-cli-latest).
+
+First you will log into the CLI. Run `az login` and follow the instructions to log in within a browser. It will return a JSON structure of all your subscriptions if it logs in successfully. If you run the command `az accout list -o tsv`, you will get a table view of all you subscriptions. The third column will show the active subscription as `True`.  You can change the subscription by using the command `az account set --subscription <Subscription>` passing either the subscription id (column 6 from the list) or if unique the subscription name (column 4).
+
