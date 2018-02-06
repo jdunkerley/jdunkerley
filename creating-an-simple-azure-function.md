@@ -2,17 +2,17 @@
 
 ![Azure Function Logo](assets/azure-functions/logo.jpg)
 
-Azure Functions are a serverless way to create application within the Azure cloud. They can be written in a variety of languages (C#, JavaScript for example) using a variety of tools (or just in the web UI). This post walks through creating a simple HTTP server which will return the current time. The function will be written in JavaScript using VS Code (and all the comamnds I use can be executed within the integrated PowerShell terminal there as well).
+Azure Functions are a serverless way to create applications within the Azure cloud. They can be written in a variety of languages (C#, JavaScript for example) using a variety of tools (or just inside the web UI). This post walks through creating a simple HTTP server which will return the current time. The function will be written in JavaScript using VS Code (and all the comamnds I use can be executed within the integrated PowerShell terminal there as well) using the Azure CLI.
 
-## Why Using Functions
+## Why Use Functions
 
-Serverless architecture is very popular at the moment. They allow you to easily get an application or service up and running and easily scale from a tiny instance through to managing a huge number of requests. The 'pay and go' nature of serverless instance means you only pay for what you need and don't have redundant processes running unnecessarily. In addition due to the nature of the serverless instance, there are some nice security benefit in that each execution of process is running in a known state.
+Serverless architectures are very popular at the moment. They allow you to easily get an application or service up and running and quickly scale from a tiny instance through to managing massive simultaneous requests. The 'pay and go' nature of serverless instances mean you only pay for what you need and don't have redundant processes or machines running unnecessarily. In addition, due to the nature of the serverless instance, there are some nice security benefits in that each execution runs in a known state in its own space.
 
-[Azure Functions](https://azure.microsoft.com/en-us/services/functions/) allow you to provide a simple application with different 'hooks' which trigger it to run. These can be simple web hooks (as will be the case in this walkthrough) or events on other cloud based services (for example a file being written to OneDrive). One nice benefit of Azure Functions is that they can easily be tied into services of other vendors. They are of course not alone, AWS offers [Lambdas](https://aws.amazon.com/lambda/) and GCP has [functions](https://cloud.google.com/functions/) (which is still in beta).
+[Azure Functions](https://azure.microsoft.com/en-us/services/functions/) allow you to provide a simple application with different 'hooks' which trigger it to run. These can be simple web hooks (as will be the case in this walkthrough) or events on other cloud based services (for example a file being written to OneDrive). One nice benefit of Azure Functions is that they can easily be tied into services of other vendors for example Twillio or GitHub. They are of course not alone, AWS offers [Lambdas](https://aws.amazon.com/lambda/) and GCP has its own [functions](https://cloud.google.com/functions/).
 
-Their pricing model is based on the compute time of the function. As there is no virtual machine or even container running when the function isn't executing this is a great model. Both [Azure](https://azure.microsoft.com/en-us/pricing/details/functions/) and [AWS](https://aws.amazon.com/lambda/pricing/) have the same free tier of 400,000 GB-seconds or 1 million requests. Exactly how quickly you will go through the GB-s will depend on complexity of the function and the size of the host instance you choose.
+Their pricing model is based on the compute time of the function. As there is no virtual machine or even container running when the function isn't executing this is a great model. Both [Azure](https://azure.microsoft.com/en-us/pricing/details/functions/) and [AWS](https://aws.amazon.com/lambda/pricing/) have the same free tier of 400,000 GB-seconds or 1 million requests. Exactly how quickly you will go through the GB-s will depend on complexity of the function and the size of the underlying host instance you choose.
 
-So which one to use - AWS, Azure of GCP? At the time of writing, GCP is still in beta and not subject to any SLA or guarentees. For that reason, I would probably select one of the other two. The language range of AWS and Azure may be a factor - for example AWS support Java where as Azure does not. Lambdas are more limited to other AWS services but if you are already in AWS that is probably not an issues. The two big things that I think Azure functions have over AWS lambda are great local debugging support and the ability to deploy on premise. I won't cover the on premise side in this post but read the overview of [Azure Function Runtime](https://docs.microsoft.com/en-us/azure/azure-functions/functions-runtime-overview) for more details.
+So which one to use - AWS, Azure of GCP? At the time of writing, GCP is still in beta and not subject to any SLA or guarentees. For that reason, I would probably select one of the other two. The language range of AWS and Azure may be a factor - for example AWS supports Java whereas Azure support is still in preview. Lambda is more limited to other AWS services, Functions more aimed at Azure - so you are already in AWS or Azure that will be a big factor. The two big things that I think Azure Functions have over AWS Lambda are great local debugging support and the ability to deploy on premise. I won't cover the on premise side in this post but read the overview of [Azure Function Runtime](https://docs.microsoft.com/en-us/azure/azure-functions/functions-runtime-overview) for more details.
 
 ## Getting Started
 
@@ -234,11 +234,39 @@ You can access the output of the function via the first displayed Uri in a brows
 
 Note in the console output above, there is a debugger sat listening. The `func init` command set up for VS Code to be able to connect to this. If you go to the Debug tab (Crtl-Shift-D) within VS Code there should be an entry `Attach to Azure Functions`. Click play and you will be able to set a break point inside `index.js` and debug:
 
-![Debugging Locallay](assets/azure-functions/debugging-locally.jpg)
+![Debugging Locally](assets/azure-functions/debugging-locally.jpg)
 
 ## Publishing to Azure
 
-While the Functions Core Tools allow for the updating of a function they don't support the initial publishing of a function. To do that from the command line you will need to install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/overview?view=azure-cli-latest).
+While the Functions Core Tools allow for the updating of a function they don't support the initial publishing of a functionapp. To do that from the command line, you will need to install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/overview?view=azure-cli-latest).
 
-First you will log into the CLI. Run `az login` and follow the instructions to log in within a browser. It will return a JSON structure of all your subscriptions if it logs in successfully. If you run the command `az accout list -o tsv`, you will get a table view of all you subscriptions. The third column will show the active subscription as `True`.  You can change the subscription by using the command `az account set --subscription <Subscription>` passing either the subscription id (column 6 from the list) or if unique the subscription name (column 4).
+First, log into the CLI. Run `az login` and follow the instructions to log in within a browser. It will return a JSON structure of all the associated subscriptions if it logs in successfully. Running the command `az accout list -o table`, will get a table view of this list. The third column will show the active subscription as `True`.  The active subscription can be changed by using the command `az account set --subscription <Subscription>` passing either the subscription id (column 6 from the list) or if unique the subscription name (column 4).
 
+Next, set up a new or select an existing the resource group. Running the command `az group list -o table`, will get a table of all current resource groups. To create a new one then use the command `az group create --name <Name> --location <Location>`. To get a list of currently available locations, execute the command `az account list-locations -o table`. Currently there are 26 locations all over the world:
+
+![Azure Locations](assets/azure-functions/locations.jpg)
+
+Now set up a new or choose an existing storage account within the resource group. The command `az storage account list -o table` will show all the storage accounts within the active subscription. To create a new one run `az storage account create --name <Name> --location <Location> --resource-group <ResourceGroup> --sku Standard_LRS`. This will create Standard Locally Redundant Storage. You can choose a few other skus:
+
+- Standard_LRS - *Standard Locally-Redundant Storage*
+- Standard_GRS - *Standard Geo-Redundant Storage*
+- Standard_RAGRS - *Standard Read-Access Geo-Redundant Storage*
+- Standard_ZRS - *Standard [Zone Redundant Storage](https://blogs.msdn.microsoft.com/windowsazurestorage/2014/08/01/introducing-zone-redundant-storage/)*
+- Premium_LRS - *Premium Locally-Redundant Storage*
+
+Finally, to create the function app run `az functionapp create --name <FunctionAppName> --storage-acount <StorageAccount> --resource-group <ResourceGroup> --consumption-plan-location <Location>`. This will create the functionapp and give it a public URL you can use to access it, something like `https://myfirstfunction.azurewebsites.net/`. This is however an empty function. 
+
+Now we need to move back to the Function Core Tools. Again, first need to login and select the subscription. Run `func azure login` and then log in again. Then run `func azure subscriptions set <Subscription>` to set the active subscription. Finally run `func azure functionapp publish <FunctionAppName>` within the folder of the app to publish the function to Azure.
+
+To summarise the command to set it all up and publish look like:
+
+```bash
+az login
+az account set --subscription 'my-azure-subscription'
+az group create --name 'my-functions-group' --location uksouth
+az storage account create --name 'my-functions-storage' --location uksouth --resource-group 'my-functions-group' --sku Standard_LRS
+az functionapp create --name 'my-functions-app' --storage-account 'my-function-storage' --resource-group 'my-functions-group' --consumption-plan-location uksouth
+func azure login
+func azure subscriptions set 'my-azure-subscription'
+func azure functionapp publish 'my-functions-app'
+```
