@@ -2,17 +2,18 @@
 
 I've been using AWS Lambda for a little while now. It's a great platform and allows you to rapidly get something up and running. So far, I've built them in both JavaScript and Python - both of which have been very straight forward. I've spent a fair chunk of my development life working in C# so wanted to try putting one together in C# using .Net Core.
 
-I've been planning to build a simple Diabetes log app for my own use and this will be the base of a series of posts on creating a serverless application on AWS (and probably Azure as well). 
+I've been planning to build a simple Diabetes log app for my own use and this will be the base of a series of posts on creating a serverless application on AWS (and possibly Azure as well). All the code will be on [GitHub](https://github.com/jdunkerley/diabeteslog/blob/).
 
 ## Getting Set Up
 
-For this walkthrough, I will be using [.Net Core 2.2 SDK](https://dotnet.microsoft.com/download) but will have to target .Net Core 2.1 as this is the currently the highest supported version in Lambda. Lets start by getting an empty C# Class Library. If you create a new folder and then run:
+For this walkthrough, I will be using [.Net Core 2.2 SDK](https://dotnet.microsoft.com/download) but will have to target .Net Core 2.1 as this is the currently the highest supported version in Lambda. Lets start by getting an empty C# Class Library. If you create a new folder and then run the following within the folder:
 
 ```bash
 dotnet new classlib
 ```
 
-This will create the empty project structure:
+This will create the empty project structure based on the folder name (diabeteslog in my case):
+
 ```bash
 ├── Class1.cs
 ├── diabeteslog.csproj
@@ -33,6 +34,7 @@ First, we need to reconfigure the project to target `dotnetcore2.1`. If you edit
   </PropertyGroup>
 
 </Project>
+```
 
 Next, we need to add the reference to the Core Lambda library. Run:
 
