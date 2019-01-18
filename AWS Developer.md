@@ -1,8 +1,26 @@
-This is my set of notes 
+This is my set of notes for the AWS Developer Associate Exams. It based on having done the SA Associate
+
+# Weekly Guide
+*Times shown as at 18-Jan-2018*
+
+1. Revisit IAM / EC2 / S3 (5:26:18 - but content all covered in SA)
+2. Look at Serverless (2:26:45)
+3. Build something in Serverless (2 week project)
+4. DynamoDB (1:36:02)
+5. KMS and Other AWS Services (1:37:54)
+6. Developer Theory (2:50:50)
+7. Advanced IAM, Monitoring (1:15:42)
+8. Practice Papers (2 weeks)
+
+**Total Time: 10 weeks**
+
+# IAM
+
+# EC2
 
 # S3
 
-# Lambda
+# Serverless Computing
 
 # DynamoDB
 
@@ -16,8 +34,8 @@ This is my set of notes
 - Model: 
     - Tables, Items (like a row), Attributes (like a column)
     - Key: Name of Data, Value: data
-    - Documents in JSON, HTML or ML
-- Stored by Primary Key
+    - Documents in JSON, HTML or XML
+- Stored by Primary Key (also called HashKey)
     - 2 Types: 
     - Partition Key
          - Used as part of hash to determine physical location data is stored
@@ -50,6 +68,14 @@ This is my set of notes
     - All or nothing action across multiple tables
     - Durable across system failure
     - e.g. buying an item in a game
+- TTL
+    - Time to live
+    - Expiry time for data
+    - Stored as attribute in Unix timestamp format
+    - Reduce storage cost
+    - Automatically deleted at some point after (within 48 hours) 
+    - Can filter in scans/queries
+    - Manage TTL lets you set attribute and lets you preview state
 
 ## Query or Scan
 - By default All attributes
@@ -83,6 +109,10 @@ This is my set of notes
 - Can change price model once a day
 - Write costs more than read
 - Partial items round up
+- ProvisionedThroughputExceededExceptions
+    - Request rate too high for capacity
+    - AWS SDK will automatically retry using exponential back off (feature of every AWS SDK)
+    - If hand rolled then use exponential back off approach
 
 ## DyanamoDB Accellerator (DAX) or Elasticache
 - In Memory cache for DynamoDB
@@ -112,3 +142,94 @@ aws dynamodb create-table
   --key-schema
   --attribute-definitions
 ```
+
+*ToDo*
+
+## Dynamo DB Streams
+- Time order sequence of modification events (CUD)
+- Stored for 24 hours
+- Encrypted at rest
+- Dedicated enpoint
+- Trigger lambdas (lambda polls the stream)
+- Near real time
+
+# KMS
+
+- Key Management Service
+- Main difference from CloudHSM is that KMS is shared hardware rather than dedicated
+- Manage encryptions keys
+- 2 roles - use (encrypt/decrypt) or manage
+  - Can add external users as well as IAM Users and Groups
+- Included in EBS, S3, RDS, Redshift, Workmail, Elastic Transcoder and others 
+- Part of IAM
+- *Not global* - keys are regional
+- When creating a key - Key material can be from KMS or external
+- When deleting a key
+  - First disable the key
+  - Then schedule deletion (within 7 - 30 days)
+- Customer Master Key
+  - Metadata: Alias, creation date, description and key state
+  - Key material 
+  - Can not be exported (need to use Cloud HSM if you want to export)
+- Envelope Encryption
+  - Envelope Key (key used to encrypt data)
+  - Envelope Key is encrypted by the customer master key
+  - Data Key is decrypted Envelope Key
+- KMS API Calls
+  - aws kms encrypt --key-id <KeyName> --plaintext <File/Text> --output text --query CipherTextBlob
+  - aws kms decrypt --key-id <KeyName> --ciphertext-blob <File/Text> --output text --query PlainText
+  - aws kms re-encrypt --ciphertext-blob <File/Text> --destination-key-id <KeyName>
+    - Take encrypted one, decrypt and then re-encrypt it
+  - aws kms enable-key-rotation
+    - Key will automatically be rotated once a year
+    - only is key material from KMS (not imported)
+
+# SQS
+
+- Decouple components
+- Oldest AWS service
+- Webservice access to a queue
+- 256KB of text (any format e.g. JSON/XML)
+- Retention is 1 min to 14 days (default 4 days)
+- Poll based system not a push based systems (use SNS)
+- Can work as a buffer layer (producer faster than consumer)
+  - Could use length of queue to autoscale processors
+- Messages marked as invisible while being processed
+  - If processing fails re-appears after visibility time out
+  - Default time out is 30 s 
+  - Maximum time out is 12 hours
+- Two Types of Queue
+  - Standard
+    - Delivered at least once
+    - Best effort ordering
+    - Nearly unlimited rate
+  - FIFO
+    - Exactly once 
+    - Firt in first out
+    - Max of 300 tx / s
+    - Support message groups 
+- Long Polling
+  - Doesnt return from request until either timeout or a message sent
+  - Reduces costs
+
+# SNS
+
+- Web service to send notifications
+- Push to mobile devices, SMS, email, SQS or HTTP endpoint
+  - Also can trigger a lambda
+  - Simple APIs
+- Grouped by topics
+  - Allows recipients to subscribe
+  - Support different target types and more than one subscriber
+- Redundant storage across multiple AZs
+- Push based (pub-sub)
+- Pricing
+  - $0.5 / 1m Requests
+  - $0.06 / 100k HTTP deliveries
+  - $0.75 / 100 SMS
+  - $2 / 100k emails
+- SES
+  - Simple Email Service
+  - Automated emails (e.g. Marketing email, shipping email)
+  - Can receive email as well (to S3 or trigger SNS / Lambda)
+  - Not subscription based just need email of target
