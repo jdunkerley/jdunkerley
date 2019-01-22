@@ -233,3 +233,73 @@ aws dynamodb create-table
   - Automated emails (e.g. Marketing email, shipping email)
   - Can receive email as well (to S3 or trigger SNS / Lambda)
   - Not subscription based just need email of target
+
+# Elastic Beanstalk
+
+- https://www.youtube.com/watch?v=SrwxAScdyT0
+- Deploying and scaling Web Apps
+  - Deployment
+  - Provisioning
+  - Load Balancing / AutoScaling
+- Written in Java, .Net, PHP, NodeJS, Python, Ruby, Go, Docker
+- Widely used platfroms Tomcat, NGINX, IIS, etc.
+- Can be within a VPC
+- Can include additional resources such as RDS
+- GUI driven
+  - Control of EC2 type
+  - EBS can fully manage or can take over full EC2 management
+  - Managed platform updates 
+      - OS, PHP etc
+      - Control times
+- Pay for and control of deployed resources
+- EBS Deployment Policy
+    - All at Once
+        - All simultaneous
+        - All go out of service (not for prod systems, for test & dev)
+        - If fails would need to roll back
+        - Works on single instance
+    - Rolling
+        - Deploys in batches 
+        - Performance impact as cluster shrinks by batch size
+        - If fails would need to roll back
+    - Rolling with Additional Batch
+        - Adds another batch
+        - Performance not impacted
+        - If fails would need to roll back
+    - Immutable
+        - Completely new fresh instances in new auto scaling group
+        - Once healthy moved to existing group and old terminated
+        - Preferred option for mission critical systems
+        - Roll back easy as just involves killing new ASG
+        - Works on single instance
+- Code and configuration in an S3 bucket
+    - Config written in JSON or YAML
+    - Called `.config` in `.ebextensions` folder
+    - .ebextensions in top level of application source code bundle
+- Delete of environment deletes whole stack
+- When using with RDS
+    - Good for Dev / Test as database coupled with environment
+    - For production, decouple and launch separately
+        - Additional Security Group on ASG
+        - Provided connection string configuration to application servers
+
+# Kinesis
+
+- Streaming data from 1000s of sources simultaneous in small sizes (Kbs)
+- Load, Analyze Streaming Data
+- 3 Services
+    - Streams
+        - Data stored in Shards
+        - 24hr to 7 day retention
+        - NUmber of Shards controls capacity of streams
+        - Consumers read and send on
+    - Firehose
+        - No need to worry about shards or streams
+        - Completely automated
+        - Can use Lambda to analyse
+        - Sends data to S3
+        - No automatic retention - either straight to Lambda, S3, Elasticsearch
+        - If to Redshift via S3
+    - Analytics
+        - SQL queries as it exists in Firehose or Streams
+        - Store in S3, Redshift, Elasticsearch
