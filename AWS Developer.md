@@ -303,3 +303,66 @@ aws dynamodb create-table
     - Analytics
         - SQL queries as it exists in Firehose or Streams
         - Store in S3, Redshift, Elasticsearch
+
+# CodeStar - CI / CD
+
+- [White Paper](https://d1.awsstatic.com/whitepapers/DevOps/practicing-continuous-integration-continuous-delivery-on-AWS.pdf)
+- Cloud9 - Code Editor
+- Code Commit (Git) ==> Code Build (Build System) ==> Tests ==> Code Deploy ==> Envronments
+- Code Pipeline links it all together
+
+## Code Commit
+- Git
+- HTTPS and SSH
+    - IAM based need to create Git credentials in IAM
+- Notifications to SNS or CloudWatch
+
+## Code Build
+
+## Code Deploy
+- Deploy to EC2, on-premise of Lambda
+- Integrates with Jenkins, GitHub, CodePipeline
+- Config management tools Ansible, Puppet and Chef
+- Two deployments methods In-Place or Blue/Green
+    - In-Place (or Rolling update):
+         - One/Half/All instance at a time is upgraded 
+         - Capacity loss, rollback involves redeploy
+         - Take out of Load Balancer during upgrade
+         - Not available for Lambda
+    - Blue-Green
+         - New instances created and deployed
+         - No capacity loss
+         - New instances added to ELB and then ready
+         - Much easier to switch back if problem (just ELB config)
+- `Deployment Configuration` set of rules as well as success/fail conditions
+- `appspec.yml` file defines the deployment actions
+    - Defines parameters for code deploy
+    - Same location as files to deploy
+    - `version`, `os` settings
+    - `files` to copy from `source` to `destination`
+    - `hooks` 
+        - `BeforeInstall` and `AfterInstall`
+        Set of commands to run (runas support and timeouts)
+- Code Deploy agent installed on EC2 or On-Premise machines
+- Service role in IAM for CodeDeploy controls permissions
+    - Download from AWS URL and run install
+    - Runs as service on AWS Linux
+- Example deploy a web app from S3 bucket to EC2
+    - `aws deploy create-application --application-name mywebapp`
+    - `aws deploy push --application-name mywebapp --s3-location s3://bucket/stuff.zip --ignore-hidden-files`
+    - Next:
+        - Define deployment group which is set of target machines
+        - Choose Deployment type
+        - Choose ASG, EC2 by Tag, OnPremise
+        - Point at Load Balancer for config
+    - Create the Deployment
+        - Gives additional options about file overwrites
+        - Can override default roll back configuration
+
+## Code Pipeline
+- CI/CD service
+- Orchestrate build, test and deployment on code changes
+- Links with Lambda, Elastic Beanstalk, Cloud Formation, ECS
+- Source code from CodeCommit, GitHub, or S3
+    - Trigger by CloudWatch alert
+- Can integrate with Jenkins
