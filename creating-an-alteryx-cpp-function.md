@@ -36,6 +36,8 @@ The next step is to adjust the project properties so it compiles with the C++ St
 
 Inside here, within `C/C++` and then `Code Generation`, there is the innocent sounding `Runtime library`. This is by default on `Multi-threaded DLL (/MD)` for Release mode and `Multi-threaded Debug DLL (/MDd)` for Debug mode. This means it will using the runtime dynamically. If you use this locally or are using the same version as Alteryx uses then it will work fine. However, for general compatibility if you switch to `Multi-threaded (/MT)` for Release mode and `Multi-threaded Debug (/MTd)` for Debug mode, then it will embed the standard library into the compiled DLL. This makes the DLL a little bit bigger but easy to distribute.
 
+I also turn off `Precompiled Headers` for all modes. They seemed to cause me issues and didnt make much difference being. Just set to `Not Using Precompiled Headers` in the project properties.
+
 I then choose to delete `stdafx.cpp`, `targetver.h` and `dllmain.cpp` files. You also need to remove the line to `#include "targetver.h"` in `stdafx.h`. This leaves a project structure which looks like:
 
 ```none
@@ -131,7 +133,7 @@ This is the definition of a custom C++ function in Alteryx. They all look like t
 
 - `typedef`: This tells the compiler to create an alias for a function pointer
 - `long`: This specifies the return type as a long. If you function succeeds you should return 1 and 0 otherwise
-- `_stdcall`: This is a calling convention for Win32 API.
+- `_stdcall`: This is a calling convention for Win32 API. More details [here](https://docs.microsoft.com/en-us/cpp/cpp/stdcall?view=vs-2017).
 - `* FormulaAddInPlugin`: This specifies that this type definition is a pointer and is called `FormulaAddInPlugin`
 - `int nNumArgs`: Alteryx will tell you how many arguments you have been passed. When we get to the XML definition for the function, you can define a variable number of arguments and then this will tell you how many we passed.
 - `FormulaAddInData *pArgs`: The input arguments are passed as an array.
@@ -175,10 +177,106 @@ extern "C" long _declspec(dllexport) _stdcall Total(int nNumArgs, FormulaAddInDa
 }
 ```
 
+Lets go over the function in detail. Starting with declaration:
 
+- `extern "C"`: This makes the C++ function not have it's name mangled by the compiler. This mean Alteryx can find it by name and link to it.
+- `long`: This specifies the return type for function.
+- `_declspec(dllexport)`: This tells the compiler to export the function in the DLL. Again, allowing Alteryx to call it.
+- `_stdcall`: As before, this specified the calling the convention.
+- `Total`: This is the name of the function. When we come to the XML definition file we must match this name exactly including case.
+- `(int nNumArgs, FormulaAddInData *pArgs, FormulaAddInData *pReturnValue)`: This is the same arguments as described in the `typedef` part above.
+
+Onto the actual function code. Picking out some highlights:
+
+```cpp
+pReturnValue->nVarType = nVarType_DOUBLE;
+```
+
+This tells Alteryx the return type is a double. It is important you tell Alteryx what type your function returns, regardless of input as parse phase uses the type to work out whether the syntax of an expression is valid.
+
+```cpp
+if (pArgs[argNum].nVarType != nVarType_DOUBLE)
+{
+	return 0;
+}
+```
+
+This is handling if we are passed an non-numeric argument. In this case, the evaluation should fail and return to Alteryx. Ideally, you would return an error message but I will talk about those in a later post.
+
+```
+if (pArgs[argNum].isNull)
+{
+	pReturnValue->isNull = 1;
+	return 1;
+}
+```
+
+In this section, I am handling a `NULL` value being passed. The function then returns `NULL` but tells Alteryx that evaluation was successful (`return 1`). When thinking about the design of Alteryx funciton, how you handle `NULL` is a very important consideration.
+
+```
+pReturnValue->isNull = 0;
+pReturnValue->dVal = total;
+return 1;
+```
+
+This is the happy path exit. The total is returned to Alteryx by setting `dVal` and stating that the result is not `NULL`. Again `return 1`, tells Alteryx that evaluation was success.
+
+At this point, try to compile the project and hopefully it will succeed. You should end up with a file structure like:
+
+```none
+├── AlteryxTotals
+│   ├── AlteryxFunction.h
+│   ├── AlteryxTotals.cpp
+│   ├── AlteryxTotals.vcxproj
+│   ├── AlteryxTotals.vcxproj.filters
+│   ├── AlteryxTotals.vcxproj.user
+│   ├── stdafx.h
+│   └── x64
+│       └── Debug
+			...
+├── AlteryxTotals.sln
+└── x64
+    └── Debug
+        ├── AlteryxTotals.dll
+        ├── AlteryxTotals.exp
+        ├── AlteryxTotals.ilk
+        ├── AlteryxTotals.lib
+        └── AlteryxTotals.pdb
+```
+
+The output we care about is the dll file in `x64\Debug`
 
 ## XML Definition File
 
+The last file we need is an XML function definition. I suggest you create it in the solution folder. It can be named anything but I would match the dll filename (e.g. AlteryxTotals.xml). Add the following:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<FormulaAddIn>
+  <Function>
+    <Name>TOTAL</Name>
+    <NumParams variable="true">0</NumParams>
+    <Category>Math</Category>
+    <InsertText>TOTAL(Value1,Value2,...)</InsertText>
+    <Description>Sums the input values</Description>
+    <Dll>
+      <Name>AlteryxTotals.dll</Name>
+      <EntryPoint>Total</EntryPoint>
+    </Dll>
+  </Function>
+</FormulaAddIn>
+```
+
+Take a look at my post on XML functions for most of the definitions. The special part for C++ functions is just the Dll part. This specifies the DLL file for Alteryx to read and the name of the function to call. This must match the case in the cpp file.
+
 ## Installing In Alteryx
 
+Copy the DLL and XML file into the `bin\RuntimeData\FormulaAddIn` folder of your Alteryx install. If you have an admin install you will need to do this as administator. Restart Alteryx and hopefully it will show up and work:
+
+![Total Test](assets/alteryx-cpp-function/total-test.jpg)
+
 ## Wrapping It Up
+
+Congratulations - you have created your first custom function in C++. In another post I'll look at handling strings and returning error messages but thats it.
+
+The code for this post is available [here](https://www.dropbox.com/s/94o1hx5c5485hkr/AlteryxTotals.zip?dl=0)
