@@ -4,7 +4,7 @@ At [Inspire EU 18](https://www.alteryx.com/inspire-europe-2018/), I presented a 
 
 ## Why Would I Want To?
 
-The main reasons for wanting to create new functions is to extend functionality. Technically, the XML Macro functions are just a shorthand to existing expressions (although this is still a very powerful ability) - you cannot make Alteryx do anything fundamentally new using this method. The C++ coded functions however allow you to do anything you like within a function (assuming your C++ is up to it!).
+The main reasons for wanting to create new functions is to extend functionality. Technically, the XML Macro functions are just a shorthand to existing expressions (although this is still a very powerful ability) - you cannot make Alteryx do anything fundamentally new using this method. The C++ coded functions, however, allow you to do anything you like within a function (assuming your C++ is up to it!).
 
 They remove a lot of the limitations that the XML functions have. It is straight forward to take a variable amount of inputs and handle appropriately. You can deal with invalid inputs gracefully and return errors (with hopefully helpful messages) back to the end user.
 
@@ -26,7 +26,7 @@ First, we need to create the new project in Visual Studio and configure as we ne
 
 ![New Project](assets/alteryx-cpp-function/create-project.jpg)
 
-This will take a few seconds to create the project. Next, configure the project. Alteryx is 64-bit (since v11 there hasn't been a [32-bit version](https://www.alteryx.com/support-32-bit-windows-systems)) - so first I remove 'x86' from the list. Go to *Build* and then *Configuration Manager*, select the drop down in *Active Solution Platform* and go to *Edit*.
+This will take a few seconds to create the project. Next, configure the project. Alteryx is 64-bit (since v11 there hasn't been a [32-bit version](https://www.alteryx.com/support-32-bit-windows-systems)) - so first I remove 'x86' from the list. Go to *Build* and then *Configuration Manager*, select the drop-down in *Active Solution Platform* and go to *Edit*.
 
 ![Configuration Manager](assets/alteryx-cpp-function/configuration-manager.jpg)
 
@@ -34,7 +34,7 @@ The next step is to adjust the project properties so it compiles with the [C++ S
 
 ![Project Properties](assets/alteryx-cpp-function/project-properties.jpg)
 
-Inside here, within *C/C++* and then *Code Generation*, there is the innocent sounding *Runtime library*. This is by default on `Multi-threaded DLL (/MD)` for Release mode and `Multi-threaded Debug DLL (/MDd)` for Debug mode. This means it will be using the runtime dynamically. If you use this locally or are using the same version as Alteryx uses, then it will work fine. However, for general compatibility if you switch to `Multi-threaded (/MT)` for Release mode and `Multi-threaded Debug (/MTd)` for Debug mode, then it will embed the standard library into the compiled DLL. This makes the DLL a little bit bigger but easy to distribute.
+Inside here, within *C/C++* and then *Code Generation*, there is the innocent-sounding *Runtime library*. This is by default on `Multi-threaded DLL (/MD)` for Release mode and `Multi-threaded Debug DLL (/MDd)` for Debug mode. This means it will be using the runtime dynamically. If you use this locally or are using the same version as Alteryx uses, then it will work fine. However, for general compatibility, if you switch to `Multi-threaded (/MT)` for Release mode and `Multi-threaded Debug (/MTd)` for Debug mode, then it will embed the standard library into the compiled DLL. This makes the DLL a little bit bigger but easy to distribute.
 
 I also turn off [Precompiled Headers](https://en.wikipedia.org/wiki/Precompiled_header) for all modes. They seemed to cause me issues and didn't make much difference being there or not. Just set to 'Not Using Precompiled Headers` in the project properties.
 
@@ -98,7 +98,7 @@ const int nVarType_DOUBLE = 1;
 const int nVarType_WCHAR = 2;
 ```
 
-This defines constants to identify the variable type Alteryx passes into your function. All custom function variables are passed either as double values (assuming a numeric type in Alteryx) or as Unicode character array (assuming a text or date time value in Alteryx). Alteryx tells you what time the variable is by passing one of the two values above. The constants just mean you can use friendly code and not need to remember which one is which!
+This defines constants to identify the variable type Alteryx passes into your function. All custom function variables are passed either as double values (assuming a numeric type in Alteryx) or as Unicode character array (assuming a text or date-time value in Alteryx). Alteryx tells you what time the variable is bypassing one of the two values above. The constants just mean you can use the friendly variable names and not need to remember which one is which!
 
 ```cpp
 struct FormulaAddInData
@@ -120,8 +120,8 @@ The above [struct](http://www.cplusplus.com/doc/tutorial/structures/) is how Alt
 
 - `nVarType`: defines the value type (double or wchar*)
 - `isNull`: indicated if the value is `NULL` - 1 for `NULL`, 0 otherwise
-- `dVal`: if the value is not `NULL` and is a double (i.e. if `isNull == 0 && nVarType == nVarType_DOUBLE`) then will be the value
-- `pVal`: if the value is not `NULL` and is a wchar* (i.e. if `isNull == 0 && nVarType == nVarType_WCHAR`) then will be the value
+- `dVal`: if the value is not `NULL` and is a double (i.e. if `isNull == 0 &amp;&amp; nVarType == nVarType_DOUBLE`) then will be the value
+- `pVal`: if the value is not `NULL` and is a wchar* (i.e. if `isNull == 0 &amp;&amp; nVarType == nVarType_WCHAR`) then will be the value
 
 The last part defines the [default constructor](https://docs.microsoft.com/en-us/cpp/cpp/constructors-cpp?view=vs-2017#default_constructors) for the struct. It is worth noting that the engine of Alteryx is amazingly memory efficient and it will reuse the struct over and over, hence you must check the `isNull` for each execution.
 
@@ -177,10 +177,10 @@ extern "C" long _declspec(dllexport) _stdcall Total(int nNumArgs, FormulaAddInDa
 }
 ```
 
-Going over the function in detail, starting with declaration:
+Going over the function in detail, starting with the declaration:
 
-- `extern "C"`: This makes the C++ function not have it's name mangled by the compiler. This mean Alteryx can find it by name and link to it.
-- `long`: This specifies the return type for function.
+- `extern "C"`: This makes the C++ function not have its name mangled by the compiler. This means Alteryx can find it by name and link to it.
+- `long`: This specifies the return type for the function.
 - `_declspec(dllexport)`: This tells the compiler to export the function in the DLL. Again, allowing Alteryx to call it.
 - `_stdcall`: As before, this specified the calling the convention.
 - `Total`: This is the name of the function. When we come to the XML definition file, we must match this name exactly including case.
@@ -219,7 +219,7 @@ pReturnValue->dVal = total;
 return 1;
 ```
 
-This is the happy path exit. The total is returned to Alteryx by setting `dVal` and stating that the result is not `NULL`. Again `return 1`, tells Alteryx that evaluation was success.
+This is the happy path exit. The total is returned to Alteryx by setting `dVal` and stating that the result is not `NULL`. Again `return 1`, tells Alteryx that evaluation was a success.
 
 At this point, try to compile the project and hopefully it will succeed. You should end up with a file structure like:
 
@@ -267,17 +267,17 @@ The last file we need is an XML function definition. I suggest you create it in 
 </FormulaAddIn>
 ```
 
-Take a look at my post on [XML functions](https://jdunkerley.co.uk/2016/08/13/beyond-alteryx-macros-part-2-how-to-create-an-xml-macro-function/) for most of the meanings of the XML. The special part for C++ functions is just the `Dll` part. This specifies the name of the file for Alteryx to read and the name of the function to call (`EntryPoint`). This is *case-sensitive* and must match the case in the cpp file exactly.
+Take a look at my post on [XML functions](https://jdunkerley.co.uk/2016/08/13/beyond-alteryx-macros-part-2-how-to-create-an-xml-macro-function/) for most of the meanings of the XML. The special part for C++ functions is just the `Dll` part. This specifies the name of the file for Alteryx to read and the name of the function to call (`EntryPoint`). This is *case-sensitive* and must match the case in the *cpp* file exactly.
 
 ## Installing in Alteryx
 
-Copy the DLL and XML file into the `bin\RuntimeData\FormulaAddIn` folder of your Alteryx install. If you have an admin install, you will need to do this as an administator. Restart Alteryx and hopefully it will show up and work:
+Copy the DLL and XML file into the `bin\RuntimeData\FormulaAddIn` folder of your Alteryx install. If you have an admin install, you will need to do this as an administrator. Restart Alteryx and hopefully, it will show up and work:
 
 ![Total Test](assets/alteryx-cpp-function/total-test.jpg)
 
 ## Wrapping It Up
 
-Congratulations - you have created your first custom function in C++. In another post I'll look at handling strings and returning error messages.
+Congratulations - you have created your first custom function in C++. In another post, I'll look at handling strings and returning error messages.
 
 The code for this post is available [here](https://www.dropbox.com/s/94o1hx5c5485hkr/AlteryxTotals.zip?dl=0)
 
