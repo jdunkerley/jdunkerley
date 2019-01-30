@@ -16,6 +16,27 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 
 # IAM
 
+## Policy Types
+- Managed Policies (owned by AWS, cannot be edited => copy to customer manage)
+- Customer Manager Policy (only with own account)
+- Inline policy (embedded into the User, Group or Role ==> Customer Manager generally recommended) 
+
+## Web Identity Federation
+- Authenticate with other internet providers (e.g. Google, Facebook, Amazon, SAML (Active Directory) and Open ID)
+- `Cognito` acts a identity brokers between AWS and internet providers
+    - OAuth 2.0 flows
+    - Can customise look and feel (logo labels etc)
+    - Can hold user pool as well as other providers (built in signup, signin and guest users)
+        - Can have password rules and MFA requirements
+        - Verification code flow
+        - Has groups as well as users with mapping to IAM
+    - User logs into provider, get JWT token from broker (Facebook), cognito exchanges for temporary limited IAM token
+    - `Push Syncronization` with SNS to send user updates to devices
+    - SAML
+        - Security Assertion Markup Langauge 2.0
+        - Endpoint https://signin.aws.amazon.com/saml
+        - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html
+
 # EC2
 
 # S3
@@ -318,6 +339,27 @@ aws dynamodb create-table
 - Notifications to SNS or CloudWatch
 
 ## Code Build
+- Fully managed code build service
+- e.g. CodeCommit => Docker Build ==> ECR host on ECS
+    - Code in Git in Code Commit
+    - ECS Cluster running Linux ASG in a VPC
+    - Docker repository in ECR
+    - Docker build and then push to ECR (docker build, docker tag, docker push)
+    - Create a Task definition in ECS for image
+    - Create a Service to launch the Task in Cluster (allows control of placement of instances as wel)
+- Controlled by `buildspec.yml`
+    - Defaults to spec file in source code
+    - Can be hard coded in console (useful if cant change source code)
+- Environment variables (`env`) section (Key Value Pair)
+    - Constants or from Paramater Store 
+- Phases (`phases`): 
+    - Install, PreBuild, Build, PostBuild
+    - Sequence of shell commands
+- Specify output `artifacts`
+- CodeBuild runs on a docker image
+    - AWS provide some standard one (Ubuntu)
+    - Can be any image
+- Shortened logs in console, full logs in CloudWatch
 
 ## Code Deploy
 - Deploy to EC2, on-premise of Lambda
@@ -338,11 +380,23 @@ aws dynamodb create-table
 - `appspec.yml` file defines the deployment actions
     - Defines parameters for code deploy
     - Same location as files to deploy
-    - `version`, `os` settings
-    - `files` to copy from `source` to `destination`
-    - `hooks` 
-        - `BeforeInstall` and `AfterInstall`
-        Set of commands to run (runas support and timeouts)
+    - EC2 (YAML):
+        - `version`: for future use, currently 0.0
+        - `os`: windows or linux
+        - `files` to copy from `source` to `destination`
+        - `hooks` 
+            - `BeforeBlockTraffic`, `BlockTraffic`, `AfterBlockTraffic`
+            - `ApplicationStop` 
+            - `DownloadBundle`
+            - `BeforeInstall`, `Install` and `AfterInstall`
+            - `ApplicationStart` and `ValidateService`
+            - `BeforeAllowTraffic`, `AllowTraffic`, `AfterAllowTraffic`
+            Shell script to run (runas support and timeouts)
+    - Lambda (YAML or JSON):
+        - `version`: for future use, currently 0.0
+        - `resources`: name and properties of Lambda
+        - `hooks`: as per EC2 - e.g. to valdiate deployment at stages `BeforeAllowTraffic` and `AfterAllowTraffic`
+        
 - Code Deploy agent installed on EC2 or On-Premise machines
 - Service role in IAM for CodeDeploy controls permissions
     - Download from AWS URL and run install
@@ -365,4 +419,46 @@ aws dynamodb create-table
 - Links with Lambda, Elastic Beanstalk, Cloud Formation, ECS
 - Source code from CodeCommit, GitHub, or S3
     - Trigger by CloudWatch alert
+    - S3 enable versioning and trigger on new version
 - Can integrate with Jenkins
+
+# Cloud Formation
+
+- Infrastructure as code - Manage, configure, provision
+    - Version control
+    - Consistency
+    - Time and effort
+- Defined in templates (YAML or JSON)
+    - Store in S3 (can be uploaded directly in console into S3 bucket)
+    - Sample templates from AWS
+- Free to use
+- Under management tools
+- Dependencies built in sequence
+- Managed as Stacks (build and delete)
+- Structure:
+    - `AWSTemplateFormatVersion: "2010-09-09"`: specifies file format (only one supported)
+    - `Description`
+    - `Metadata` - custom fields
+    - `Parameters` - Input values, provided at stack launch by user
+    - `Conditions` - Custom expressions to allow template to make decisions
+    - `Mappings` - Define values in a dictionary key (e.g. RegionMap)
+    - `Transform` - Include snippets of code from other files in S3 (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html), code re-se
+    - `Resources` - The AWS Resources you are deploying (*required!*)
+    - `Outputs` - Outputs from the scripts, can be passed downstream
+- Rollback on failure by default
+    - Can be disabled for debugging etc
+    - --disable-rollback from CLI/API
+- Nested Stacks
+    - Allow for reuse of template within a template
+    - Part of `Resources` section as a Stack type
+    - Must have `TenplateURL` can have `Parameters`
+
+## Serverless Application Model (SAM)
+
+- Cloudformation extension for serverless
+- Simplified syntax
+- Add a `Transform: AWS::Serverless-2016-10-31` line to template after Version
+    - Tells AWS is SAM template
+- SAM CLI
+    - sam package: Package all the local resources for a SAM to s3-bucket (applies transform)
+    - sam deploy: deploys the serverless app using CF
