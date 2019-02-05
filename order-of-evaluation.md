@@ -8,6 +8,8 @@ In this post, I'm going to use a special function - `LOG` this allows me to get 
 LOG(<ReturnValue>, <FileName>, <Message>)
 ```
 
+As always, as I don't work for Alteryx this is based on my poking and prodding and seeing what happens. I believe it's pretty accurate.
+
 # Back to School
 
 Lets go back to basics to start with some simple maths. Maths defines an order of operation. I'm English so I learnt it as 'BODMAS':
@@ -140,4 +142,49 @@ So Alteryx's engine is efficient - that shouldn't surprise anyone.
 
 # IF and  IIF
 
-So the same kind of short circuiting logic can be applied to 
+So the same kind of short circuiting logic can be applied to an `IF` or `IIF` statement. You first evaluate the condition and then can decde whether to execute true or false:
+
+```none
+IF LOG(1, "C:\Temp\Logic.log", "Condition") THEN
+	LOG(100, "C:\Temp\Logic.log", "True")
+ELSE
+	LOG(-100, "C:\Temp\Logic.log", "False")
+ENDIF
+```
+
+![If True](assets/order/if.true.jpg)
+
+Looking at the log, Alteryx evaluates the condition gets a `TRUE` value and then evaluates the first block. 
+
+```none
+Condition
+True
+```
+
+Lets look at a `FALSE` scenario in an `IIF` function:
+
+```none
+IIF(LOG(0, "C:\Temp\Logic.log", "Condition"),
+	LOG(100, "C:\Temp\Logic.log", "True"),
+	LOG(-100, "C:\Temp\Logic.log", "False")
+)
+```
+
+As expected, just the `FALSE` block is eavluated.
+
+```none
+Condition
+False
+```
+
+# SWITCH
+
+# IFNULL
+
+So this is an interesting one. 
+
+# A Brief Mention of the Parse Phase
+
+# Summing Up
+
+Hopefully this little tour of function evaluation has given you some 
