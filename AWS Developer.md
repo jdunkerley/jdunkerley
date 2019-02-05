@@ -36,12 +36,25 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
         - Security Assertion Markup Langauge 2.0
         - Endpoint https://signin.aws.amazon.com/saml
         - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html
+        - SAML Federation for organisation SSO
+    - Streams
+        - Allows access to data stored in Cognito
+
 
 # EC2
 
 # S3
 
+- Public url: https://[bucket].s3-website-[region].amazonaws.com
+
 # Serverless Computing
+
+## API Gateway
+
+- Client ==> Method Request ==> Integration Request ==> Backend
+- Backend ==> Integration Response ==> Method Response ==> Client
+- Method are API interface and frontend
+- Integration are where API interacts with bacekn
 
 # DynamoDB
 
@@ -112,7 +125,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
     - Examines all entries in a table
     - Can filter but applied after dumping entire data
     - Slower than Query
-    - Lower page size to stop Scan from blocking access to tables
+    - *Lower page size* to stop Scan from blocking access to tables
     - Can run scan in parallel scans
         - Logically divide table into segment and scan in parallel
         - Impact on performance
@@ -232,6 +245,7 @@ aws dynamodb create-table
 - Long Polling
   - Doesnt return from request until either timeout or a message sent
   - Reduces costs
+- Compatible with JMS (v1.1) - only standard queues
 
 # SNS
 
@@ -350,6 +364,7 @@ aws dynamodb create-table
 - Controlled by `buildspec.yml`
     - Defaults to spec file in source code
     - Can be hard coded in console (useful if cant change source code)
+    - Can be passed in `start-build` command
 - Environment variables (`env`) section (Key Value Pair)
     - Constants or from Paramater Store 
 - Phases (`phases`): 
@@ -396,6 +411,7 @@ aws dynamodb create-table
         - `version`: for future use, currently 0.0
         - `resources`: name and properties of Lambda
         - `hooks`: as per EC2 - e.g. to valdiate deployment at stages `BeforeAllowTraffic` and `AfterAllowTraffic`
+        - Can specify version of Lambda to be deployed
         
 - Code Deploy agent installed on EC2 or On-Premise machines
 - Service role in IAM for CodeDeploy controls permissions
@@ -462,3 +478,21 @@ aws dynamodb create-table
 - SAM CLI
     - sam package: Package all the local resources for a SAM to s3-bucket (applies transform)
     - sam deploy: deploys the serverless app using CF
+
+# Monitoring
+
+- CloudWatch - monitor performance and logs
+- CloudTrail - monitors API calls to AWS (think audit)
+- AWS Config - records state of AWS environment and notifies of changes (think version control of environment)
+
+## Cloudwatch
+- Can monitor Compute (ASG, ELBs, R53 Healthcheck), Storage and CDN, Databases and Analytics
+- Also monitors billing (alerts on threshold) 
+- Gathers logs into log streams
+- EC2 Monitors by default (CPU, Network, Disk IOs, Status Check) every 5 mins (cost for every 1 minute) 
+    - Cannot monitor by default RAM or Disk space - custom metric (minimum of every 1 minute)
+- Stored indefinitely by default (including terminated instances)
+- Can get data using GetMetricStatistics API
+- Alert on all metrics, trigger an action including a lambda
+- Can include outside resources of AWS - SSM agent and Cloudwatch agent
+- Default EC2 metrics are 5 min, detailed 1 min, High resolution metrics allow for 10s or 30s
