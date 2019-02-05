@@ -50,6 +50,15 @@ Lets look at a bit of a more weird and wonderful example. Let's try `3 < 2 != 3 
 
 ![Simple Logic 2](assets/order/logic.case.2.jpg)
 
+One last logic example: `1 - 3 > 2 < 5 - 4`. Breaking it down this is evaluated as:
+
+1. Evaluate `1 - 3` ==> `-2`
+2. Evaluate `5 - 4` ==> `1`
+3. Evaluate `-2 > 2` ==> `FALSE` (or `0`)
+4. Evaluate `0 < 1` ==> `TRUE` (or `-1`)
+
+![Simple Logic 3](assets/order/logic.case.3.jpg)
+
 ## Functions
 
 Let's think about another quick example. What about `MOD(7 + 4, 2) + -MOD(7, 4)`? Well following the normal logic we would evaluate each of the `MOD` functions and then evaluate the addition. In other words:
@@ -84,4 +93,4 @@ So if we evaluate `Left` to be `FALSE`, we can stop as we know the result is `FA
 
 In this case, if we evaluate `Left` to be `TRUE` we can stop as we know the result is `TRUE` and not bother with evaluating `Right`.
 
-This is called
+This is called [Short Circuit Evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation). Let's take a look and see what happens in Alteryx:
