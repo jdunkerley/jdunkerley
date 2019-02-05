@@ -44,6 +44,8 @@ Please not some of the standard operators (e.g. `%`) are function calls in Alter
 
 ![Simple Logic 2](assets/order/logic.case.1.jpg)
 
+*Alteryx represents TRUE as -1 if shown as a number*
+
 Lets look at a bit of a more weird and wonderful example. Let's try `3 < 2 != 3 < 5`. This evaluates to `(3 < 2) != (3 < 5)` which evaluates to `TRUE`:
 
 ![Simple Logic 2](assets/order/logic.case.2.jpg)
@@ -61,3 +63,25 @@ Let's think about another quick example. What about `MOD(7 + 4, 2) + -MOD(7, 4)`
 ![Simple Logic 2](assets/order/mods.jpg)
 
 ## Short Circuits
+
+So far, we have no choice on what we have had to do. To perform most operations all inputs need to be known. Now lets think about logical `AND` and `OR`. Well for `AND`, we have the logic table:
+
+|Left|Right|Output|
+|---|---|---|
+|FALSE|FALSE|FALSE|
+|FALSE|TRUE|FALSE|
+|TRUE|FALSE|FALSE|
+|TRUE|TRUE|TRUE|
+
+So if we evaluate `Left` to be `FALSE`, we can stop as we know the result is `FALSE` and not bother with evaluating `Right`. Likewise if we look at `OR`:
+
+|Left|Right|Output|
+|---|---|---|
+|FALSE|FALSE|FALSE|
+|FALSE|TRUE|TRUE|
+|TRUE|FALSE|TRUE|
+|TRUE|TRUE|TRUE|
+
+In this case, if we evaluate `Left` to be `TRUE` we can stop as we know the result is `TRUE` and not bother with evaluating `Right`.
+
+This is called
