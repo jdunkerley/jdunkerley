@@ -1,4 +1,4 @@
-# Order of Evaluation in an Alteryx Formula
+# Order of Evaluation in an Alteryx Expressions
 
 This post is the start of a small series around some of the functionality coming in the Alteryx Abacus 1.4 release. While this post, doesn't directly use anything in the add in understand the sequence of evaluation within an Alteryx expression is critical when working with variables (one of the big new features in the release). It specifically looks at how Alteryx evaluates an expression. While in general you don't care, one your expression has '[side-effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science))', it starts to really matter.
 
@@ -94,3 +94,50 @@ So if we evaluate `Left` to be `FALSE`, we can stop as we know the result is `FA
 In this case, if we evaluate `Left` to be `TRUE` we can stop as we know the result is `TRUE` and not bother with evaluating `Right`.
 
 This is called [Short Circuit Evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation). Let's take a look and see what happens in Alteryx:
+
+```none
+LOG(1, "C:\Temp\Logic.log", "Left") AND LOG(1, "C:\Temp\Logic.log", "Right")
+```
+
+![And Case 1](assets/order/and.1.jpg)
+
+As expected both sides must be executed, so log output looks like:
+
+```none
+Left
+Right
+```
+
+So now let's try:
+
+```none
+LOG(0, "C:\Temp\Logic.log", "Left") AND LOG(1, "C:\Temp\Logic.log", "Right")
+```
+
+![And Case 2](assets/order/and.2.jpg)
+
+The log output this time looks like:
+
+```none
+Left
+```
+
+Alteryx has short circuited the evaluation and not bothered to work out value of the second input. For sake of completeness example below shows same behaviour in `OR` case:
+
+```none
+LOG(1, "C:\Temp\Logic.log", "Left") OR LOG(1, "C:\Temp\Logic.log", "Right")
+```
+
+![Or Case](assets/order/or.jpg)
+
+As expected the log looks like this:
+
+```none
+Left
+```
+
+So Alteryx's engine is efficient - that shouldn't surprise anyone.
+
+# IF and  IIF
+
+So the same kind of short circuiting logic can be applied to 
