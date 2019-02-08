@@ -2,7 +2,7 @@
 
 ![Headline](assets/order/headline.png)
 
-This post is the start of a small series around some of the functionality coming in the Alteryx Abacus 1.4 release. While this post, doesn't directly use anything in the add in, understanding the sequence of evaluation within an Alteryx expression is critical when working with variables (one of the big new features in the next release). It specifically looks at how Alteryx evaluates an expression. While in general you don't care, once your expression has '[side-effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science))', it can start to really matter.
+This post is the start of a small series around some of the functionality coming in the Alteryx Abacus 1.4 release. While this post doesn't directly use anything in the add-in, understanding the sequence of evaluation within an Alteryx expression is critical when working with variables (one of the big new features in the next release). It specifically looks at how Alteryx evaluates an expression. While in general, you don't care, once your expression has '[side-effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science))', it can start to really matter.
 
 As always, as I don't work for Alteryx this is based on my poking and prodding and seeing what happens, so no guarantees it is correct! 
 
@@ -79,7 +79,7 @@ Let's think about another quick example. What about `MOD(7 + 4, 2) + -MOD(7, 4)`
 
 ## Short Circuits
 
-So far, we have no choice on what we have had to do. To perform most operations, all inputs need to be known. Now think about logical `AND` and `OR`. Well for `AND`, we have the logic table:
+So far, we have no choice about what we have had to do. To perform most operations, all inputs need to be known. Now think about logical `AND` and `OR`. Well for `AND`, we have the logic table:
 
 |Left|Right|Output|
 |---|---|---|
@@ -128,7 +128,7 @@ The log output this time looks like:
 Left
 ```
 
-Alteryx has short circuited the evaluation and not bothered to work out value of the second input. For sake of completeness, the example below shows same behaviour in an `OR` case:
+Alteryx has short-circuited the evaluation and not bothered to work out the value of the second input. For sake of completeness, the example below shows the same behaviour in an `OR` case:
 
 ```none
 LOG(1, "C:\Temp\Logic.log", "Left") OR LOG(1, "C:\Temp\Logic.log", "Right")
@@ -210,7 +210,7 @@ Case2
 Result2
 ````
 
-Even though logically there is no way to get to other results all are evaluated. If you need short circuiting, then you will need to use an `IF...ELSEIF...ENDIF` structure. You can always make the formula have 2 steps - first evaluate the `Value` then in the second step have the `IF` expression needed. 
+Even though logically there is no way to get to other results all are evaluated. If you need short-circuiting, then you will need to use an `IF...ELSEIF...ENDIF` structure. You can always make the formula have 2 steps - first evaluate the `Value` then in the second step have the `IF` expression needed. 
 
 # IFNULL
 
@@ -250,7 +250,7 @@ IFNULL(LOG("Something", "C:\Temp\Logic.log", "IFNULL_P1"),
        LOG("NotNull", "C:\Temp\Logic.log", "IFNULL_P2"))
 ```
 
-The `IIF` statement, it evaluates the `Cond` and the `Null` expressions. However, the `IFNULL` continues and evaluates both `P1` and `P2`. This can be an advantage or a disadvantage. Imagine a case where computing `P1` was complicated - then `IFNULL` avoids it being computed twice. This can clearly be a big advantage in this scenario. However, in another case if you have a function which reads a value and if null updates the value (this is the variable functionality in Abacus) then you want `P2` to only be executed if `P1` is null. 
+The `IIF` statement, it evaluates the `Cond` and the `Null` expressions. However, the `IFNULL` continues and evaluates both `P1` and `P2`. This can be an advantage or a disadvantage. Imagine a case where computing `P1` was complicated - then `IFNULL` avoids it being computed twice. This can clearly be a big advantage in this scenario. However, in another case, if you have a function which reads a value and if null updates the value (this is the variable functionality in Abacus) then you want `P2` to only be executed if `P1` is null. 
 
 This was a surprise for me when I first noticed this behaviour as I had imagined XML Macro functions worked as a substitution straight into the expression (just making it easier to write), but this behaviour allows for some performance wins (and some losses).
 
@@ -297,7 +297,7 @@ Condition
 False
 ```
 
-In this case you can see the parse is run (first three lines). Then each record is evaluated in turn (2 lines for each record). When I first tried the variable functions, the parse caused me a little issue as got an extra call I didn't expect.
+In this case, you can see the parse is run (first three lines). Then each record is evaluated in turn (2 lines for each record). When I first tried the variable functions, the parse caused me a little issue as got an extra call I didn't expect.
 
 # Summing Up
 
