@@ -4,6 +4,8 @@
 
 This post is the start of a small series around some of the functionality coming in the Alteryx Abacus 1.4 release. While this post, doesn't directly use anything in the add in, understanding the sequence of evaluation within an Alteryx expression is critical when working with variables (one of the big new features in the next release). It specifically looks at how Alteryx evaluates an expression. While in general you don't care, once your expression has '[side-effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science))', it can start to really matter.
 
+As always, as I don't work for Alteryx this is based on my poking and prodding and seeing what happens, so no guarantees it is correct! 
+
 ## LOGS
 
 In this post, I'm going to use a special function - `LOG` this allows me to get a line written to a file to tell me what was evaluated. This is a new function in Abacus 1.4. It's stupidly useful for debugging complicated expressions. The syntax is:
@@ -12,8 +14,6 @@ In this post, I'm going to use a special function - `LOG` this allows me to get 
 LOG(<ReturnValue>, <FileName>, [Message])
 ```
 
-As always, as I don't work for Alteryx this is based on my poking and prodding and seeing what happens, so no guarentees it correct! 
-
 # Back to School
 
 Let's go back to basics to start with some simple maths. Maths defines an order of operation. I'm English so I learnt it as 'BODMAS':
@@ -21,38 +21,38 @@ Let's go back to basics to start with some simple maths. Maths defines an order 
 - **B**rackets (Parenthesis in American)
 - **O**rder (Exponents in American)
 - **D**ivision / **M**ultiplication
-- **A**ddition / **S**ubstraction
+- **A**ddition / **S**ubtraction
 
-If there is an ambiguity then *left-to-right* is used (e.g. `3-4-5` is evaluated as `(3-4)-5` i.e. `-6`). So lets do some simple tests in Alteryx. 
+If there is an ambiguity, then *left-to-right* is used (e.g. `3-4-5` is evaluated as `(3-4)-5` i.e. `-6`). Let's do some simple tests in Alteryx. 
 
 ![Simple Maths 1](assets/order/basic.maths.1.jpg)
 
-Unsurpisingly, this produces the correct result of `-6`. Now, another `10-3+2` should be treated as `(10-3)+2` i.e. 9:
+Unsurprisingly, this produces the correct result of `-6`. Now, another `10-3+2` should be treated as `(10-3)+2` i.e. 9:
 
 ![Simple Maths 2](assets/order/basic.maths.2.jpg)
 
 In Alteryx's case, *Order* is not an operator, it's a function so onto...
 
-# Progamming Languages
+# Programming Languages
 
 Programming languages have way more operators. The table below summarises the order assuming Alteryx follows this standard:
 
 - **B**rackets, Function calls
 - Unary operators - `!`, `-`, `+`
 - **D**ivision / **M**ultiplication
-- **A**ddition / **S**ubstraction
+- **A**ddition / **S**ubtraction
 - Comparisons: less-than and greater-than (`<`, `>`, `<=`, `>=`)
 - Comparisons: equal and not equal (`==`,`!=`)
 - Logical AND, `&&`
-- Locical OR, `||`
+- Logical OR, `||`
 
-Please note some of the common programming operators (e.g. `%`) are function calls in Alteryx expressions (e.g. `MOD`). Lets consider a simple expression: `4 + 9 > 12`. This will be evaluated as `(4 + 9) > 12`:
+Please note some of the common programming operators (e.g. `%`) are function calls in Alteryx expressions (e.g. `MOD`). Consider a simple expression: `4 + 9 > 12`. This will be evaluated as `(4 + 9) > 12`:
 
 ![Simple Logic 2](assets/order/logic.case.1.jpg)
 
 *Alteryx represents TRUE as -1 if shown as a number*
 
-Lets look at a bit of a more weird and wonderful example. Let's try `3 < 2 != 3 < 5`. This evaluates to `(3 < 2) != (3 < 5)` which evaluates to `TRUE`:
+Now onto at a bit of a more weird and wonderful example - `3 < 2 != 3 < 5`. This evaluates to `(3 < 2) != (3 < 5)` which evaluates to `TRUE`:
 
 ![Simple Logic 2](assets/order/logic.case.2.jpg)
 
@@ -67,7 +67,7 @@ One last logic example: `1 - 3 > 2 < 5 - 4`. Breaking it down this is evaluated 
 
 ## Functions
 
-Let's think about another quick example. What about `MOD(7 + 4, 2) + -MOD(7, 4)`? Well following the normal logic we would evaluate each of the `MOD` functions and then evaluate the addition. In other words:
+Let's think about another quick example. What about `MOD(7 + 4, 2) + -MOD(7, 4)`? Well following the normal logic, we would evaluate each of the `MOD` functions and then evaluate the addition. In other words:
 
 1. Evaluate `7 + 4` ==> `11`
 2. Evaluate `MOD(11, 2)` ==> `1`
@@ -79,7 +79,7 @@ Let's think about another quick example. What about `MOD(7 + 4, 2) + -MOD(7, 4)`
 
 ## Short Circuits
 
-So far, we have no choice on what we have had to do. To perform most operations all inputs need to be known. Now lets think about logical `AND` and `OR`. Well for `AND`, we have the logic table:
+So far, we have no choice on what we have had to do. To perform most operations, all inputs need to be known. Now think about logical `AND` and `OR`. Well for `AND`, we have the logic table:
 
 |Left|Right|Output|
 |---|---|---|
@@ -88,7 +88,7 @@ So far, we have no choice on what we have had to do. To perform most operations 
 |TRUE|FALSE|FALSE|
 |TRUE|TRUE|TRUE|
 
-So if we evaluate `Left` to be `FALSE`, we can stop as we know the result is `FALSE` and not bother with evaluating `Right`. Likewise if we look at `OR`:
+If we evaluate `Left` to be `FALSE`, we can stop as we know the result is `FALSE` and not bother with evaluating `Right`. Likewise, if we look at `OR`:
 
 |Left|Right|Output|
 |---|---|---|
@@ -97,9 +97,9 @@ So if we evaluate `Left` to be `FALSE`, we can stop as we know the result is `FA
 |TRUE|FALSE|TRUE|
 |TRUE|TRUE|TRUE|
 
-In this case, if we evaluate `Left` to be `TRUE` we can stop as we know the result is `TRUE` and not bother with evaluating `Right`.
+In this case, if we evaluate `Left` to be `TRUE`, we can stop as we know the result is `TRUE` and not bother with evaluating `Right`.
 
-This is called [Short Circuit Evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation). Let's take a look and see what happens in Alteryx:
+This is called [Short Circuit Evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation). Take a look and see what happens in Alteryx:
 
 ```none
 LOG(1, "C:\Temp\Logic.log", "Left") AND LOG(1, "C:\Temp\Logic.log", "Right")
@@ -107,14 +107,14 @@ LOG(1, "C:\Temp\Logic.log", "Left") AND LOG(1, "C:\Temp\Logic.log", "Right")
 
 ![And Case 1](assets/order/and.1.jpg)
 
-As expected both sides must be executed, so log output looks like:
+As expected, both sides must be executed, so log output looks like:
 
 ```none
 Left
 Right
 ```
 
-So now let's try:
+So, now let's try:
 
 ```none
 LOG(0, "C:\Temp\Logic.log", "Left") AND LOG(1, "C:\Temp\Logic.log", "Right")
@@ -136,17 +136,17 @@ LOG(1, "C:\Temp\Logic.log", "Left") OR LOG(1, "C:\Temp\Logic.log", "Right")
 
 ![Or Case](assets/order/or.jpg)
 
-As expected the log looks like this:
+As expected, the log looks like this:
 
 ```none
 Left
 ```
 
-So Alteryx's engine is efficient - that shouldn't surprise anyone.
+Alteryx's engine is efficient - that shouldn't surprise anyone.
 
 # IF and  IIF
 
-Lets think about functions (or operators as well I guess). In order to evaluate the function, you need to first evaluate all the inputs to it. However, the same kind of short circuiting logic can be applied to an `IF` or `IIF` statement as we saw with `AND` and `OR`. You first evaluate the condition, and then can decde whether to execute true or false:
+Now, think about functions (or operators as well I guess). In order to evaluate the function, you need to first evaluate all the inputs to it. However, the same kind of short-circuiting logic can be applied to an `IF` or `IIF` statement as we saw with `AND` and `OR`. You first evaluate the condition, and then can decide whether to execute true or false:
 
 ```none
 IF LOG(1, "C:\Temp\Logic.log", "Condition") THEN
@@ -176,7 +176,7 @@ IIF(LOG(0, "C:\Temp\Logic.log", "Condition"),
 
 ![Iif False](assets/order/iif.false.jpg)
 
-As expected, just the `FALSE` block is eavluated.
+As expected, just the `FALSE` block is evaluated.
 
 ```none
 Condition
@@ -187,7 +187,7 @@ As far as I have ever been able to tell, there is no evaluation difference betwe
 
 # SWITCH
 
-The `SWITCH` statement could easily have the same short circuiting approach. We could first evaluate the `Value` input, then evaluate each `Case1`, `Case2`, ..., `CaseN` in turn until we either find one which matches or run out of cases. We can then evaluate the appropriate `Result` or `Default` expression. So lets look at a simple example:
+The `SWITCH` statement could easily have the same short-circuiting approach. We could first evaluate the `Value` input, then evaluate each `Case1`, `Case2`, ..., `CaseN` in turn until we either find one which matches or run out of cases. We can then evaluate the appropriate `Result` or `Default` expression. So, let's look at a simple example:
 
 ```none
 SWITCH(LOG("A", "C:\Temp\Logic.log", "Value"),
@@ -210,17 +210,17 @@ Case2
 Result2
 ````
 
-Even though logically there is no way to get to other results all are evaluated. If you need short circuiting, then you will need to use a `IF...ELSEIF...ENDIF` structure. You can always makes the formula have 2 steps - first evaluate the `Value` then in the second step have the `IF` expression needed. 
+Even though logically there is no way to get to other results all are evaluated. If you need short circuiting, then you will need to use an `IF...ELSEIF...ENDIF` structure. You can always make the formula have 2 steps - first evaluate the `Value` then in the second step have the `IF` expression needed. 
 
 # IFNULL
 
-So this is an interesting one. `IFNULL` is an [XML Macro Function](https://jdunkerley.co.uk/2016/08/13/beyond-alteryx-macros-part-2-how-to-create-an-xml-macro-function/) built into the Abacus library (it's been there since the earliest versions). It's underlying expression is:
+So, this is an interesting one. `IFNULL` is an [XML Macro Function](https://jdunkerley.co.uk/2016/08/13/beyond-alteryx-macros-part-2-how-to-create-an-xml-macro-function/) built into the Abacus library (it's been there since the earliest versions). Its underlying expression is:
 
 ```none
 IIF(ISNULL(P1),P2,P1)
 ```
 
-So let's consider the case where P1 is NULL:
+Let's consider the case where P1 is NULL:
 
 ```none
 IIF(ISNULL(LOG(NULL(), "C:\Temp\Logic.log", "IIF_Cond")),
@@ -250,13 +250,13 @@ IFNULL(LOG("Something", "C:\Temp\Logic.log", "IFNULL_P1"),
        LOG("NotNull", "C:\Temp\Logic.log", "IFNULL_P2"))
 ```
 
-Looking at the `IIF` statement, it evaluates the `Cond` and the `Null` expressions. However, the `IFNULL` continues and evaluates both `P1` and `P2`. This can be an advantage or a disadvantage. Imagine a case where computing `P1` was complicated - then `IFNULL` avoids it being computed twice. This can clearly be a big advantage in this scenario. However, in another case if you have a function which reads a value and if null updates the value (this is the variable functionality in Abacus) then you want `P2` to only be executed if `P1` is null. 
+The `IIF` statement, it evaluates the `Cond` and the `Null` expressions. However, the `IFNULL` continues and evaluates both `P1` and `P2`. This can be an advantage or a disadvantage. Imagine a case where computing `P1` was complicated - then `IFNULL` avoids it being computed twice. This can clearly be a big advantage in this scenario. However, in another case if you have a function which reads a value and if null updates the value (this is the variable functionality in Abacus) then you want `P2` to only be executed if `P1` is null. 
 
 This was a surprise for me when I first noticed this behaviour as I had imagined XML Macro functions worked as a substitution straight into the expression (just making it easier to write), but this behaviour allows for some performance wins (and some losses).
 
 # A Brief Mention of the Parse Phase
 
-Just a quick note on how expressions are pared within Alteryx. If you do try some of these examples you will find the expression is evaluated over and over. Alteryx runs a parse phase where it evaluates the expression. It checks syntax and makes sure all is well. If you have a custom function, you will be passed `0` or an empty string where you would get a data field. This allows Alteryx to check syntax and understand the structure of the expression. The code below shows the output of the following expression:
+Just a quick note on how expressions are pared within Alteryx. If you try some of these examples, you will find the expression is evaluated over and over. Alteryx runs a parse phase where it evaluates the expression. It checks syntax and makes sure all is well. If you have a custom function, you will be passed `0` or an empty string where you would get a data field. This allows Alteryx to check syntax and understand the structure of the expression. The code below shows the output of the following expression:
 
 ```
 IIF(LOG([Alpha], "C:\Temp\Logic.log", "Condition") = "A",
@@ -272,7 +272,7 @@ With an input of:
 |A|
 |B|
 
-When you work with the formula editor the expression is evaluated on first lost, then on every keypress so you end up with a log file full of entries. The sequence below show what happens when the editor is first loaded:
+When you work with the formula editor the expression is evaluated on first lost, then on every keypress so you end up with a log file full of entries. The sequence below shows what happens when the editor is first loaded:
 
 ```
 True
@@ -297,7 +297,7 @@ Condition
 False
 ```
 
-In this case you can see the parse is run (first three lines). Then each record is evaluated in turn (2 lines for each record). When I first tried the variable functions the parse caused me a little issue as got an extra call I didn't expect.
+In this case you can see the parse is run (first three lines). Then each record is evaluated in turn (2 lines for each record). When I first tried the variable functions, the parse caused me a little issue as got an extra call I didn't expect.
 
 # Summing Up
 
