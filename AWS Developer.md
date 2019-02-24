@@ -16,10 +16,13 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 
 # IAM
 
+- Use CloudTrail to monitor STS
+
 ## Policy Types
 - Managed Policies (owned by AWS, cannot be edited => copy to customer manage)
 - Customer Manager Policy (only with own account)
 - Inline policy (embedded into the User, Group or Role ==> Customer Manager generally recommended) 
+- `aws iam simulate-custom-policy` to test permissions. Need to get context keys to supply to CLI
 
 ## Web Identity Federation
 - Authenticate with other internet providers (e.g. Google, Facebook, Amazon, SAML (Active Directory) and Open ID)
@@ -36,18 +39,35 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
         - Security Assertion Markup Langauge 2.0
         - Endpoint https://signin.aws.amazon.com/saml
         - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html
-        - SAML Federation for organisation SSO
+        - SAML Federation for organisation SSO to AD
     - Streams
         - Allows access to data stored in Cognito
 
 
 # EC2
 
+# ECS
+
+- Run a docker container
+- IAM Role controls access to resources (like an EC2) set at Task level
+- Part of the VPC so usual VPC access
+- Can use Securty Group on instances to isolate
+
 # S3
 
 - Public url: https://[bucket].s3-website-[region].amazonaws.com
 
 # Serverless Computing
+
+- Can use a dead letter queue for failed function invocations 
+    - Either SQS and SNS
+    - Function retried twice if invoked asyncronously
+
+## Lambda ALIAS
+
+- By default points at single version
+- `routing-config` allows you to point at two versions
+- Controls percentage at each version
 
 ## API Gateway
 
@@ -121,6 +141,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
         - Can be reversed using `ScanIndexForward` parameter
         - *Only on Queries, despite name*
     - Eventually Consistent by Default, need to specify for Strongly Consistent
+    - Can use secondary index as well
 - Scan:
     - Examines all entries in a table
     - Can filter but applied after dumping entire data
@@ -310,13 +331,17 @@ aws dynamodb create-table
 - Code and configuration in an S3 bucket
     - Config written in JSON or YAML
     - Called `.config` in `.ebextensions` folder
-    - .ebextensions in top level of application source code bundle
+    - `.ebextensions` in top level of application source code bundle
+    - Use to change the instance size (S3 file)
 - Delete of environment deletes whole stack
 - When using with RDS
     - Good for Dev / Test as database coupled with environment
     - For production, decouple and launch separately
         - Additional Security Group on ASG
         - Provided connection string configuration to application servers
+- Every deployment creates a version
+    - Will hit version limit
+    - Use Application Version Lifecycle policy to delete old versions
 
 # Kinesis
 
@@ -364,7 +389,7 @@ aws dynamodb create-table
 - Controlled by `buildspec.yml`
     - Defaults to spec file in source code
     - Can be hard coded in console (useful if cant change source code)
-    - Can be passed in `start-build` command
+    - Can be passed in `start-build` command (`buildspecOverride`)
 - Environment variables (`env`) section (Key Value Pair)
     - Constants or from Paramater Store 
 - Phases (`phases`): 
@@ -475,6 +500,7 @@ aws dynamodb create-table
 - Simplified syntax
 - Add a `Transform: AWS::Serverless-2016-10-31` line to template after Version
     - Tells AWS is SAM template
+- Place yaml file in same folder as Lambda code
 - SAM CLI
     - sam package: Package all the local resources for a SAM to s3-bucket (applies transform)
     - sam deploy: deploys the serverless app using CF
