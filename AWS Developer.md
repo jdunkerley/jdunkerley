@@ -17,7 +17,8 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 - Free Test - June 2018
 - Free Test CDA
 - Test 1
-
+- Test 2
+- Test 3
 
 **Total Time: 10 weeks**
 
@@ -25,6 +26,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 
 - Use CloudTrail to monitor STS
 - To use a role run `STS:AssumeRole` to get access as the role
+- If get error can use `aws sts decode-authorization-message` to get detail
 
 ## Policy Types
 - Managed Policies (owned by AWS, cannot be edited => copy to customer manage)
@@ -61,21 +63,23 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 - IAM Role controls access to resources (like an EC2) set at Task level
 - Part of the VPC so usual VPC access
 - Can use Securty Group on instances to isolate
-- Often stick an ELB in front of ECS
+- Often stick an Application LB in front of ECS
 
 # S3
 
 - Public url: https://[bucket].s3-website-[region].amazonaws.com
 - MultiPart upload - 3 steps: Initiate, Upload part, Complete
 - Rough performance is 3,500 writes / second and 5,500 reads / second
+    - If encrypted will be bottlenecked by KMS as well (5,500 / second)
 - Still use prefix if absolutely needed...
-- To block unencrypted uploda need to us Bucket Policy including `x-amz-server-side-encryption`
+- To block unencrypted uploda need to us Bucket Policy Denying if no `x-amz-server-side-encryption`
 
 # Serverless Computing
 
 - Can use a dead letter queue for failed function invocations 
     - Either SQS and SNS
     - Function retried twice if invoked asyncronously
+    - Need to grant permission to lambda to `SendMessage` to SQS or `Publish` to SNS
 - Lambda defaults to 3s for timeout (max 15 minutes)
 - Step function to orchestrate performing discrete functions or tasks and co-ordinate
 - Lambda@Edge allows for code in front of CloudFront
@@ -101,7 +105,10 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 - Both document and key value data models
 - Backed by SSD storages
 - Encryption must be chosen at creation
-- Always acreoss 3 DCs (avoids single point of failure)
+- Always across 3 DCs (avoids single point of failure)
+- Global tables
+    - multi region
+    - multi master
 - Consistency - Eventual (default - usual within 1s) or Strongly
 - Model: 
     - Tables, Items (like a row), Attributes (like a column)
@@ -363,6 +370,8 @@ aws dynamodb create-table
 - Every deployment creates a version
     - Will hit version limit
     - Use Application Version Lifecycle policy to delete old versions
+- Periodic stuff use a `cron.yaml` file
+- EB CLI allows for monitoring and working with environment
 
 # Kinesis
 
@@ -372,14 +381,15 @@ aws dynamodb create-table
     - Streams
         - Data stored in Shards
         - 24hr to 7 day retention
-        - NUmber of Shards controls capacity of streams
+        - Number of Shards controls capacity of streams
         - Consumers read and send on
+        - Can only control order within a shard using `sequenceNumberForOrdering` parameter
     - Firehose
         - No need to worry about shards or streams
         - Completely automated
-        - Can use Lambda to analyse
+        - Can use Lambda to analyse / transform
         - Sends data to S3
-        - No automatic retention - either straight to Lambda, S3, Elasticsearch
+        - No automatic retention - either straight to Lambda, S3, Elasticsearch (+Splunk)
         - If to Redshift via S3
     - Analytics
         - SQL queries as it exists in Firehose or Streams
@@ -398,6 +408,10 @@ aws dynamodb create-table
 - HTTPS and SSH
     - IAM based need to create Git credentials in IAM
 - Notifications to SNS or CloudWatch
+- Cross Account
+    - Create cross account IAM role
+    - Grant role access
+    - Provide ARN to users
 
 ## Code Build
 - Fully managed code build service
@@ -515,6 +529,7 @@ aws dynamodb create-table
     - Allow for reuse of template within a template
     - Part of `Resources` section as a Stack type
     - Must have `TemplateURL` can have `Parameters`
+- For EC2 can use `cfn-init` to install software on instances
 
 ## Serverless Application Model (SAM)
 
