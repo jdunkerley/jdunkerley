@@ -12,11 +12,19 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 7. Advanced IAM, Monitoring (1:15:42)
 8. Practice Papers (2 weeks)
 
+## Reviewed
+
+- Free Test - June 2018
+- Free Test CDA
+- Test 1
+
+
 **Total Time: 10 weeks**
 
 # IAM
 
 - Use CloudTrail to monitor STS
+- To use a role run `STS:AssumeRole` to get access as the role
 
 ## Policy Types
 - Managed Policies (owned by AWS, cannot be edited => copy to customer manage)
@@ -48,20 +56,29 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 
 # ECS
 
+- Fully managed orchestration service
 - Run a docker container
 - IAM Role controls access to resources (like an EC2) set at Task level
 - Part of the VPC so usual VPC access
 - Can use Securty Group on instances to isolate
+- Often stick an ELB in front of ECS
 
 # S3
 
 - Public url: https://[bucket].s3-website-[region].amazonaws.com
+- MultiPart upload - 3 steps: Initiate, Upload part, Complete
+- Rough performance is 3,500 writes / second and 5,500 reads / second
+- Still use prefix if absolutely needed...
+- To block unencrypted uploda need to us Bucket Policy including `x-amz-server-side-encryption`
 
 # Serverless Computing
 
 - Can use a dead letter queue for failed function invocations 
     - Either SQS and SNS
     - Function retried twice if invoked asyncronously
+- Lambda defaults to 3s for timeout (max 15 minutes)
+- Step function to orchestrate performing discrete functions or tasks and co-ordinate
+- Lambda@Edge allows for code in front of CloudFront
 
 ## Lambda ALIAS
 
@@ -83,6 +100,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 - Fully managed
 - Both document and key value data models
 - Backed by SSD storages
+- Encryption must be chosen at creation
 - Always acreoss 3 DCs (avoids single point of failure)
 - Consistency - Eventual (default - usual within 1s) or Strongly
 - Model: 
@@ -198,8 +216,6 @@ aws dynamodb create-table
   --attribute-definitions
 ```
 
-*ToDo*
-
 ## Dynamo DB Streams
 - Time order sequence of modification events (CUD)
 - Stored for 24 hours
@@ -207,6 +223,7 @@ aws dynamodb create-table
 - Dedicated enpoint
 - Trigger lambdas (lambda polls the stream)
 - Near real time
+- Creation of materialised views
 
 # KMS
 
@@ -293,11 +310,12 @@ aws dynamodb create-table
 # Elastic Beanstalk
 
 - https://www.youtube.com/watch?v=SrwxAScdyT0
-- Deploying and scaling Web Apps
+- Deploying and scaling Web Apps (or Docker environments)
   - Deployment
   - Provisioning
   - Load Balancing / AutoScaling
 - Written in Java, .Net, PHP, NodeJS, Python, Ruby, Go, Docker
+    - Packer to create custom environments using AMI and Platform.yaml
 - Widely used platfroms Tomcat, NGINX, IIS, etc.
 - Can be within a VPC
 - Can include additional resources such as RDS
@@ -328,11 +346,14 @@ aws dynamodb create-table
         - Preferred option for mission critical systems
         - Roll back easy as just involves killing new ASG
         - Works on single instance
+    - Blue/Green
+        - As per immutable but swap URL in DNS at end
 - Code and configuration in an S3 bucket
     - Config written in JSON or YAML
     - Called `.config` in `.ebextensions` folder
     - `.ebextensions` in top level of application source code bundle
     - Use to change the instance size (S3 file)
+    - Precedence: Default, .ebextensions, Saved Config, Settings directly applied
 - Delete of environment deletes whole stack
 - When using with RDS
     - Good for Dev / Test as database coupled with environment
@@ -370,6 +391,7 @@ aws dynamodb create-table
 - Cloud9 - Code Editor
 - Code Commit (Git) ==> Code Build (Build System) ==> Tests ==> Code Deploy ==> Envronments
 - Code Pipeline links it all together
+- CodeStart is the overall service for SDLC in cloud
 
 ## Code Commit
 - Git
@@ -492,7 +514,7 @@ aws dynamodb create-table
 - Nested Stacks
     - Allow for reuse of template within a template
     - Part of `Resources` section as a Stack type
-    - Must have `TenplateURL` can have `Parameters`
+    - Must have `TemplateURL` can have `Parameters`
 
 ## Serverless Application Model (SAM)
 
@@ -510,8 +532,13 @@ aws dynamodb create-table
 - CloudWatch - monitor performance and logs
 - CloudTrail - monitors API calls to AWS (think audit)
 - AWS Config - records state of AWS environment and notifies of changes (think version control of environment)
+- XRay allow you to trace through execution path
+    - Needs IAM permission to write to XRay
+- TO monitor ELBs look at the access logs
 
 ## Cloudwatch
+
+- Can aggregrate in CloudWatch using statistic sets
 - Can monitor Compute (ASG, ELBs, R53 Healthcheck), Storage and CDN, Databases and Analytics
 - Also monitors billing (alerts on threshold) 
 - Gathers logs into log streams
@@ -521,4 +548,6 @@ aws dynamodb create-table
 - Can get data using GetMetricStatistics API
 - Alert on all metrics, trigger an action including a lambda
 - Can include outside resources of AWS - SSM agent and Cloudwatch agent
-- Default EC2 metrics are 5 min, detailed 1 min, High resolution metrics allow for 10s or 30s
+- Default EC2 metrics are 5 min (basic monitoring), detailed 1 min, High resolution metrics allow for 10s or 30s
+- Alerts over multiple evaluation periods, control for period length, number of points
+- For logs from EC2 need to install CloudWatch agent
