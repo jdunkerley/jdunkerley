@@ -10,7 +10,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 5. KMS and Other AWS Services (1:37:54)
 6. Developer Theory (2:50:50)
 7. Advanced IAM, Monitoring (1:15:42)
-8. Practice Papers (2 weeks)
+8. Practice Papers (2 weeks - 5 mock tests allowing about 2 hours for each test and review)
 
 ## Reviewed
 
@@ -20,7 +20,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 - Test 2
 - Test 3
 - Test 4
-- Test 5:0
+- Test 5:15
 
 **Total Time: 10 weeks**
 
@@ -362,6 +362,7 @@ aws dynamodb create-table
         - Works on single instance
     - Blue/Green
         - As per immutable but swap URL in DNS at end
+        - Create new environment, deploy to it, swap URLs
 - Code and configuration in an S3 bucket
     - Config written in JSON or YAML
     - Called `.config` in `.ebextensions` folder
@@ -446,6 +447,7 @@ aws dynamodb create-table
     - AWS provide some standard one (Ubuntu)
     - Can be any image
 - Shortened logs in console, full logs in CloudWatch
+- To access VPC resources need to add VPC-specific configuration
 
 ## Code Deploy
 - Deploy to EC2, on-premise of Lambda
@@ -550,6 +552,7 @@ aws dynamodb create-table
 - Add a `Transform: AWS::Serverless-2016-10-31` line to template after Version
     - Tells AWS is SAM template
 - Place yaml file in same folder as Lambda code
+- Package whole lot including YAML to S3 bucket
 - SAM CLI
     - sam package: Package all the local resources for a SAM to s3-bucket (applies transform)
     - sam deploy: deploys the serverless app using CF
