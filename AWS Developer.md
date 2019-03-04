@@ -19,6 +19,8 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 - Test 1
 - Test 2
 - Test 3
+- Test 4
+- Test 5:0
 
 **Total Time: 10 weeks**
 
@@ -73,6 +75,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
     - If encrypted will be bottlenecked by KMS as well (5,500 / second)
 - Still use prefix if absolutely needed...
 - To block unencrypted uploda need to us Bucket Policy Denying if no `x-amz-server-side-encryption`
+- 503 errors can be when have millions of versions of a file - check inventory
 
 # Serverless Computing
 
@@ -86,7 +89,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 
 ## Lambda ALIAS
 
-- By default points at single version
+- By default points at single version (pointer to specific version)
 - `routing-config` allows you to point at two versions
 - Controls percentage at each version
 
@@ -193,6 +196,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
     - Request rate too high for capacity
     - AWS SDK will automatically retry using exponential back off (feature of every AWS SDK)
     - If hand rolled then use exponential back off approach
+- `ReturnConsumedCapacity` in query to get used capacity: NONE (off) / TOTAL / INDEXES
 
 ## DyanamoDB Accellerator (DAX) or Elasticache
 - In Memory cache for DynamoDB
@@ -254,6 +258,7 @@ aws dynamodb create-table
   - Envelope Key (key used to encrypt data)
   - Envelope Key is encrypted by the customer master key
   - Data Key is decrypted Envelope Key
+  - Command `GenerateDataKey` or `GenerateDataKeyWithoutPlaintext`
 - KMS API Calls
   - aws kms encrypt --key-id <KeyName> --plaintext <File/Text> --output text --query CipherTextBlob
   - aws kms decrypt --key-id <KeyName> --ciphertext-blob <File/Text> --output text --query PlainText
@@ -291,6 +296,8 @@ aws dynamodb create-table
   - Doesnt return from request until either timeout or a message sent
   - Reduces costs
 - Compatible with JMS (v1.1) - only standard queues
+- Delay Queues - can lag a message up to 15 minutes (default is 0). Can set on indiviual messages.
+- Can have message attributes as well as payload
 
 # SNS
 
@@ -367,11 +374,14 @@ aws dynamodb create-table
     - For production, decouple and launch separately
         - Additional Security Group on ASG
         - Provided connection string configuration to application servers
+    - Can control what happens with `Retention` setting - e.g. Create snapshot to keep DB
 - Every deployment creates a version
     - Will hit version limit
     - Use Application Version Lifecycle policy to delete old versions
+    - Each application can have multiple versions
 - Periodic stuff use a `cron.yaml` file
 - EB CLI allows for monitoring and working with environment
+- Change environment to change runtime
 
 # Kinesis
 
@@ -519,7 +529,7 @@ aws dynamodb create-table
     - `Parameters` - Input values, provided at stack launch by user
     - `Conditions` - Custom expressions to allow template to make decisions
     - `Mappings` - Define values in a dictionary key (e.g. RegionMap)
-    - `Transform` - Include snippets of code from other files in S3 (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html), code re-se
+    - `Transform` - Include snippets of code from other files in S3 (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html), code re-use
     - `Resources` - The AWS Resources you are deploying (*required!*)
     - `Outputs` - Outputs from the scripts, can be passed downstream
 - Rollback on failure by default
@@ -530,6 +540,8 @@ aws dynamodb create-table
     - Part of `Resources` section as a Stack type
     - Must have `TemplateURL` can have `Parameters`
 - For EC2 can use `cfn-init` to install software on instances
+- StackSets extend stacks over multiple regions and account
+- ChangeSets used to change running resources
 
 ## Serverless Application Model (SAM)
 
