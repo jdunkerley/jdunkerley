@@ -12,6 +12,8 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 7. Advanced IAM, Monitoring (1:15:42)
 8. Practice Papers (2 weeks - 5 mock tests allowing about 2 hours for each test and review)
 
+**Total Time: 10 weeks**
+
 ## Reviewed
 
 - Free Test - June 2018
@@ -20,9 +22,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 - Test 2
 - Test 3
 - Test 4
-- Test 5:15
-
-**Total Time: 10 weeks**
+- Test 5
 
 # IAM
 
@@ -54,6 +54,9 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
         - SAML Federation for organisation SSO to AD
     - Streams
         - Allows access to data stored in Cognito
+    - Can detect compromised credentials on User Pool
+        - Use `Block use` in advanced security
+        - Checks on Sign In, Sign Up, Password Change
 
 
 # EC2
@@ -76,6 +79,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
 - Still use prefix if absolutely needed...
 - To block unencrypted uploda need to us Bucket Policy Denying if no `x-amz-server-side-encryption`
 - 503 errors can be when have millions of versions of a file - check inventory
+- CloudFront TTL use minimum TTL and origin can add Cache-Control or Expires headers
 
 # Serverless Computing
 
@@ -123,7 +127,7 @@ This is my set of notes for the AWS Developer Associate Exams. It based on havin
          - Used as part of hash to determine physical location data is stored
          - No 2 items can have same Primary Key
     - Composite Key
-         - Partition Key and Sort Key
+         - Partition Key (HASH) and Sort Key (RANGE)
          - 2 items may have same partition key but not primary key
          - Same Partition Key stored together, then sorted by sort key
 - Access managed by IAM
@@ -310,6 +314,7 @@ aws dynamodb create-table
   - Support different target types and more than one subscriber
 - Redundant storage across multiple AZs
 - Push based (pub-sub)
+  - User can add filter policy when they subscribe to get subset
 - Pricing
   - $0.5 / 1m Requests
   - $0.06 / 100k HTTP deliveries
@@ -393,6 +398,7 @@ aws dynamodb create-table
         - Data stored in Shards
         - 24hr to 7 day retention
         - Number of Shards controls capacity of streams
+            - Max of incoming write / 1000 and outgoing read / 2000 
         - Consumers read and send on
         - Can only control order within a shard using `sequenceNumberForOrdering` parameter
     - Firehose
@@ -564,7 +570,13 @@ aws dynamodb create-table
 - AWS Config - records state of AWS environment and notifies of changes (think version control of environment)
 - XRay allow you to trace through execution path
     - Needs IAM permission to write to XRay
-- TO monitor ELBs look at the access logs
+    - Docker image in ECS
+    - Use interceptors to catch all HTTP requests
+    - XRay Lambda Environment Variables
+        - `_X_AMZN_TRACE_ID` - trace ID for XRay
+        - `AWS_XRAY_CONTEXT_MISSING` - what happens if no trace ID (error log by default)
+        - `AWS_XRAY_DAEMON_ADDRESS` - IP:PORT for XRay daemon
+- To monitor ELBs look at the access logs
 
 ## Cloudwatch
 
