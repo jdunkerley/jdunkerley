@@ -1,7 +1,7 @@
 This is my set of notes for the AWS Developer Associate Exams. It based on having done the SA Associate
 
 # Weekly Guide
-*Times shown as at 18-Jan-2018*
+*Times shown as at 18-Jan-2019*
 
 1. Revisit IAM / EC2 / S3 (5:26:18 - but content all covered in SA)
 2. Look at Serverless (2:26:45)
