@@ -9,11 +9,11 @@ So I have now completed both the [Solution Architect Associate](https://aws.amaz
 
 For a long time, I haven't been particularly bothered by doing any certifications. I have always believed in proving myself in the work I do, and this was particularly true when I worked as an in-house developer. As a consultant for [Scott Logic](https://www.scottlogic.com/), I naturally have to have a more public profile - certification is one way of saying I know a technology area.
 
-Alteryx introduced certification a couple of years ago and that was my first exposure to actually doing one. It was a requirement of being an [ACE](https://community.alteryx.com/t5/ACE-Program/bd-p/ace-program) that you at least the [Core certification](https://community.alteryx.com/t5/Certification/bd-p/product-certification). In this case, I have spent far too much time digging deep into Alteryx so didn't do much study for them. The Expert certification really made me value the process. It is a very hard test and really demonstates a great breadth of detailed knowledge in the platform.
+Alteryx introduced certification a couple of years ago and that was my first exposure to actually doing one. It was a requirement of being an [ACE](https://community.alteryx.com/t5/ACE-Program/bd-p/ace-program) that you at least the [Core certification](https://community.alteryx.com/t5/Certification/bd-p/product-certification). In this case, I have spent far too much time digging deep into Alteryx so didn't do much study for them. The Expert certification really made me value the process. It is a very hard test and really demonstrates a great breadth of detailed knowledge in the platform.
 
 In AWS case, the SA associate gives a fantastic introduction to their services. AWS is a huge platform and grows at an astronomical rate - take a look at the [2018 What's New](https://aws.amazon.com/about-aws/whats-new/2018/) to give you an idea. The SA associate exposes you to a wide range of services giving you a brief introduction to many of them. In addition, it goes much deeper into some import topic areas such as EC2 and IAM. This helps hugely when working on the platform as you have a good idea where to start looking.
 
-Finally, the cloud is a new world and we should think in a new way. If all we do is lift and shift from data center to the cloud then the benefits are a lot smaller. The SA gives a lot of advice and examples of how to build things in a cloud way. Changing the way you think about using the platform is another huge value from passing the certifications.
+Finally, the cloud is a new world and we should think in a new way. If all we do is lift and shift from data centre to the cloud, then the benefits are a lot smaller. The SA gives a lot of advice and examples of how to build things in a cloud way. Changing the way, you think about using the platform is another huge value from passing the certifications.
 
 ## So How Did I Approach It
 
@@ -23,11 +23,11 @@ A group of us working on the same project decided we all wanted to work together
 
 ![Study Group](assets/certification/studygroup.jpg)
 
-At first, we just wanted to learn about AWS in general but when we looked into it felt like the SA associate was a good way. Next, we looked into finding some material to use to help study. We looked into a few options before settling on the [A Cloud Guru](https://acloud.guru/) [course](https://acloud.guru/learn/aws-certified-solutions-architect-associate). You can also get the course on [Udemy](https://www.udemy.com/aws-certified-solutions-architect-associate/). 
+At first, we just wanted to learn about AWS in general but when we investigated it felt like the SA associate was a good way. Next, we looked into finding some material to use to help study. We looked into a few options before settling on the [A Cloud Guru](https://acloud.guru/) [course](https://acloud.guru/learn/aws-certified-solutions-architect-associate). You can also get the course on [Udemy](https://www.udemy.com/aws-certified-solutions-architect-associate/). 
 
 In general, I aimed to watch about 2 hours of videos a week and then spend time playing with and experimenting with the technologies we had been looking at. The table below shows roughly what I looked at each week:
 
-1. Look at 10,000 foot overview and the certifications path
+1. Look at 10,000-foot overview and the certifications path
 2. IAM and AWS CLI 
 3. S3 101 - get familiar with S3, including life cycle management
 4. Work on a DropBox style 's3Box' web app
@@ -51,13 +51,13 @@ After completing the SA associate, we took a little break and a breather to deci
 
 1. Revisit IAM / EC2 / S3 (5:26:18 - but content all covered in SA)
 2. Look at Serverless (2:26:45)
-3. Build something in Serverless (2 week project)
+3. Build something in Serverless (2-week project)
 4. DynamoDB (1:36:02)
 5. KMS and Other AWS Services (1:37:54)
 6. Developer Theory (2:50:50)
 7. Advanced IAM, Monitoring (1:15:42)
 
-Again after we completed the videos, we chose a date and then set about doing the [WhizLabs practice papers](https://www.whizlabs.com/aws-developer-associate/practice-tests/). I will say that the questions involve more detail than was covered in the videos. I think acing this test without actively using the platform and specific services is a lot harder. Again all of our group did pass the test well.
+Again, after we completed the videos, we chose a date and then set about doing the [WhizLabs practice papers](https://www.whizlabs.com/aws-developer-associate/practice-tests/). I will say that the questions involve more detail than was covered in the videos. I think acing this test without actively using the platform and specific services is a lot harder. Again all of our group did pass the test well.
 
 While they are mostly to help me remember my notes from studying the course are on [GitHub](https://github.com/jdunkerley/jdunkerley/blob/master/AWS%20Developer.md).
 
@@ -67,7 +67,7 @@ Just for completeness, I thought I would mention the Alteryx certifications. I s
 
 Expert is another challenge altogether. It is a very tricky practical exam and can only be taken at an Inspire conference (there are now three of these allowing you three chances a year if you feel like jet setting!). The first thing to do is to read carefully the areas they are going to challenge you on (you receive details in advance of Inspire telling you the topics). I would then recommend doing the [weekly challenges](https://community.alteryx.com/t5/Weekly-Challenge/bd-p/weeklychallenge) and answering questions on the community to prepare. Finally, watch the live training on these topics and make sure you are happy with it. Finally, remember the format of the test. You only need to answer 3 questions correctly out of 5 available (you can answer up to 4).
 
-One last thing on Alteryx tests - they are open book. AWS ones were sat in an exam center with no internet access (ironic for a cloud exam!). The Alteryx ones (including expert) allow you to search the web. So my advice for expert is do the ones you are happy with straight away and get them done. Then you will hopefully have time to search the community or google for something similar to the question asked and then you can adapt to solve the problem at hand (it still won't be easy!).
+One last thing on Alteryx tests - they are open book. AWS ones were sat in an exam centre with no internet access (ironic for a cloud exam!). The Alteryx ones (including expert) allow you to search the web. So, my advice for expert is do the ones you are happy with straight away and get them done. Then you will hopefully have time to search the community or google for something similar to the question asked and then you can adapt to solve the problem at hand (it still won't be easy!).
 
 ## What's Next
 
