@@ -1,7 +1,7 @@
 # My Experience from AWS Certifications  
 
-![SA](assets/certification/solution-architect.png)
-![Developer](assets/certification/developer.png)
+![SA](https://jdunkerley79.files.wordpress.com/2019/03/solution-architect.png)
+![Developer](https://jdunkerley79.files.wordpress.com/2019/03/developer.png)
 
 So I have now completed both the [Solution Architect Associate](https://aws.amazon.com/certification/certified-solutions-architect-associate/) and [Developer Associate](https://aws.amazon.com/certification/certified-developer-associate/) certifications and thought I would share my thoughts from the process.
 
@@ -21,7 +21,7 @@ There are hundreds of blogs or YouTube videos about how I study and passed AWS c
 
 A group of us working on the same project decided we all wanted to work together to learn about AWS. We met once a week over breakfast in [SmoothBean](https://www.tripadvisor.co.uk/Restaurant_Review-g504167-d7171237-Reviews-Smoothbean-Croydon_Greater_London_England.html) in Croydon to see how we were all getting on, chat and ask each other questions (and eat nice breakfast and drink coffee!).
 
-![Study Group](assets/certification/studygroup.jpg)
+![Study Group](https://jdunkerley79.files.wordpress.com/2019/03/studygroup.jpg)
 
 At first, we just wanted to learn about AWS in general but when we investigated it felt like the SA associate was a good way. Next, we looked into finding some material to use to help study. We looked into a few options before settling on the [A Cloud Guru](https://acloud.guru/) [course](https://acloud.guru/learn/aws-certified-solutions-architect-associate). You can also get the course on [Udemy](https://www.udemy.com/aws-certified-solutions-architect-associate/). 
 
