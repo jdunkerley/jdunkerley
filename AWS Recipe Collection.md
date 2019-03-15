@@ -1,4 +1,6 @@
-# So I have far too many recipe cards...
+# RecipeFinder: A Serverless Data Flows, NLP, Elasticsearch in the Cloud Project
+
+So I have far too many recipe cards...
 
 ![Too Many Recipe Cards](assets/recipe-cards/recipe-cards.jpg)
 
@@ -8,11 +10,19 @@ Over the last few months, I have been working with serverless technologies in AW
 
 Additionally, I'll want to use AWS technologies to secure the platform, take images in and OCR the content and allow me to find out more about all the recipes I have gathered!
 
-## So Why Serverless...
+## So Why Serverless Data Flows ...
 
-So I've covered this before for [Azure Functions](https://jdunkerley.co.uk/2018/02/06/creating-a-simple-azure-function-in-javascript-with-vs-code/) and while have done a post [AWS Lambda](https://jdunkerley.co.uk/2019/01/08/creating-a-simple-aws-lambda-in-c/) haven't talked about Lambda's strengths recently. As mentioned in the Azure post, they have lots of benefits - cost (you get a chunky free allowance each month), 
+So I've covered some of this before for [Azure Functions](https://jdunkerley.co.uk/2018/02/06/creating-a-simple-azure-function-in-javascript-with-vs-code/) and while have done a post [AWS Lambda](https://jdunkerley.co.uk/2019/01/08/creating-a-simple-aws-lambda-in-c/) haven't talked about Lambda's strengths recently. As mentioned in the Azure post, they have lots of benefits. The first one that normally comes up is cost - you get a chunky free allowance each month and it pay per use. Let's talk a bit more about the other benefits as cost is an easy one (centered on Lambda but generally applicable to all Functions as a Service (Faas) offerings).
 
-**To Do**
+<img src="" style="float:right;" />
+
+Speed of delivery is amazing with Lambda. You manage only what matters to you. Before the public cloud, the chances are you would have needed to find a physical server to either buy and set up in a data center or rent one from a company that ran a data center. You had huge investment and commitment upfront before you have even started. One of the first services that was offered by AWS was EC2 (it launched in around March 2006). This meant you could get hardware in the cloud quickly and easily. However you still have to size and scale up front.
+
+<img src="" style="float:left;" />
+
+At this point, we have abstracted the hardware management but we still have to size and manage the OS and everything downwards. One possible next step of abstraction is to run things within containers. At first, in some ways this just add complexity now you have Docker running on a machine and still tons of stuff to manage. Fortunately, all three main cloud providers offer a container service ([ECS](https://aws.amazon.com/ecs/), [ACS](https://docs.microsoft.com/en-us/azure/container-service/), and [Google Contianers](https://cloud.google.com/compute/docs/containers/)). These are cloud native ways to run containers. This abstracts away some of running the machines and when combined with AWS Fargate or Azure Container Instances you no longer need to guess scale up front. Even at the container level there is still a lot to care about. The container will have a container OS and these base images will need managing and update. FaaS takes it one step further the OS and the runtime (e.g. Python, .Net Core) as manged for you. You just manage your application.
+
+... Write More ...
 
 ## 10,000 Foot Plan
 
@@ -32,6 +42,4 @@ So that's the end architecture, but there is also the whole build and deployment
 
 So there's a lot of fun steps ahead, lots of fun technologies to play with and dive deep into from Lambdas, APIs, AI, NLP, Elastic to pick just a few. [Jan Akerman](https://janakerman.co.uk/) has agreed to join me on this journey and will be helping with the different tools and technologies as we go.
 
-I'll try and do all this securely and with as much tips and tricks to help others as we go.
-
-First up will be to build an Elastic EC2 instance from the ground up. 
+I'll try and do all this securely and with as much tips and tricks to help others as we go. My plan is to do this in a series of small focuesed posts. So first up will be to build an Elastic EC2 instance from the ground up.
