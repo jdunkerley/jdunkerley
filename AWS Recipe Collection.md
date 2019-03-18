@@ -14,7 +14,7 @@ Additionally, I'll want to use AWS technologies to secure the platform, take ima
 
 I've talked about some of the benefits of Serverless Compute (Function as a Service) before when looking at [Azure Functions](https://jdunkerley.co.uk/2018/02/06/creating-a-simple-azure-function-in-javascript-with-vs-code/), but there are more services than just compute. The list below shows some serverless technologies on AWS (there are equivalents on Azure) just to give an idea of what is available:
 
-**ToDo: AWS Serverless Logos**
+<img src="assets/recipe-cards/serverless.jpg" style="float:right;" />
 
 - Storage: *S3*
 - Content Delivery Network: *CloudFront*
@@ -28,13 +28,12 @@ The first one that normally comes up is cost. Serverless technologies are charge
 
 Scalability is huge benefit to using serverless technologies. Prior to the public cloud, you would have needed to find a physical servesr to either buy and set up in a data center. One of the first services that was offered by AWS was EC2 (it launched in around March 2006). This meant you could get hardware in the cloud quickly and easily. However, you still have to size and scale for anticipated demand. Serverless technolofies are generally all designed to scale instantly. To take a couple of examples, Lambda is designed to just add instances until it has enough to cope with incoming events and S3 will happily store huge files (into multiple TB *Check*) and cope with thousands of requests per second.
 
-With modern distributed architectures, you need to design for failues and think about high availability. If you imagine running a machine in a data center, you need to think about everything from the machine reboot through to complete destuction of the data center. AWS has regions and availablity zones (AZ) allowing you to set up machine clusters such that a failure is isolated. For their serverless services, they are all designed to run across multiple AZs (and as required across regions). This means you get high availability effectively for free.
+With modern distributed architectures, you need to design for failues and think about high availability. If you imagine running a machine in a data center, you need to think about everything from the machine rebooting through to complete destuction of the data center and everything in between. AWS has regions and availablity zones (AZ) allowing you to set up machine clusters such that a failure is isolated. For their serverless services, they are all designed to run across multiple AZs (and can as required span across regions). This means you get high availability effectively for no effort.
 
-**Rewrite and complete**
+Another huge advantage is around security. Firstly, like all AWS services you can use IAM to provide role based access control to the services. For example, you can control exactly which users can run lambda functions and which other services can trigger them. Additional various services have additional policies that can be applied which will allow or deny access based on different conditions (for example client IP restrictions on API Gateway). These tools allow you to make all of the services very securely. 
+- known state
 
-Another huge advantage is around security. Firstly, like all AWS services you can use IAM to provide role based access control to the functions. So you can control exactly which users can run the functions and which other services can trigger them. On top of IAM role control  
-
-Maintenance and Updates
+- Maintenance and Updates
 
 <img src="assets/recipe-cards/containers.png" style="float:left;" />
 
@@ -42,14 +41,24 @@ At this point, we have abstracted the hardware management but we still have to s
 
 Even at the container level, there is still a lot of stuff to care about. The container will have a container OS and these base images will need managing and updating. FaaS takes it one step further the OS and the runtime (e.g. Python, .Net Core) are managed for you. You just manage your application and it's dependencies.
 
-
-Logging and Tracing
+- Logging and Tracing
 
 All of this adds up to a speed of delivery is amazing with these technologies. You only need to deal with what matters to you. You can start small and deliver something that will scale as you need straight away.
 
+There are catches of course. You are giving up lots of control by handing it over to AWS to manage for you but often this is an advantage. A couple of examples of issues you might face are execution time limitations (e.g. a Lambda has maximum run time of 15 minutes)
+
 ### Why Does It Suit A Data Flow
 
+- Event driven
+- each record own event - issues isolated
+- build in retry logic
+- simple to connect together with events on each service (S3 Lambda SQS)
+
 ### Serverless Web App
+
+- Cheap hosting
+- CDN and API GW
+- Lambda data
 
 ## Why Use Elasticsearch
 
