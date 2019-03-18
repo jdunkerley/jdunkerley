@@ -1,6 +1,6 @@
 # RecipeFinder: A Serverless Data Flows, NLP, Elasticsearch in the Cloud Project
 
-So I have far too many recipe cards...
+So, I have far too many recipe cards...
 
 ![Too Many Recipe Cards](assets/recipe-cards/recipe-cards.jpg)
 
@@ -10,19 +10,48 @@ Over the last few months, I have been working with serverless technologies in AW
 
 Additionally, I'll want to use AWS technologies to secure the platform, take images in and OCR the content and allow me to find out more about all the recipes I have gathered!
 
-## So Why Serverless Data Flows ...
+## So Why Use Serverless Technologies
 
-So I've covered some of this before for [Azure Functions](https://jdunkerley.co.uk/2018/02/06/creating-a-simple-azure-function-in-javascript-with-vs-code/) and while have done a post [AWS Lambda](https://jdunkerley.co.uk/2019/01/08/creating-a-simple-aws-lambda-in-c/) haven't talked about Lambda's strengths recently. As mentioned in the Azure post, they have lots of benefits. The first one that normally comes up is cost - you get a chunky free allowance each month and it pay per use. Let's talk a bit more about the other benefits as cost is an easy one (centered on Lambda but generally applicable to all Functions as a Service (Faas) offerings).
+I've talked about some of the benefits of Serverless Compute (Function as a Service) before when looking at [Azure Functions](https://jdunkerley.co.uk/2018/02/06/creating-a-simple-azure-function-in-javascript-with-vs-code/), but there are more services than just compute. The list below shows some serverless technologies on AWS (there are equivalents on Azure) just to give an idea of what is available:
 
-<img src="" style="float:right;" />
+**ToDo: AWS Serverless Logos**
 
-Speed of delivery is amazing with Lambda. You manage only what matters to you. Before the public cloud, the chances are you would have needed to find a physical server to either buy and set up in a data center or rent one from a company that ran a data center. You had huge investment and commitment upfront before you have even started. One of the first services that was offered by AWS was EC2 (it launched in around March 2006). This meant you could get hardware in the cloud quickly and easily. However you still have to size and scale up front.
+- Storage: *S3*
+- Content Delivery Network: *CloudFront*
+- API Management: *API Gateway*
+- IDAM: *Cognito*
+- Databases: NoSQL - *DynamoDB*, SQL - *Aurora Serverless*
+- Message: *SQS* and *SNS*
+- Logging and Tracing: *XRay* and *CloudWatch*
 
-<img src="" style="float:left;" />
+The first one that normally comes up is cost. Serverless technologies are charged on a consumption model - i.e. you pay for what you use. If you think about a web server under light load it spends most of it's time idle. If you are using an EC2 instance for this you pay for all the time it is running. If you replace it with a serverless equivalent, then you will only pay when it is serving content. Additionally, for Lambda (and other Functions as a Service (Faas) offerings), you get a chunky free allowance each month - used wisely it can be a long time before you pay for it.
 
-At this point, we have abstracted the hardware management but we still have to size and manage the OS and everything downwards. One possible next step of abstraction is to run things within containers. At first, in some ways this just add complexity now you have Docker running on a machine and still tons of stuff to manage. Fortunately, all three main cloud providers offer a container service ([ECS](https://aws.amazon.com/ecs/), [ACS](https://docs.microsoft.com/en-us/azure/container-service/), and [Google Contianers](https://cloud.google.com/compute/docs/containers/)). These are cloud native ways to run containers. This abstracts away some of running the machines and when combined with AWS Fargate or Azure Container Instances you no longer need to guess scale up front. Even at the container level there is still a lot to care about. The container will have a container OS and these base images will need managing and update. FaaS takes it one step further the OS and the runtime (e.g. Python, .Net Core) as manged for you. You just manage your application.
+Scalability is huge benefit to using serverless technologies. Prior to the public cloud, you would have needed to find a physical servesr to either buy and set up in a data center. One of the first services that was offered by AWS was EC2 (it launched in around March 2006). This meant you could get hardware in the cloud quickly and easily. However, you still have to size and scale for anticipated demand. Serverless technolofies are generally all designed to scale instantly. To take a couple of examples, Lambda is designed to just add instances until it has enough to cope with incoming events and S3 will happily store huge files (into multiple TB *Check*) and cope with thousands of requests per second.
 
-... Write More ...
+With modern distributed architectures, you need to design for failues and think about high availability. If you imagine running a machine in a data center, you need to think about everything from the machine reboot through to complete destuction of the data center. AWS has regions and availablity zones (AZ) allowing you to set up machine clusters such that a failure is isolated. For their serverless services, they are all designed to run across multiple AZs (and as required across regions). This means you get high availability effectively for free.
+
+**Rewrite and complete**
+
+Another huge advantage is around security. Firstly, like all AWS services you can use IAM to provide role based access control to the functions. So you can control exactly which users can run the functions and which other services can trigger them. On top of IAM role control  
+
+Maintenance and Updates
+
+<img src="assets/recipe-cards/containers.png" style="float:left;" />
+
+At this point, we have abstracted the hardware management but we still have to size and manage the OS and everything downwards. One possible next step of abstraction is to run everything within containers. At first, in some ways this just add complexity now you have Docker running on a machine and extra stuff to manage. Fortunately, all three main cloud providers offer a container service ([ECS](https://aws.amazon.com/ecs/), [ACS](https://docs.microsoft.com/en-us/azure/container-service/), and [Google Contianers](https://cloud.google.com/compute/docs/containers/)). These are cloud native ways to run containers which abstracts away some of management of running the machines. When combined with [AWS Fargate](https://aws.amazon.com/fargate/) or [Azure Container Instances](https://azure.microsoft.com/en-gb/services/container-instances/), you no longer need to guess scale up front. 
+
+Even at the container level, there is still a lot of stuff to care about. The container will have a container OS and these base images will need managing and updating. FaaS takes it one step further the OS and the runtime (e.g. Python, .Net Core) are managed for you. You just manage your application and it's dependencies.
+
+
+Logging and Tracing
+
+All of this adds up to a speed of delivery is amazing with these technologies. You only need to deal with what matters to you. You can start small and deliver something that will scale as you need straight away.
+
+### Why Does It Suit A Data Flow
+
+### Serverless Web App
+
+## Why Use Elasticsearch
 
 ## 10,000 Foot Plan
 
