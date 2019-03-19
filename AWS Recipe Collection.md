@@ -30,18 +30,17 @@ Scalability is huge benefit to using serverless technologies. Prior to the publi
 
 With modern distributed architectures, you need to design for failues and think about high availability. If you imagine running a machine in a data center, you need to think about everything from the machine rebooting through to complete destuction of the data center and everything in between. AWS has regions and availablity zones (AZ) allowing you to set up machine clusters such that a failure is isolated. For their serverless services, they are all designed to run across multiple AZs (and can as required span across regions). This means you get high availability effectively for no effort.
 
-Another huge advantage is around security. Firstly, like all AWS services you can use IAM to provide role based access control to the services. For example, you can control exactly which users can run lambda functions and which other services can trigger them. Additional various services have additional policies that can be applied which will allow or deny access based on different conditions (for example client IP restrictions on API Gateway). These tools allow you to make all of the services very securely. 
-- known state
+Another huge advantage is around security. Firstly, like all AWS services you can use IAM to provide role based access control to the services. For example, you can control exactly which users can run lambda functions and which other services can trigger them. Additional various services have additional policies that can be applied which will allow or deny access based on different conditions (for example client IP restrictions on API Gateway). These tools allow you to make all of the services very securely.
 
-- Maintenance and Updates
+One final security aspect of note, Lambda has a known state for each execution. While it is not quite true that every execution is a completely clean environment (it is possible to use `/tmp` to share things between invocations for example), the runtimes are much shorter lived than is the case with servers or containers. Additionally, as there is no guarentee of sharing a runtime, it encourages everything to be written in a self contained manner.
 
 <img src="assets/recipe-cards/containers.png" style="float:left;" />
 
-At this point, we have abstracted the hardware management but we still have to size and manage the OS and everything downwards. One possible next step of abstraction is to run everything within containers. At first, in some ways this just add complexity now you have Docker running on a machine and extra stuff to manage. Fortunately, all three main cloud providers offer a container service ([ECS](https://aws.amazon.com/ecs/), [ACS](https://docs.microsoft.com/en-us/azure/container-service/), and [Google Contianers](https://cloud.google.com/compute/docs/containers/)). These are cloud native ways to run containers which abstracts away some of management of running the machines. When combined with [AWS Fargate](https://aws.amazon.com/fargate/) or [Azure Container Instances](https://azure.microsoft.com/en-gb/services/container-instances/), you no longer need to guess scale up front. 
+We have handed over the management of the hardware but if we are running virtual machines we still to think about keeping the environment patched and up to date. If you consider running in containers, then you can hand over the management of the host OS and docker environment. All three main cloud providers offer a container service ([ECS](https://aws.amazon.com/ecs/), [ACS](https://docs.microsoft.com/en-us/azure/container-service/), and [Google Contianers](https://cloud.google.com/compute/docs/containers/)). When combined with [AWS Fargate](https://aws.amazon.com/fargate/) or [Azure Container Instances](https://azure.microsoft.com/en-gb/services/container-instances/), you no longer need to guess scale up front or manage hosts. 
 
-Even at the container level, there is still a lot of stuff to care about. The container will have a container OS and these base images will need managing and updating. FaaS takes it one step further the OS and the runtime (e.g. Python, .Net Core) are managed for you. You just manage your application and it's dependencies.
+Unfortunately, even at the container level, there is still a lot of stuff to care about. The container will have a container OS and these base images will need managing and updating. If you are using a runtime (Python, Node, .Net or Java), it will need patching and updating. Serverless technogies take away these two layers. The provider will manage patching everything except your code. You just manage your application and it's dependencies.
 
-- Logging and Tracing
+As architectures grow and become more distributed, it becomes critical to have good logging and tracing capabilities. AWS uses CloudWatch for both logging and metrics. This is built into many of the serverless services giving you the option to log and measure many different aspect of your architecture. Additionally, you can use X-Ray to trace an execution through the application showing where bottlenecks or failures occur.
 
 All of this adds up to a speed of delivery is amazing with these technologies. You only need to deal with what matters to you. You can start small and deliver something that will scale as you need straight away.
 
@@ -49,10 +48,17 @@ There are catches of course. You are giving up lots of control by handing it ove
 
 ### Why Does It Suit A Data Flow
 
-- Event driven
-- each record own event - issues isolated
-- build in retry logic
-- simple to connect together with events on each service (S3 Lambda SQS)
+Consider a simple data process.
+
+![Simple Data Flow](assets/recipe-cards/datapipeline.png)
+
+Starting with a time based trigger in we run a process to generate a list of work to do. Each item of work can then be gather processed and stored. In the picture above, CloudWatch is used to provide a cron style trigger which runs a first Lambda function. This function works out what work is needed to be done and stores the item in a Simple Queue Service (SQS) queue. A second lambda watches this queue and is then triggered in parallel to pick up the items and begin processing. The results of this lambda can then be stored in an S3 bucket for later use.
+
+The serverless services allow us to implement this simple event driven data pipeline in an incredibly short period of time. The event messaging is all built into the AWS architecture and makes it straight forward to plug together components to build complex pipelines.
+
+Each event becomes it's own execution. This isolates issues down to that specific record. If the lambda crashes then it only affect the single record passing through and allows the others to proceed. This single record as a single invocation also allows us to leverage the scalability of lambda and run hundreds (or even thousands) in parallel.
+
+Additionally, all asynchronous invocations of Lambda automatically has a retry logic built in attempting 3 times to complete the execution. It is also trivial to attach a 'dead letter queue' to these lambdas allowing you to receive notifications in the event of a failure.
 
 ### Serverless Web App
 
@@ -61,6 +67,8 @@ There are catches of course. You are giving up lots of control by handing it ove
 - Lambda data
 
 ## Why Use Elasticsearch
+
+- Write Me!
 
 ## 10,000 Foot Plan
 
