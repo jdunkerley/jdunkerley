@@ -62,9 +62,13 @@ Additionally, all asynchronous invocations of Lambda automatically has a retry l
 
 ### Serverless Web App
 
-- Cheap hosting
-- CDN and API GW
-- Lambda data
+![Serverless Webapp](assets/recipe-cards/serverless-webapp.png)
+
+Using a collection of serverless services it is very straight forward to host a modern web app. Place the built HTML/JS into an S3 bucket. I don't recommend directly exposing this using it's web hosting except for early development as it only support HTTP not HTTPS. From past experience, do not leave security features (like HTTPS) to the end as they are a lot easier to build as you go along. Fortunately, there is an easy solution for this. If you use CloudFront to serve the content from S3 then you can easily add HTTPS.
+
+For REST APIs needed to power the site, you can easily do this using API Gateway backing onto Lambda (or other services as needed). This is HTTPS by default (I don't believe it support HTTP). You can then additionally secure the APIs using Cognito such that only authorised users can use parts of the site.
+
+The big advantage of this is cost. All services will hardly cost anything for this set up. Obviously, if your site takes off costs will start to appear but the free tier for these services is huge.
 
 ## Why Use Elasticsearch
 
@@ -86,6 +90,6 @@ So that's the initial ideas for the architecture, but there is also the whole wo
 
 ## What's Next
 
-So there's a lot of fun steps ahead, lots of fun technologies to play with and dive deep into from Lambdas, APIs, AI, NLP, Elastic to pick just a few. [Jan Akerman](https://janakerman.co.uk/) has agreed to join me on this journey and will be helping with the different tools and technologies as we go.
+So there's a lot of fun steps ahead, lots of fun technologies to play with and dive deep into from Lambdas, APIs, AI, NLP, Elastic to pick just a few. A couple of my colleague [Jan Akerman](https://janakerman.co.uk/), [Bartosz ]()  have agreed to join me on this journey and will be helping with the different tools and technologies as we go.
 
 I'll try and do all this securely and with as much tips and tricks to help others as we go. My plan is to do this in a series of small focussed posts. So first up will be to build an Elastic EC2 instance from the ground up.
