@@ -70,9 +70,17 @@ For REST APIs needed to power the site, you can easily do this using API Gateway
 
 The big advantage of this is cost. All services will hardly cost anything for this set up. Obviously, if your site takes off costs will start to appear but the free tier for these services is huge.
 
-## Why Use Elasticsearch
+## Why Use ElasticSearch
 
-- Write Me!
+So far, I have argued for serverless everywhere. I could look to use a serverless NoSql solution such as DynamoDB as my final datastore. Depending on the nature of the data this could be good solution. 
+
+![Elastic Logo](assets/recipe-cards/elastic.png)
+
+Elasticsearch has some amazing capabilities. The underlying Apache Lucene technologies creates highly performant indexes allowing search and retrieval of records easily. Additionally, while not simple, the query syntax allows you to build arbitary complicated searches with a good fuzzy matching capabilities.
+
+The downside is you need a machine or cluster. To enable this, you need to build a VPC and set up the EC2 within one or more private subnets. Elasticsearch is pretty straight forward to get set up first as a single machine and then as cluster. Additionally, as it's cluster is very resiliant you can easily take nodes out and upgrade. 
+
+Having a non-serverless component comes with some limitations (you can't expect it to scale as well as the serverless components), but this it is power is huge.
 
 ## 10,000 Foot Plan
 
@@ -90,6 +98,6 @@ So that's the initial ideas for the architecture, but there is also the whole wo
 
 ## What's Next
 
-So there's a lot of fun steps ahead, lots of fun technologies to play with and dive deep into from Lambdas, APIs, AI, NLP, Elastic to pick just a few. A couple of my colleague [Jan Akerman](https://janakerman.co.uk/), [Bartosz ]()  have agreed to join me on this journey and will be helping with the different tools and technologies as we go.
+So there's a lot of fun steps ahead, lots of fun technologies to play with and dive deep into from Lambdas, APIs, AI, NLP, Elastic to pick just a few. A couple of my colleagues, [Jan Akerman](https://janakerman.co.uk/), [Bartosz Jedrzejewski](https://www.e4developer.com/) and Colin Lambden, have agreed to join me on this journey and will be helping with the different tools and technologies as we build out the application.
 
-I'll try and do all this securely and with as much tips and tricks to help others as we go. My plan is to do this in a series of small focussed posts. So first up will be to build an Elastic EC2 instance from the ground up.
+We'll try and do all this securely and with as much tips and tricks to help others as we go. My plan is that we do this in a series of small focuesed posts on each part. So first up will be to build an Elastic EC2 instance from the ground up.
