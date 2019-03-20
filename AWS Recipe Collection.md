@@ -98,6 +98,6 @@ So that's the initial ideas for the architecture, but there is also the whole wo
 
 ## What's Next
 
-So, there's a lot of fun steps ahead, lots of fun technologies to play with and dive deep into from Lambdas, APIs, AI, NLP, Elastic to pick just a few. A couple of my colleagues, [Jan Akerman](https://janakerman.co.uk/), [Bartosz Jedrzejewski](https://www.e4developer.com/) and Colin Lambden, have agreed to join me on this journey and will be helping with the different tools and technologies as we build out the application.
+So, there's a lot of fun steps ahead, lots of fun technologies to play with and dive deep into from Lambdas, APIs, AI, NLP, Elastic to pick just a few. A couple of my colleagues, [Jan Akerman](https://janakerman.co.uk/), [Bartosz Jedrzejewski](https://www.e4developer.com/), [Jamie Morris](https://github.com/jamiemorris1991) and Colin Lambden, have agreed to join me on this journey and will be helping with the different tools and technologies as we build out the application.
 
 We'll try and do all this securely and with as much tips and tricks to help others as we go. My plan is that we do this in a series of small focused posts on each part. So first up will be to build an Elastic EC2 instance from the ground up.
