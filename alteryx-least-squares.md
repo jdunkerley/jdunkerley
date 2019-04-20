@@ -44,6 +44,33 @@ Now, expand out the square:
 
 ![$ =\sum_{i=1}^{n} (y_i^2-2y_i(A+Bx_i)+(A+Bx_i)^2)$](assets/least-squares/sum_ei_lin2.svg)
 
-![$ =\sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i)+A^2+2ABx_i+B^2x_i^2)$](assets/least-squares/sum_ei_lin3.svg)
+![$ =\sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)$](assets/least-squares/sum_ei_lin3.svg)
 
+So the goal is to find *A* and *B* to minimise the above expression: 
+
+![$\min_{A,B} \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)$](assets/least-squares/min_ei_lin3.svg)
+
+Going back to calculus basics, a maximum or minimum will be when the first derivative is 0. So let's differentiate with respect to *A* :
+
+![$\frac{\partial \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)}{\partial A}=\sum_{i=1}^{n} (-2y_i+2A+2Bx_i)$](assets/least-squares/da_lin.svg)
+
+So we want to find when this is 0. Rearranging (and dividing by 2):
+
+![$\sum_{i=1}^{n} A=\sum_{i=1}^{n}y_i-\sum_{i=1}^{n}Bx_i$](assets/least-squares/da_lin2.svg)
+
+We can then expand the sums for this:
+
+![$nA=\sum_{i=1}^{n}y_i-B\sum_{i=1}^{n}x_i$](assets/least-squares/da_lin3.svg)
+
+Dividing by *n*, this gives us:
+
+![$A=\bar{y}+B\bar{x}$](assets/least-squares/da_lin4.svg)
+
+Where ![$\bar{x}$](assets/least-squares/x_bar.svg) and ![$\bar{y}$](assets/least-squares/y_bar.svg) are the average of *x* and *y* respectively.
+
+Now back to the original expression, this time let's differentiate with resepect to *B*:
+
+![$\frac{\partial \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)}{\partial B}=\sum_{i=1}^{n} (-2y_i x_i+2Ax_i+2Bx_i^2)$](assets/least-squares/db_lin.svg)
+
+Following a similar approach, we can get that:
 
