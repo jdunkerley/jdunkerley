@@ -1,1 +1,0 @@
-width=406&height=608&ltx=&ltxsource=%24%5Csum_%7Bi%3D1%7D%5E%7Bn%7D+A%3D%5Csum_%7Bi%3D1%7D%5E%7Bn%7Dy_i-%5Csum_%7Bi%3D1%7D%5E%7Bn%7DBx_i%24&result=svg&init=0

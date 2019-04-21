@@ -69,10 +69,25 @@ Where ![$\bar{x}$](assets/least-squares/x_bar.svg) and ![$\bar{y}$](assets/least
 
 Now back to the original expression, this time let's differentiate with resepect to *B*:
 
-![$\frac{\partial \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)}{\partial B}=\sum_{i=1}^{n} (-2y_i x_i+2Ax_i+2Bx_i^2)$](assets/least-squares/db_lin.svg)
+![$\frac{\partial}{\partial B} \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)=\sum_{i=1}^{n} (-2y_i x_i+2Ax_i+2Bx_i^2)$](assets/least-squares/db_lin.svg)
 
 Following a similar approach, we can get that:
 
 ![$B=\frac{\sum_{i=1}^{n}x_i y_i-A\bar{x}}{\sum_{i=1}^{n}x_i^2}$](assets/least-squares/db_lin2.svg)
 
-If we have a known intercept, then we can substitute this for *A* above otherwise we can substitute our expression 
+If we have a known intercept, then we can substitute this for *A* above. Otherwise, we can substitute our expression we had above for *A*:
+
+![$B\sum_{i=1}^{n}x_i^2=\sum_{i=1}^{n}x_i y_i-(\bar{y}-B\bar{x})\bar{x}$](assets/least-squares/db_lin3.svg)
+
+![$B(\sum_{i=1}^{n}x_i^2-\bar{x}^2)=\sum_{i=1}^{n}x_i y_i-\bar{y}\bar{x}$](assets/least-squares/db_lin4.svg)
+
+![$B=\frac{\sum_{i=1}^{n}x_i y_i-\bar{y}\bar{x}}{\sum_{i=1}^{n}x_i^2-\bar{x}^2}$](assets/least-squares/db_lin5.svg)
+
+So to find *A* and *B* all we need to compute is:
+
+- ![$\bar{x}$](assets/least-squares/x_bar.svg) - the average of *x*
+- ![$\bar{y}$](assets/least-squares/y_bar.svg) - the average of *y*
+- ![$\sum_{i=1}^{n}x_i^2$](assets/least-squares/sum_x_sq.svg) - the sum of *x* squared
+- ![$\sum_{i=1}^{n}x_i^2$](assets/least-squares/sum_xy.svg) - the sum of *x* times *y*
+
+## Building the First Macro
