@@ -53,6 +53,7 @@ So the goal is to find *A* and *B* to minimise the above expression:
 Going back to calculus basics, a maximum or minimum will be when the first derivative is 0. So let's differentiate with respect to *A* :
 
 ![$\frac{\partial }{\partial A}  \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)=\sum_{i=1}^{n} (-2y_i+2A+2Bx_i)$](assets/least-squares/da_lin.svg)
+
 So we want to find when this is 0. Rearranging (and dividing by 2):
 
 ![$\sum_{i=1}^{n} A=\sum_{i=1}^{n}y_i-\sum_{i=1}^{n}Bx_i$](assets/least-squares/da_lin2.svg)
@@ -69,11 +70,12 @@ Where ![$\bar{x}$](assets/least-squares/x_bar.svg) and ![$\bar{y}$](assets/least
 
 Now back to the original expression, this time let's differentiate with resepect to *B*:
 
-![$\frac{\partial}{\partial B} \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)=\sum_{i=1}^{n} (-2y_i x_i+2Ax_i+2Bx_i^2)$](assets/least-squares/db_lin.svg)
+![$\frac{\partial}{\partial B} \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)=$](assets/least-squares/db_lin.svg)
+![$\sum_{i=1}^{n} (-2y_i x_i+2Ax_i+2Bx_i^2)$](assets/least-squares/db_lin1.svg)
 
 Following a similar approach, we can get that:
 
-![$B=\frac{\sum_{i=1}^{n}x_i y_i-A\bar{x}}{\sum_{i=1}^{n}x_i^2}$](assets/least-squares/db_lin2.svg)
+![$B=\frac{\sum_{i=1}^{n}y_i x_i+An\bar{x}}{\sum_{i=1}^{n}x_i^2}$](assets/least-squares/db_lin2.svg)
 
 If we have a known intercept, then we can substitute this for *A* above. Otherwise, we can substitute our expression we had above for *A*:
 
@@ -91,3 +93,4 @@ So to find *A* and *B* all we need to compute is:
 - ![$\sum_{i=1}^{n}x_i^2$](assets/least-squares/sum_xy.svg) - the sum of *x* times *y*
 
 ## Building the First Macro
+
