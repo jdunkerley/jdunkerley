@@ -8,23 +8,23 @@ If you have the predictive tools installed then Alteryx has a [Linear Regression
 
 Excel has 6 options for fitting a trendline to a dataset. With the exception of *Moving Average* these are all fitted using the least squares method. The five models are:
 
-- *Exponential*: ![$y=Ae^{Bx}$](assets/least-squares/exp.svg)
-- *Linear*: ![$y=A+Bx$](assets/least-squares/lin.svg)
-- *Logarithmic*: ![$y=A+Blog_e(x)$](assets/least-squares/log.svg)
-- *Power*: ![$y=Ax^B$](assets/least-squares/pow.svg)
-- *Polynomial*: ![$y=A+Bx+Cx^2+...$](assets/least-squares/poly.svg) *depends on Order*
+- *Exponential*: <img alt="$y=Ae^{Bx}$" src="assets/least-squares/exp.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />
+- *Linear*: <img alt="$y=A+Bx$" src="assets/least-squares/lin.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />
+- *Logarithmic*: <img alt="$y=A+Blog_e(x)$" src="assets/least-squares/log.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />
+- *Power*: <img alt="$y=Ax^B$" src="assets/least-squares/pow.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />
+- *Polynomial*: <img alt="$y=A+Bx+Cx^2+...$" src="assets/least-squares/poly.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" /> *depends on Order*
 
 For my Alteryx macro, I plan to support Exponential, Linear, Logarithmic and Power (Moving Average isn't really the same and Polynomial will need more work). 
 
-The Excel tool also allows you specify an intercept (the value when ![$(x=0)$](assets/least-squares/x_0.svg)) for Linear, Exponential and Polynomial. In other words fixing the value of *A* in each case. In the *Power* case, the intercept is always *0* and for the *Logarithmic* case it will be an error as the logarithm is not defined at 0. I want my macro to also support this.
+The Excel tool also allows you specify an intercept (the value when <img alt="$(x=0)$" src="assets/least-squares/x_0.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />) for Linear, Exponential and Polynomial. In other words fixing the value of *A* in each case. In the *Power* case, the intercept is always *0* and for the *Logarithmic* case it will be an error as the logarithm is not defined at 0. I want my macro to also support this.
 
-Finally, you can get the trendline in Excel to output both the equation and the value of ![$r^2$](assets/least-squares/r2.svg). So finaly requirement is to do this as well
+Finally, you can get the trendline in Excel to output both the equation and the value of <img alt="$r^2$" src="assets/least-squares/r2.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />. So finaly requirement is to do this as well
 
 A quick shout out to the [LaTeX Previewer](http://www.tlhiv.org/ltxpreview/) by [Troy Henderson](http://www.tlhiv.org/) - I used it to create the SVG of all the LaTeX in this post. Onto the Maths...
 
 ## Least Squares Method for Regression
 
-Lets imagine we have a dataset of points ![$(x_i, y_i)$](assets/least-squares/xy.svg). 
+Lets imagine we have a dataset of points <img alt="$(x_i, y_i)$" src="assets/least-squares/xy.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />. 
 
 The goal of the least squares method is to fit a function ![$f(x)$](assets/least-squares/fx.svg), which minimises the square of the errors, ![$e_i](assets/least-squares/e.svg), where ![$e_i](assets/least-squares/e.svg) is defined as ![$e_i=y_i-f(x_i)$](assets/least-squares/ei.svg). In other words:
 
