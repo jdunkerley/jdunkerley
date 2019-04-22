@@ -145,9 +145,31 @@ As before, this is again a linear model. In this case we have to take both log o
 
 ### Expanded Macro
 
+First, let's add a model drop down with a manual set of values:
 
+```
+Linear (y=A+Bx):Linear
+Logarithmic (y=A+B ln(x)):Logarithmic
+Exponential (y=Ae^(Bx)):Exponential
+Power (Y=Ax^B):Power
+```
 
-## R Squared and Equation
+We can feed this into a new formula tool after creating `__X__` and `__Y__` to create the adjust series we need.
+
+```
+__X__ = IIF([#1] IN ('Logarithmic', 'Power'),LOG([__X__]),[__X__])
+__Y__ = IIF([#1] IN ('Exponential', 'Power'),LOG([__Y__]),[__Y__])
+```
+
+And then add an additional step to formula tool adjusting the intercept for *Exponential* and *Power*:
+
+```
+Intercept = IIF([#1] IN ('Exponential', 'Power'), EXP([Intercept]),[Intercept])
+```
+
+## Equation
+
+## R Squared
 
 R Squared is a measure which measures how much of the dependent variable is predicted by the model. It is expressed as:
 
