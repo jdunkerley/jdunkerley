@@ -8,11 +8,11 @@ If you have the predictive tools installed then Alteryx has a [Linear Regression
 
 Excel has 6 options for fitting a trendline to a dataset. With the exception of *Moving Average* these are all fitted using the least squares method. The five models are:
 
-- *Exponential*: <img alt="$y=Ae^{Bx}$" src="https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/assets/least-squares/exp.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />
-- *Linear*: <img alt="$y=A+Bx$" src="https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/assets/least-squares/lin.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />
-- *Logarithmic*: <img alt="$y=A+Blog_e(x)$" src="https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/assets/least-squares/log.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />
-- *Power*: <img alt="$y=Ax^B$" src="https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/assets/least-squares/pow.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" />
-- *Polynomial*: <img alt="$y=A+Bx+Cx^2+...$" src="https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/assets/least-squares/poly.svg" style="max-width:100%; height:16px; vertical-align: text-bottom;" /> *depends on Order*
+- *Exponential*: ![$y=Ae^{Bx}$](assets/least-squares/exp.svg)
+- *Linear*: ![$y=A+Bx$](assets/least-squares/lin.svg)
+- *Logarithmic*: ![$y=A+Blog_e(x)$](assets/least-squares/log.svg)
+- *Power*: ![$y=Ax^B$](assets/least-squares/pow.svg)
+- *Polynomial*: ![$y=A+Bx+Cx^2+...$](assets/least-squares/poly.svg) *depends on Order*
 
 For my Alteryx macro, I plan to support Exponential, Linear, Logarithmic and Power (Moving Average isn't really the same and Polynomial will need more work). 
 
