@@ -79,18 +79,46 @@ Following a similar approach, we can get that:
 
 If we have a known intercept, then we can substitute this for *A* above. Otherwise, we can substitute our expression we had above for *A*:
 
-![$B\sum_{i=1}^{n}x_i^2=\sum_{i=1}^{n}x_i y_i-(\bar{y}-B\bar{x})\bar{x}$](assets/least-squares/db_lin3.svg)
+![$B\sum_{i=1}^{n}x_i^2=\sum_{i=1}^{n}x_i y_i-n(\bar{y}-B\bar{x})\bar{x}$](assets/least-squares/db_lin3.svg)
 
-![$B(\sum_{i=1}^{n}x_i^2-\bar{x}^2)=\sum_{i=1}^{n}x_i y_i-\bar{y}\bar{x}$](assets/least-squares/db_lin4.svg)
+![$B(\sum_{i=1}^{n}x_i^2-n\bar{x}^2)=\sum_{i=1}^{n}x_i y_i-n\bar{y}\bar{x}$](assets/least-squares/db_lin4.svg)
 
-![$B=\frac{\sum_{i=1}^{n}x_i y_i-\bar{y}\bar{x}}{\sum_{i=1}^{n}x_i^2-\bar{x}^2}$](assets/least-squares/db_lin5.svg)
+![$B=\frac{\sum_{i=1}^{n}x_i y_i-n\bar{y}\bar{x}}{\sum_{i=1}^{n}x_i^2-n\bar{x}^2}$](assets/least-squares/db_lin5.svg)
 
 So to find *A* and *B* all we need to compute is:
 
+- *n* - the number of records
 - ![$\bar{x}$](assets/least-squares/x_bar.svg) - the average of *x*
 - ![$\bar{y}$](assets/least-squares/y_bar.svg) - the average of *y*
 - ![$\sum_{i=1}^{n}x_i^2$](assets/least-squares/sum_x_sq.svg) - the sum of *x* squared
 - ![$\sum_{i=1}^{n}x_i^2$](assets/least-squares/sum_xy.svg) - the sum of *x* times *y*
 
+All of this is straight forward using a Summarize tool.
+
 ## Building the First Macro
 
+So let's start building the macro. This first version will handle computing *A* and *B* for the linear model.
+
+![Macro Version 1](assets/least-squares/macro_v1.png)
+
+We start by taking a standard macro input. I have chosen not to expose a FieldMap but instead create new variables called `__X__` and `__Y__`. I use a drop down box to allow you to map the field to each, using an action tool to update the raw XML of a pair of formula tools. 
+
+Next, I compute values for `__XX__` and `__XY__` which I will need to compute the totals. Then it is on to the Summarize tool to compute the five values I need. Additionally, I use a List Box to allow selection of the Group By within this tool. This is a little fiddly inside the formula for action tool, but basically it works by adding the group by entries to the raw XML of the summarise:
+
+```
+IIF([#1]='""',
+    '',
+    '<SummarizeField field=' + 
+      Replace([#1], '|||', ' action="GroupBy" /><SummarizeField field=') +
+    ' action="GroupBy" />')
++
+[Destination]
+```
+
+Finally, last step is to compute the `Slope` and `Intercept` and to use a select tool to drop all the intermediary fields. One last little catch is to remember to select the *Output fields change based on macro's configuration or data input* option within the Interface Designer.
+
+![Output fields change](assets/least-squares/output_fields.png)
+
+## Expanding to Other Models
+
+Currently, it can only . We've basically finished the hard work. 
