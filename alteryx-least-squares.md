@@ -169,13 +169,32 @@ Intercept = IIF([#1] IN ('Exponential', 'Power'), EXP([Intercept]),[Intercept])
 
 ## Equation
 
+Now, that we have different models it seems a good time to add a new column containing the expression. A simple formula tool will handle this:
+
+```
+ToString([Intercept]) + 
+IF [#1] = 'Logarithmic' THEN
+ ' + ' + ToString([Slope]) + ' LOG(X)'
+ELSEIF [#1] = 'Exponential' THEN
+' EXP(' + ToString([Slope]) + ' X)'
+ELSEIF [#1] = 'Power' THEN
+' X ^ ' + ToString([Slope])
+ELSE
+	' + ' + ToString([Slope]) + ' X'
+ENDIF
+```
+
 ## R Squared
 
 R Squared is a measure which measures how much of the dependent variable is predicted by the model. It is expressed as:
 
-<img alt="$R^2=1-\frac{\sum_i=1^{n}e_i}{\sum_i=1^{n}{y_i-\bar{y})^2}$" src="assets/least-squares/r_sq.svg" height="55px" />
+![$R^2=1-\frac{\sum_{i=1}^{n}e_i}{\sum_{i=1}^{n}{(y_i-\bar{y})^2}}=1-\frac{\sum_{i=1}^{n}(y_i-f(x_i))^2}{\sum_{i=1}^{n}{(y_i-\bar{y})^2}}$](assets/least-squares/r_sq.svg)
+
+**To Do**
 
 ## Fixed Intercepts
+
+**To Do**
 
 ## Wrapping Up
 
