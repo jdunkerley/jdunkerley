@@ -83,7 +83,7 @@ If we have a known intercept, then we can substitute this for *A* above. Otherwi
 
 ![$B(\sum_{i=1}^{n}x_i^2-n\bar{x}^2)=\sum_{i=1}^{n}x_i y_i-n\bar{y}\bar{x}$](assets/least-squares/db_lin4.svg)
 
-![$B=\frac{\sum_{i=1}^{n}x_i y_i-n\bar{y}\bar{x}}{\sum_{i=1}^{n}x_i^2-n\bar{x}^2}$](assets/least-squares/db_lin5.svg)
+![$B=\frac{\sum_{i=1}^{n}x_i y_i-n\bar{y}\bar{x}}{\sum_{i=1}^{n}x_i^2-n\bar{x}^2}$](assets/least-squares/db_lin5.svg){:height="60px"}
 
 So to find *A* and *B* all we need to compute is:
 
@@ -121,4 +121,44 @@ Finally, last step is to compute the `Slope` and `Intercept` and to use a select
 
 ## Expanding to Other Models
 
-Currently, it can only . We've basically finished the hard work. 
+Currently, it can only solve *Linear*. However, we've basically finished the hard work all we need to do is see how we can transform the inputs to get each of the other models. 
+
+### *Logarithmic*: ![$y=A+Blog_e(x)$](assets/least-squares/log.svg)
+
+This is straight forward. If we take log of x as `__x__` then we have the linear model.
+
+### *Exponential*: ![$y=Ae^{Bx}$](assets/least-squares/exp.svg)
+
+Let's take the log of both sides:
+
+![$log_e(y)=log_e(A)+Bx$](assets/least-squares/exp_model.svg)
+
+Again, we have got to a linear model. So if we take log of y as `__y__` and then take the exponential of the intercept we can compute this model.
+
+### *Power*: ![$y=Ax^B$](assets/least-squares/pow.svg)
+
+Let's take the log of both sides:
+
+![$log_e(y)=log_e(A)+Blog_e(x)$](assets/least-squares/pow_model.svg)
+
+As before, this is again a linear model. In this case we have to take both log of x as `__x__` and log of y as `__y__` and then finally take the exponential of the intercept to compute this model.
+
+### Expanded Macro
+
+
+
+## R Squared and Equation
+
+R Squared is a measure which measures how much of the dependent variable is predicted by the model. It is expressed as:
+
+<img alt="$R^2=1-\frac{\sum_i=1^{n}e_i}{\sum_i=1^{n}{y_i-\bar{y})^2}$" src="assets/least-squares/r_sq.svg" height="55px" />
+
+## Fixed Intercepts
+
+## Wrapping Up
+
+This little macro should re-create most of the capabilities of Excel trendlines. The direct manipulation of raw XML does mean that some fields names (e.g. containing a `"`, `|||` or `>`) may cause it some issues.
+
+If you want to fit another expression you can hopefully use the techniques above to get you started. Some of the techniques in building the macro are quite advanced but provide a powerful way to add new functionality.
+
+You can download the final macro here.
