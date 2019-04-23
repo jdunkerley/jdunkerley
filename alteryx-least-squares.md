@@ -16,7 +16,7 @@ Excel has 6 options for fitting a trendline to a dataset. Apart from *Moving Ave
 
 For my Alteryx macro, I plan to support Exponential, Linear, Logarithmic and Power (Moving Average isn't really the same and Polynomial will need more work). 
 
-The Excel tool also allows you specify an intercept (the value when ![$(x=0)$](assets/least-squares/x_0.svg)) for Linear, Exponential and Polynomial. In other words, fixing the value of *A* in each case. In the *Power* case, the intercept is always *0* and for the *Logarithmic* case it will be an error as the logarithm is not defined at 0. I want my macro to also support this.
+The Excel tool also allows you to specify an intercept (the value when ![$(x=0)$](assets/least-squares/x_0.svg)) for Linear, Exponential and Polynomial. In other words, fixing the value of *A* in each case. In the *Power* case, the intercept is always *0* and for the *Logarithmic* case it will be an error as the logarithm is not defined at 0. I want my macro to also support this.
 
 Finally, you can get the trendline in Excel to output both the equation and the value of ![$r^2$](assets/least-squares/r2.svg). So the last requirement is to do this as well
 
@@ -103,7 +103,7 @@ Let's start building the macro. This first version will handle computing *A* and
 
 We start by taking a standard macro input. I have chosen not to expose a FieldMap but instead create new variables called `__X__` and `__Y__`. I use a dropdown box to allow you to map the field to each, using an action tool to update the raw XML of a pair of formula tools. 
 
-Next, I compute values for `__XX__` and `__XY__` which I will need to compute the totals. Then it is on to the Summarize tool to compute the five values I need. Additionally, I use a List Box to allow selection of the Group By within this macro. This is a little fiddly inside the formula for action tool, but basically it works by adding the group by entries to the raw XML of the summarise:
+Next, I compute values for `__XX__` and `__XY__` which I will need to compute the totals. Then it is on to the Summarize tool to compute the five values I need. Additionally, I use a List Box to allow selection of the Group By within this macro. This is a little fiddly inside the formula for action tool, but basically, it works by adding the group by entries to the raw XML of the summarise:
 
 ```
 IIF([#1]='""',
@@ -115,7 +115,7 @@ IIF([#1]='""',
 [Destination]
 ```
 
-Finally, last step is to compute the `Slope` and `Intercept` and to use a select tool to drop all the intermediary fields. One last little catch is to remember to select the *Output fields change based on macro's configuration or data input* option within the Interface Designer.
+Finally, the last step is to compute the `Slope` and `Intercept` and to use a select tool to drop all the intermediary fields. One last little catch is to remember to select the *Output fields change based on macro's configuration or data input* option within the Interface Designer.
 
 ![Output fields change](assets/least-squares/output_fields.png)
 
@@ -125,7 +125,7 @@ Currently, it can only solve *Linear*. However, we've basically finished the har
 
 ### *Logarithmic*: ![$y=A+Blog_e(x)$](assets/least-squares/log.svg)
 
-This is straight forward. If we take log of x as `__x__` then we have the linear model.
+This is straight forward. If we take the log of x as `__x__` then we have the linear model.
 
 ### *Exponential*: ![$y=Ae^{Bx}$](assets/least-squares/exp.svg)
 
@@ -133,7 +133,7 @@ Let's take the log of both sides:
 
 ![$log_e(y)=log_e(A)+Bx$](assets/least-squares/exp_model.svg)
 
-Again, we have got to a linear model. If we take log of y as `__y__` and then take the exponential of the intercept we can compute this model.
+Again, we have got to a linear model. If we take the log of y as `__y__` and then take the exponential of the intercept we can compute this model.
 
 ### *Power*: ![$y=Ax^B$](assets/least-squares/pow.svg)
 
@@ -141,7 +141,7 @@ Let's take the log of both sides:
 
 ![$log_e(y)=log_e(A)+Blog_e(x)$](assets/least-squares/pow_model.svg)
 
-As before, this is again a linear model. In this case we have to take both log of x as `__x__` and log of y as `__y__` and then finally take the exponential of the intercept to compute this model.
+As before, this is again a linear model. In this case, we have to take both the log of x as `__x__` and the log of y as `__y__` and then finally take the exponential of the intercept to compute this model.
 
 ### Expanded Macro
 
