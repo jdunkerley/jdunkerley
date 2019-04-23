@@ -103,7 +103,7 @@ So let's start building the macro. This first version will handle computing *A* 
 
 We start by taking a standard macro input. I have chosen not to expose a FieldMap but instead create new variables called `__X__` and `__Y__`. I use a drop down box to allow you to map the field to each, using an action tool to update the raw XML of a pair of formula tools. 
 
-Next, I compute values for `__XX__` and `__XY__` which I will need to compute the totals. Then it is on to the Summarize tool to compute the five values I need. Additionally, I use a List Box to allow selection of the Group By within this tool. This is a little fiddly inside the formula for action tool, but basically it works by adding the group by entries to the raw XML of the summarise:
+Next, I compute values for `__XX__` and `__XY__` which I will need to compute the totals. Then it is on to the Summarize tool to compute the five values I need. Additionally, I use a List Box to allow selection of the Group By within this macro. This is a little fiddly inside the formula for action tool, but basically it works by adding the group by entries to the raw XML of the summarise:
 
 ```
 IIF([#1]='""',
@@ -190,7 +190,27 @@ R Squared is a measure which measures how much of the dependent variable is pred
 
 ![$R^2=1-\frac{\sum_{i=1}^{n}e_i}{\sum_{i=1}^{n}{(y_i-\bar{y})^2}}=1-\frac{\sum_{i=1}^{n}(y_i-f(x_i))^2}{\sum_{i=1}^{n}{(y_i-\bar{y})^2}}$](assets/least-squares/r_sq.svg)
 
-**To Do**
+In order to compute this, I need to join the model values back to the original series. As we might not always have a grouping field, I need to add a dummy variable, `__D__`, which can be included in all joins to make them value. Dynamically creating joins is a lttle harder than adding group by clauses. We need to take something that looks like `"A"|||"B"|||"C"` to something like:
+
+```XML
+<Field field="A" />
+<Field field="B" />
+<Field field="C" />
+```
+
+This is similar to the last case but needs to be done to two different nodes in the Join configuration. The expression below changes the list to the raw XML needed:
+
+```
+IIF([#1]='""','','<Field field=' + + Replace([#1], '|||', ' /><Field field=')+' />')
++
+[Destination]
+```
+
+![Updating a Join](assets/least-squares/action_join.png)
+
+Now to compute the values need for R squared, I first use a formula tool to evaluate the top and bottom of the fraction and then use a summarise to make totals. Again, this summarise tool needs to be grouped in the correct manner. Finally, I can compute the R squared value for each set. After this, I know that the output of this calculation will be in the same order as the output of the Slope/Intercept calculation so I can join by record position to add the value to the output. At this point the macro looks like:
+
+![Macro Version 2](assets/least-squares/macro_v2.png)
 
 ## Fixed Intercepts
 
