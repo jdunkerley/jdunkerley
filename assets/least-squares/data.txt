@@ -1,1 +1,1 @@
-width=606&height=608&ltx=&ltxsource=%24log_e%28y%29%3Dlog_e%28A%29%2BBlog_e%28x%29%24&result=svg&init=0
+width=606&height=608&ltx=&ltxsource=%24B%3D%5Cfrac%7B%5Csum_%7Bi%3D1%7D%5E%7Bn%7Dy_i+x_i-An%5Cbar%7Bx%7D%7D%7B%5Csum_%7Bi%3D1%7D%5E%7Bn%7Dx_i%5E2%7D%24&result=svg&init=0

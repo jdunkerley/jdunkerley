@@ -75,7 +75,7 @@ Now back to the original expression, this time let's differentiate with resepect
 
 Following a similar approach, we can get that:
 
-![$B=\frac{\sum_{i=1}^{n}y_i x_i+An\bar{x}}{\sum_{i=1}^{n}x_i^2}$](assets/least-squares/db_lin2.svg)
+![$B=\frac{\sum_{i=1}^{n}y_i x_i-An\bar{x}}{\sum_{i=1}^{n}x_i^2}$](assets/least-squares/db_lin2.svg)
 
 If we have a known intercept, then we can substitute this for *A* above. Otherwise, we can substitute our expression we had above for *A*:
 
@@ -214,12 +214,26 @@ Now to compute the values need for R squared, I first use a formula tool to eval
 
 ## Fixed Intercepts
 
-**To Do**
+The last step is to take in an optional set of intercepts. Alteryx supports optional Macro Inputs, they will come through as an empty template if no input is supplied. Unfortunately, as we are building the grouping fields dynamically we can't have a template that will work for all cases. The workaround I chose, is to take the output of the Summarise tool, sample 0 rows from it, and use this to create a superset of all the columns we need. This can then be unioned to the Macro Input tool. Using similar expressions to above, we can reconfigure a Join Multiple tool. I chose to use this over a Join tool as it means that the order of the records from the Summary tool is preserved.
+
+![Optional Input](assets/least-squares/optional_input.png)
+
+The formula tool at the end copes with the *Exponential* and *Power* models, where the *Intercept* needs to be adjusted. Finally, the *Slope* calculation needs to be updated to use the *Intercept* if provided:
+
+```
+IIF(IsNull([Intercept]),
+([Sum___XY__]-[Count]*[Avg___X__]*[Avg___Y__]) / ([Sum___XX__]-[Count]*[Avg___X__]*[Avg___X__]),
+([Sum___XY__]-[Count]*[Intercept]*[Avg___X__]) / [Sum___XX__]
+)
+```
 
 ## Wrapping Up
 
-This little macro should re-create most of the capabilities of Excel trendlines. The direct manipulation of raw XML does mean that some fields names (e.g. containing a `"`, `|||` or `>`) may cause it some issues.
+![Finished Macro](assets/least-squares/finished_macro.png)
+
+You can download the final macro [here](https://www.dropbox.com/s/u9pouzkupusg08v/Linear%20Regression.yxmc?dl=0).
+
+This macro should re-create most of the capabilities of Excel trendlines. The direct manipulation of raw XML does mean that some fields names (e.g. containing a `"`, `|||` or `>`) may cause it some issues.
 
 If you want to fit another expression you can hopefully use the techniques above to get you started. Some of the techniques in building the macro are quite advanced but provide a powerful way to add new functionality.
 
-You can download the final macro here.
