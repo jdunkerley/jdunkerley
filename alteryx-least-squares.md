@@ -6,7 +6,7 @@ A friend on the Alteryx community recently asked me about recreating the Excel t
 
 If you have the predictive tools installed then Alteryx has a [Linear Regression tool](https://help.alteryx.com/2018.2/lm.htm) which will fit a linear model to the set. This uses R and produces a model for the entire dataset. For my implementation, I wanted to allow for groups of data and go back to first principles and use the core Alteryx tools (i.e. no SDKs, R or Python) to build it.
 
-Excel has 6 options for fitting a trendline to a dataset. With the exception of *Moving Average* these are all fitted using the least squares method. The five models are:
+Excel has 6 options for fitting a trendline to a dataset. Apart from *Moving Average* these are all fitted using the least squares method. The five models are:
 
 - *Exponential*: ![$y=Ae^{Bx}$](assets/least-squares/exp.svg)
 - *Linear*: ![$y=A+Bx$](assets/least-squares/lin.svg)
@@ -16,21 +16,21 @@ Excel has 6 options for fitting a trendline to a dataset. With the exception of 
 
 For my Alteryx macro, I plan to support Exponential, Linear, Logarithmic and Power (Moving Average isn't really the same and Polynomial will need more work). 
 
-The Excel tool also allows you specify an intercept (the value when ![$(x=0)$](assets/least-squares/x_0.svg)) for Linear, Exponential and Polynomial. In other words fixing the value of *A* in each case. In the *Power* case, the intercept is always *0* and for the *Logarithmic* case it will be an error as the logarithm is not defined at 0. I want my macro to also support this.
+The Excel tool also allows you specify an intercept (the value when ![$(x=0)$](assets/least-squares/x_0.svg)) for Linear, Exponential and Polynomial. In other words, fixing the value of *A* in each case. In the *Power* case, the intercept is always *0* and for the *Logarithmic* case it will be an error as the logarithm is not defined at 0. I want my macro to also support this.
 
-Finally, you can get the trendline in Excel to output both the equation and the value of ![$r^2$](assets/least-squares/r2.svg). So finaly requirement is to do this as well
+Finally, you can get the trendline in Excel to output both the equation and the value of ![$r^2$](assets/least-squares/r2.svg). So the last requirement is to do this as well
 
-A quick shout out to the [LaTeX Previewer](http://www.tlhiv.org/ltxpreview/) by [Troy Henderson](http://www.tlhiv.org/) - I used it to create the SVG of all the LaTeX in this post. Onto the Maths...
+A quick shout out to the [LaTeX Previewer](http://www.tlhiv.org/ltxpreview/) by [Troy Henderson](http://www.tlhiv.org/) - I used it to create the SVG of all the LaTeX in this post. Onto the maths...
 
 ## Least Squares Method for Regression
 
-Lets imagine we have a dataset of points ![$(x_i, y_i)$](assets/least-squares/xy.svg). 
+Let's imagine we have a dataset of points ![$(x_i, y_i)$](assets/least-squares/xy.svg). 
 
 The goal of the least squares method is to fit a function ![$f(x)$](assets/least-squares/fx.svg), which minimises the square of the errors, ![$e_i](assets/least-squares/e.svg), where ![$e_i](assets/least-squares/e.svg) is defined as ![$e_i=y_i-f(x_i)$](assets/least-squares/ei.svg). In other words:
 
 ![$\min_f(x) \sum_{i=1}^{n} e_i^2$](assets/least-squares/min_ei.svg)
 
-So let's work this out for the *Linear* case. Let's expand out the summation and then see if we can simplify it:
+So, let's work this out for the *Linear* case. Let's expand out the summation and then see if we can simplify it:
 
 First, substitute for ![$e_i](assets/least-squares/e.svg):
 
@@ -46,15 +46,15 @@ Now, expand out the square:
 
 ![$ =\sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)$](assets/least-squares/sum_ei_lin3.svg)
 
-So the goal is to find *A* and *B* to minimise the above expression: 
+The goal is to find *A* and *B* to minimise the above expression: 
 
 ![$\min_{A,B} \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)$](assets/least-squares/min_ei_lin3.svg)
 
-Going back to calculus basics, a maximum or minimum will be when the first derivative is 0. So let's differentiate with respect to *A* :
+Going back to calculus basics, a maximum or minimum will be when the first derivative is 0. So let's differentiate with respect to *A*:
 
 ![$\frac{\partial }{\partial A}  \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)=\sum_{i=1}^{n} (-2y_i+2A+2Bx_i)$](assets/least-squares/da_lin.svg)
 
-So we want to find when this is 0. Rearranging (and dividing by 2):
+We want to find when this is 0. Rearranging (and dividing by 2):
 
 ![$\sum_{i=1}^{n} A=\sum_{i=1}^{n}y_i-\sum_{i=1}^{n}Bx_i$](assets/least-squares/da_lin2.svg)
 
@@ -68,7 +68,7 @@ Dividing by *n*, this gives us:
 
 Where ![$\bar{x}$](assets/least-squares/x_bar.svg) and ![$\bar{y}$](assets/least-squares/y_bar.svg) are the average of *x* and *y* respectively.
 
-Now back to the original expression, this time let's differentiate with resepect to *B*:
+Now back to the original expression, this time let's differentiate with respect to *B*:
 
 ![$\frac{\partial}{\partial B} \sum_{i=1}^{n} (y_i^2-2y_iA-2y_i Bx_i+A^2+2ABx_i+B^2x_i^2)=$](assets/least-squares/db_lin.svg)
 ![$\sum_{i=1}^{n} (-2y_i x_i+2Ax_i+2Bx_i^2)$](assets/least-squares/db_lin1.svg)
@@ -83,9 +83,9 @@ If we have a known intercept, then we can substitute this for *A* above. Otherwi
 
 ![$B(\sum_{i=1}^{n}x_i^2-n\bar{x}^2)=\sum_{i=1}^{n}x_i y_i-n\bar{y}\bar{x}$](assets/least-squares/db_lin4.svg)
 
-![$B=\frac{\sum_{i=1}^{n}x_i y_i-n\bar{y}\bar{x}}{\sum_{i=1}^{n}x_i^2-n\bar{x}^2}$](assets/least-squares/db_lin5.svg)<!-- .element height="60px" -->
+![$B=\frac{\sum_{i=1}^{n}x_i y_i-n\bar{y}\bar{x}}{\sum_{i=1}^{n}x_i^2-n\bar{x}^2}$](assets/least-squares/db_lin5.svg)
 
-So to find *A* and *B* all we need to compute is:
+This means to find *A* and *B*, all we need to compute is:
 
 - *n* - the number of records
 - ![$\bar{x}$](assets/least-squares/x_bar.svg) - the average of *x*
@@ -97,11 +97,11 @@ All of this is straight forward using a Summarize tool.
 
 ## Building the First Macro
 
-So let's start building the macro. This first version will handle computing *A* and *B* for the linear model.
+Let's start building the macro. This first version will handle computing *A* and *B* for the linear model.
 
 ![Macro Version 1](assets/least-squares/macro_v1.png)
 
-We start by taking a standard macro input. I have chosen not to expose a FieldMap but instead create new variables called `__X__` and `__Y__`. I use a drop down box to allow you to map the field to each, using an action tool to update the raw XML of a pair of formula tools. 
+We start by taking a standard macro input. I have chosen not to expose a FieldMap but instead create new variables called `__X__` and `__Y__`. I use a dropdown box to allow you to map the field to each, using an action tool to update the raw XML of a pair of formula tools. 
 
 Next, I compute values for `__XX__` and `__XY__` which I will need to compute the totals. Then it is on to the Summarize tool to compute the five values I need. Additionally, I use a List Box to allow selection of the Group By within this macro. This is a little fiddly inside the formula for action tool, but basically it works by adding the group by entries to the raw XML of the summarise:
 
@@ -133,7 +133,7 @@ Let's take the log of both sides:
 
 ![$log_e(y)=log_e(A)+Bx$](assets/least-squares/exp_model.svg)
 
-Again, we have got to a linear model. So if we take log of y as `__y__` and then take the exponential of the intercept we can compute this model.
+Again, we have got to a linear model. If we take log of y as `__y__` and then take the exponential of the intercept we can compute this model.
 
 ### *Power*: ![$y=Ax^B$](assets/least-squares/pow.svg)
 
@@ -190,7 +190,7 @@ R Squared is a measure which measures how much of the dependent variable is pred
 
 ![$R^2=1-\frac{\sum_{i=1}^{n}e_i}{\sum_{i=1}^{n}{(y_i-\bar{y})^2}}=1-\frac{\sum_{i=1}^{n}(y_i-f(x_i))^2}{\sum_{i=1}^{n}{(y_i-\bar{y})^2}}$](assets/least-squares/r_sq.svg)
 
-In order to compute this, I need to join the model values back to the original series. As we might not always have a grouping field, I need to add a dummy variable, `__D__`, which can be included in all joins to make them value. Dynamically creating joins is a lttle harder than adding group by clauses. We need to take something that looks like `"A"|||"B"|||"C"` to something like:
+In order to compute this, I need to join the model values back to the original series. As we might not always have a grouping field, I need to add a dummy variable, `__D__`, which can be included in all joins to make them value. Dynamically creating joins is a little harder than adding group by clauses (as we must do it twice!). In this case, we need to take something that looks like `"A"|||"B"|||"C"` to something like:
 
 ```XML
 <Field field="A" />
@@ -198,7 +198,7 @@ In order to compute this, I need to join the model values back to the original s
 <Field field="C" />
 ```
 
-This is similar to the last case but needs to be done to two different nodes in the Join configuration. The expression below changes the list to the raw XML needed:
+This is like the last case but needs to be applied to two nodes in the Join configuration. The expression below changes the list to the raw XML needed:
 
 ```
 IIF([#1]='""','','<Field field=' + + Replace([#1], '|||', ' /><Field field=')+' />')
@@ -214,7 +214,9 @@ Now to compute the values need for R squared, I first use a formula tool to eval
 
 ## Fixed Intercepts
 
-The last step is to take in an optional set of intercepts. Alteryx supports optional Macro Inputs, they will come through as an empty template if no input is supplied. Unfortunately, as we are building the grouping fields dynamically we can't have a template that will work for all cases. The workaround I chose, is to take the output of the Summarise tool, sample 0 rows from it, and use this to create a superset of all the columns we need. This can then be unioned to the Macro Input tool. Using similar expressions to above, we can reconfigure a Join Multiple tool. I chose to use this over a Join tool as it means that the order of the records from the Summary tool is preserved.
+The last step is to take in an optional set of intercepts. Alteryx supports optional Macro Inputs, they will come through as an empty (0 row) copy of the template if no input is supplied. Unfortunately, as we are building the grouping fields dynamically, we can't have a template that will work for all cases. 
+
+The workaround I chose, is to take the output of the Summarise tool, sample 0 rows from it, and use this to create a complete set of all the columns we need. This can then be unioned to the Macro Input tool to create a superset of columns. Using similar expressions to above, we can reconfigure a Join Multiple tool. I chose to use this over a Join tool as it means that the order of the records from the Summarise tool is preserved.
 
 ![Optional Input](assets/least-squares/optional_input.png)
 
