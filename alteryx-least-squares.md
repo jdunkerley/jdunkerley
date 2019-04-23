@@ -1,4 +1,4 @@
-# Least Squares in Alteryx
+# Least Squares in an Alteryx Macro
 
 A friend on the Alteryx community recently asked me about recreating the Excel trendline capabilities within Alteryx. 
 
