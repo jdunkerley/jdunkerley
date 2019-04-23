@@ -1,4 +1,4 @@
-# Least Squares in Alteryx
+# Least Squares in an Alteryx Macro
 
 A friend on the Alteryx community recently asked me about recreating the Excel trendline capabilities within Alteryx. 
 
@@ -238,4 +238,3 @@ You can download the final macro [here](https://www.dropbox.com/s/u9pouzkupusg08
 This macro should re-create most of the capabilities of Excel trendlines. The direct manipulation of raw XML does mean that some fields names (e.g. containing a `"`, `|||` or `>`) may cause it some issues.
 
 If you want to fit another expression you can hopefully use the techniques above to get you started. Some of the techniques in building the macro are quite advanced but provide a powerful way to add new functionality.
-
