@@ -10,12 +10,11 @@ The day started with an impressively quick registration process (last time took 
 
 ![]()
 
-Two of the customer case studies in the the
-Review of the progress of Sainsbury's move to the cloud, mention of GDS and MoJ
+Two of the customer case studies in the keynote were really interesting. The transormation that Sainsbury has been through has been huge and they talked over a lot of the gains they have had moving to a modern platform. The AI and ML capabilites have allowed them to do some impressive things with the Nectar data - aiming to provide a better customer experience. The Ministry of Justice talked about the work of the [Government Digital Services (GDS)](https://gds.blog.gov.uk). The `Cloud First` guidance is leading to HM Governemnt being huge users of the cloud and getting to adopt new technologies quickly.
 
-![]()
+![GetIT](assets/awssummit/getit.jpg)
 
-The Keynote also highlighted two of AWS programs. The first, [AWS re:start](https://aws-restart.com/) gives training and placements to young people and military veterans who possibly havent had any experience and gets them up to speed on 
+The Keynote also highlighted two of AWS programs. The first, [AWS re:start](https://aws-restart.com/) gives training and placements to young people and military veterans who possibly havent had any experience of software engineering and gets them up to speed on technoliges and places them with companies. The second p
 
 ## High Performance Computing (Frank Munz - @frankmunz)
 
@@ -230,6 +229,8 @@ Comic Relief gave an awesome overview of their platform.
 
 ## Wrapping Up
 
-![Innovation Cycle](assets)
+![Innovation Cycle](assets/awssummit/innovation-cycle.png)
 
-It was great to spend a day immersed in AWS. The cloud technologies continue to grow at an incredible rate, with new concepts and technologies all the time. The summit gave us a great chance to be buried in what people are doing and see successful implementations of various customers. I think one of the big aspects that was enphasised by various of the real world case studies was the cloud and CI?CD technologies allow for a very fast innovation cycle where we shouldn't be scared to have failed experiments as the
+It was great to spend a day immersed in AWS. The cloud technologies continue to grow at an incredible rate, with new concepts and technologies all the time. The summit gave us a great chance to be buried in what people are doing and see successful implementations of various customers. I think one of the big aspects that was emphasised by various of the real world case studies, is that the cloud combined with CI/CD technologies allow for a very fast innovation cycle where we shouldn't be scared to have failed experiments as the cost and blast radius is very small.
+
+![Cheesy Group Photo]()
