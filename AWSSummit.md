@@ -14,9 +14,9 @@ Two of the customer case studies in the keynote were really interesting. The tra
 
 ![GetIT](assets/awssummit/getit.jpg)
 
-The Keynote also highlighted two of AWS programs. The first, [AWS re:start](https://aws-restart.com/) gives training and placements to young people and military veterans who possibly havent had any experience of software engineering and gets them up to speed on technoliges and places them with companies. The second p
+The Keynote also highlighted two of AWS programs. The first, [AWS re:start](https://aws-restart.com/) gives training and placements to young people and military veterans who possibly havent had any experience of software engineering and gets them up to speed on technoliges and places them with companies. The second program was [AWS GetIt](https://aws.amazon.com/campaigns/aws-get-it/) which is a new initiative encouraging more girls to consider careers in technology.
 
-## High Performance Computing (Frank Munz - @frankmunz)
+## High Performance Computing (given by [Frank Munz](https://twitter.com/frankmunz)) - [Slides](https://speakerdeck.com/fmunz/high-performance-computing-on-aws-2019-with-astrazeneca)
 
 - Used to be a saying that the best way to do HPC was to go surfing for 18 months
 - Cloud stops the massive CapEx up front costs
@@ -233,4 +233,4 @@ Comic Relief gave an awesome overview of their platform.
 
 It was great to spend a day immersed in AWS. The cloud technologies continue to grow at an incredible rate, with new concepts and technologies all the time. The summit gave us a great chance to be buried in what people are doing and see successful implementations of various customers. I think one of the big aspects that was emphasised by various of the real world case studies, is that the cloud combined with CI/CD technologies allow for a very fast innovation cycle where we shouldn't be scared to have failed experiments as the cost and blast radius is very small.
 
-![Cheesy Group Photo]()
+![Cheesy Group Photo](assets/awssummit/group.jpg)
