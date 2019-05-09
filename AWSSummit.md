@@ -1,8 +1,21 @@
 # AWS Summit London - 8th May 2019
 
-A group of us went to the AWS Global Summit in London. This is a quick review of my day. You will learn tons from a day like this, even
+![Conference](assets/awssummit/conference.jpg)
 
-The day started with a (keynote)[] giving a overview of the current state of the AWS cloud. Review of the progress of Sainsbury's move to the cloud, mention of GDS and MoJ
+I and a group of my colleagues from Scott Logic went to the AWS Global Summit at the ExCel centre yesterday. It is the biggest of the global summits, and gives a taste of the huge Re:Invent conference. This post is my thoughts from my day and the sessions I attended. There is a huge range of sessions (about 75) on offer, and this is just a taste from the ones I went to.
+
+## Keynote
+
+The day started with an impressively quick registration process (last time took an age!) and a decent range of coffee and pastries before heading into the keynote. The keynote was presented by Matt Garman, VP of Compute Services at AWS, giving a overview of the current state of the AWS cloud. The platform continues to grow at an astounding rate with a annual run rate now approaching *31 billion* dollars a year, which is a 41% growth for last year.
+
+![]()
+
+Two of the customer case studies in the the
+Review of the progress of Sainsbury's move to the cloud, mention of GDS and MoJ
+
+![]()
+
+The Keynote also highlighted two of AWS programs. The first, [AWS re:start](https://aws-restart.com/) gives training and placements to young people and military veterans who possibly havent had any experience and gets them up to speed on 
 
 ## High Performance Computing (Frank Munz - @frankmunz)
 
@@ -158,3 +171,65 @@ Dunelm talking about CICD within Serverless world - rapid, independent tribes (T
   - Use monitoring to optimise end user experience
     - Complexity comes with Microservices
     - X-Ray for tracing
+    - AWS Cloud Map to track estate
+
+## Stream Processing and managing Real Time Data (Javier Ramirez - @supercoco9)
+
+- Challenges of data streaming
+  - Set up
+  - Scaling
+  - High availability
+- AWS streaming on cloud
+  - Various tech on platform but managed by AWS
+  - AWS Managed Streaming for Kafka (v1.1.1/v2.1.0)
+  - Flink on top of Kinesis Data Analytics
+  - Managed ElasticSearch as the query engine
+- Kinesis is fundamental service (billing and cloudwatch)
+  - Serverless platform - play for traffic in the stream
+  - Lambda for transform (e.g. Apache Log to JSON) but some built in already
+- Streams vs Firehose
+  - Latency on streams is much lower, Firehose up to 60 seconds
+  - Data streams can have server based applications
+  - Data streams very like Kafka, allows replay of events
+  - Data streams need number of shards
+    - Can use cloud watch alarms to auto scale up and down
+    - Not fully automatically (still a lot easier than Kafka with physical hardware)
+    - Library in awslabs
+  - Can mix and match (e.g. Firehose takes Stream as an input or vice versa)
+- Analytics
+  - Interact with streams in real time with SQL or Java applications (Apache Flink)
+  - SQL allows for rolling windows (either overlapping or not)
+  - Stream joined to static data
+  - Fully managed and elastic
+
+- NYC TLC Trip Record Data
+
+Real time analytics at HSBC (Prakash Sethuraman)
+
+- Scale (169PB data, trillions of dollars every day) and Diversity (global nature)
+- What and How at Re-Invent 2018
+- Moved from batch to stream processing
+- Legacy main frame for golden source, aim to get to modern cloud stores
+- Direct connect from DC to AWS
+- Deliver to mobile apps
+- Kinesis allows them to keep it flexible, no large capex, chop and change as needed
+- Use Kafka within the DC  (Change Data Capture)
+- Then through NiFi (choosen for throughput) ==> push out rather than reach in
+- Store duplicated data to allow for faster responses
+- Failed experiments can be switched of (hard in a bank...)
+- Roughly 0.5BB messages with 0.25BB events
+- All secure from the beginning, users have to come back in to get the details
+- DLS (SNS/SQS)
+- Lambda Latencies (spin up time, ENIs - reuse where possible)
+- Design of VPC
+- Eaxctly once processing is hard
+
+## Deep Dive on Serverless
+
+Comic Relief gave an awesome overview of their platform.
+
+## Wrapping Up
+
+![Innovation Cycle](assets)
+
+It was great to spend a day immersed in AWS. The cloud technologies continue to grow at an incredible rate, with new concepts and technologies all the time. The summit gave us a great chance to be buried in what people are doing and see successful implementations of various customers. I think one of the big aspects that was enphasised by various of the real world case studies was the cloud and CI?CD technologies allow for a very fast innovation cycle where we shouldn't be scared to have failed experiments as the
