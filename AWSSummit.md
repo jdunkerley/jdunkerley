@@ -2,13 +2,13 @@
 
 ![Conference](assets/awssummit/conference.jpg)
 
-I and a group of my colleagues from Scott Logic went to the AWS Global Summit at the ExCel centre yesterday. It is the biggest of the global summits, and gives a taste of the huge Re:Invent conference. This post is my thoughts from my day and the sessions I attended. There is a huge range of sessions (about 75) on offer, and this is just a taste from the ones I went to.
+A group of my colleagues from Scott Logic and I went to the AWS Global Summit at the ExCel centre this week. It is the biggest of the global summits, and gives a taste of the huge Re:Invent conference. This post is my thoughts from my day and the sessions I attended. There is a huge range of sessions (about 75) on offer, and this is just a taste from the ones I went to.
 
-## Keynote
+## Keynote ([YouTube](https://www.youtube.com/watch?v=77FiG0pZLJY))
 
 The day started with an impressively quick registration process (last time took an age!) and a decent range of coffee and pastries before heading into the keynote. The keynote was presented by Matt Garman, VP of Compute Services at AWS, giving a overview of the current state of the AWS cloud. The platform continues to grow at an astounding rate with a annual run rate now approaching *31 billion* dollars a year, which is a 41% growth for last year.
 
-![]()
+![KeyNote Case Studies](assets/awssummit/keynote.jpg)
 
 Two of the customer case studies in the keynote were really interesting. The transormation that Sainsbury has been through has been huge and they talked over a lot of the gains they have had moving to a modern platform. The AI and ML capabilites have allowed them to do some impressive things with the Nectar data - aiming to provide a better customer experience. The Ministry of Justice talked about the work of the [Government Digital Services (GDS)](https://gds.blog.gov.uk). The `Cloud First` guidance is leading to HM Governemnt being huge users of the cloud and getting to adopt new technologies quickly.
 
@@ -18,100 +18,51 @@ The Keynote also highlighted two of AWS programs. The first, [AWS re:start](http
 
 ## High Performance Computing (given by [Frank Munz](https://twitter.com/frankmunz)) - [Slides](https://speakerdeck.com/fmunz/high-performance-computing-on-aws-2019-with-astrazeneca)
 
-- Used to be a saying that the best way to do HPC was to go surfing for 18 months
-- Cloud stops the massive CapEx up front costs
+There used to be a saying that in High Performance Computing (HPC), you were best to go away for 18 months and come back and the hardware would have increased so much you would make the time back! Moore's law, that number of transistors in dense circuit boards roughly doubles every two years, has held roughly true for decades. This means that the huge upfront capital expenditure needed to be machines for HPC has been a major blocker. The cloud compute model changes that entirely. You can 'rent' these machines just for the time you need.
+
+Frank talked about five key areas you need to be aware of when doing HPC. These are listed below along with some of the associated AWS services.
 
 1. Compute (EC2 Instances, Spot Instances, Autoscaling)
-  - 190 instance types upto 4Ghz and 12TiB
-  - `p3dn.24xlarge` type: 
-     - `p` - instance type - GPU compute instances (most powerful)
-     - `3` - version
-     - `d` - (Capabilities) NVMe-bassed SSD disk 
-     - `n` - (Capabilities) networking boost (100Gbs)
-     - `23xlarge` - size of the machine
-  - `Z1d` type:
-     - `Z` - high speed single core speed (4GHz)
-  - AMD EPYC processors      
-     - `a` capability suffix
-     - 10% cost saving
-  - AWS Graviton processor
-     - `A` capability suffix
-     - ARM based
-     - 45% cost saving but not binary compatible
-
-2. Storage
-
+2. Storage (FSx Luster)
 3. Networking
-  - Placement Groups
-  - Network capabilities on EC2 instances
-  - Elastic Fabric Adapter
-    - Lowers the latency for HPC-class interconnect
-    - Bypasses TCP stack and allows use of low latency MPI
+4. Automation and Orchestration
+5. Visualisation
 
-4. FileSystem
-  - AWS FSx Luster (Linux + Cluster)
-    - Sub millisecond of latency
-    - Data stored in S3 and loaded into the FSx Luster
+I was particularly intereseted in the extreme capabilities you can now get for EC2 instances. AWS offers a wide range of different machines, and you can now get machines with up to 12 TiB RAM (soon going to be 24TiB), very fast single cores (4GHz) and huge numbers of cores (the maximum is at least 96!).
 
-AWS Parallel Cluster
- - Easy cluster management
- - Set of Python scripts
- - Build on top of Cloud Formations
- - Installs `pcluster` cli
+One nice aside was the naming convention. Consider the instance type of `p3dn.24xlarge`. The breaks down in a variety of parts:
 
-Case Study of AstraZeneca use of AWS HPC for Genomics Research
-- Challenges
-  - Compute performance - on prmeise preformance capabilities 
-  - Dependency on 3rd party providers
-  - Operation Efficiency
-- Identify variations in a genome, this gets picked out and loaded to a database and then final analysis looking at overall statistics based over the database
-- Aiming for 20 million genomes, about 10 Petabytes of data
-- Moved to AWS platform
-  - Serverless technologies (Step Functions, Lambda, SQS)
-  - Storage (DynamoDB, S3, Aurora MySQL)
-  - Batch for running software when beyond serverless capabilities
-     - FPGA compute used here
-- Nothing is running most of the time, all triggered by autoscaling on demand
-  - Receives batches of data
-  - Very efficient both in operational and performance measures
+- `p`: This is the instance type. In this case general purpose GPU instances
+- `3`: This is the generation of this type.
+- `dn`: These represent the additional capabilities of the machine:
+  - `d`: NVM3-based SSD disk used on the instance
+  - `n`: Network speed boost to 100Gbs
+- `24xlarge`: This is the specific size of the instance in the class. This is a huge machine with 96 virtual cores and 768 GiB of RAM!
 
-## CI/CD On AWS (Danilo Poccia - @danilop)
+![Instances](assets/awssummit/instances.jpg)
+[Tableau Public](https://public.tableau.com/profile/james.dunkerley#!/vizhome/Instances_15575213282580/InstanceTypes)
 
-- Infrastructure as code
-- Continuous Integration using Code Pipeline
-  - GitHiub or Code Commit
-  - Triggered by push to ECR
-  - Example of building a lambda and creating a zip within S3, sets up a Cloud Formation
-  - Triggered by WebHooks (e.g. Quay or DockerHub)
-  - CloudWatch events to trigger (scheduled builds)
-- Continuous Deployment uning Code Deploy
-  - Originally just EC2 but expanded to other services such as Lambda and ECS
-  - Talk over deploying multiple versions of a lambda and using an alias to control deployment
-  - Can use a PostTraffic hook to allow you to tag back in git repo that it was released
-  - Yaml configuration
-    - Type - Canary  `Canary10Percent5Minutes` / Linear `Linear10PercentEvery1Minute`
-  - API Gateway can have a canary stage invoking a different lambda version (or function even)
-    - multi functions backing an API
-    - Percentages not managed by CodeDeploy - more like and A/B release process
-  - ECS allows for blue-green environemnts
-  - AWS Deployment Framework (ADF) = github awslabs
+One capability which can be worth looking out for is the `a` suffix. This gives you an AMD EPYC processor instead of the Intel ones, but comes with a 10% cost saving. Depending on the workload this maybe an easy way to reduce cost.
 
-Dunelm talking about CICD within Serverless world - rapid, independent tribes (Tonino Greco - @toninog)
-- SAM CLI wrapped in Ansible (as IaC is also in Ansible)
-- Jenkins pipeline
-- Centrally managed build library used by developers across board
-    - Each tribe can customise what they need
-- Git commit triggers jenkins webhook
-    - Dedicated worker node (Spot instances) for each commit
-    - Install build required software
-    - Run a security checks
-    - Build / Compile
-    - Tests (Unit and Functional)
-    - Deploy (SAM CLI in Ansible)
-- &gt; 200 pipelines active, 15 deploys a day (generally 95% successful)
-- Security audit built in
-- Slack integration on state / result of builds. Also integrated some AWS environment control
-- Lambda to clean up on branch delete or merge
+![AstraZeneca](assets/awssummit/astrazeneca.jpg)
+
+Like all the break out sessions I attended, there was a customer case study. In this case it was AstraZeneca talking about their work on Genomics Research. The highlighted the challenges on HPC - specifically om premise performance capabilites and operational efficiency. The goal of their work is to quickly identify variations in a genome and load the results in to a database allowing for statistical analysis. The scale is enormous - they want to be able to analyse 20 million genomes, which would equate to about 10 Petabytes of data.
+
+Interestingly they are using a lot of serverless technologies - both for compute and for storage. They talked about running 1,000s of process in parallel and using AWS Batch with FPGA instance where it was beyond the serverless technologies. The nature of the solution means they have very little running most of the time and it is only running when needed. The solution leads to a platform which is both operationally efficient and highly performant.
+
+## CI/CD On AWS (given by [Danilo Poccia](https://twitter.com/danilop)) - [Slides](https://speakerdeck.com/danilop/cd-on-aws-ccd7a349-14f5-4647-861a-4ab3e9e0e000)
+
+While I am a big fan of the benefits of CI/CD, I can't say I love the technologies provided by AWS. Danilo gave a great talk on the benefits starting from Infrastructure as code going through to Continuous Integration. 
+
+Infrastructure as Code is a huge win. Having repeatable and controlled changes to the environment allows for rapid evolution and development while minimising the blast radius. Cloud Formation and the Serverless Application Model are core to AWS offering and they provide a strong foundation. This was the first time I had heard of [AWS Cloud Development Kit (CDK)](https://github.com/awslabs/aws-cdk) - it looks brilliant and moves from YAML/JSON configuration to code for defining infrastructure to using a programming language (e.g. TypeScript). One to play with soon.
+
+AWS Code Pipeline is it's offereing for continuous integration (CI). This allows for various triggers (such as GitHub and CodeCommit) and sources (including webhooks which are a recent addition as a trigger). This can trigger CodeBuild which allows for building of the code. It is controlled by a yaml file allowing easy defintion of different build processes.
+
+The final piece of the puzzle AWS offer is Code Deploy it's continuous deployment (CD). Originally this just target EC2, but over the years its outputs have been expanded over and over. The hooks built into it allow for you to call lambda at various points and verify things before proceeding. Again the awslabs have a great [repo](https://github.com/awslabs/aws-deployment-framework) walking through the options.
+
+![Dunelm Pipeline](assets/awssummit/dunelm.jpg)
+
+[Tonino Greco](https//twitter.com/toninog) from Dunelm gave a great overview of the success they have had creating a CI/CD pipeline for their tribes. They use various additional technologies to create an impressive pipeline including Jenkins, Ansible and various serverless technologies. The central management of the build tools has allowed for process that is well auditted and has various security and verification steps built in. They include a nice integration with slack as well allowing the teams easy monitoring and control.
 
 ## Modern Cloud Architecutres - 
 
