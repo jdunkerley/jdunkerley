@@ -68,7 +68,7 @@ The final piece of the puzzle AWS offer is Code Deploy for continuous deployment
 
 ## Modern Cloud Architectures (given by [Ian Massingham](https://twitter.com/IanMmmm))
 
-Ian gave an interesting talk about building application using modern cloud architectures. The new IT landscape has a rapid rate of change and innovation, with business becoming increasingly data driven. You need to be able to try lots of experiments and be prepared to fail. The cloud makes it easy to reduce 'collateral damage' from failed experiment - especially as there is no need for large up-front expenditure on hardware.
+Ian gave an interesting talk about building an application using modern cloud architectures. The new IT landscape has a rapid rate of change and innovation, with business becoming increasingly data driven. You need to be able to try lots of experiments and be prepared to fail. The cloud makes it easy to reduce 'collateral damage' from failed experiment - especially as there is no need for large up-front expenditure on hardware.
 
 ![Modern Apps Check List](assets/awssummit/modernapps.jpg)
 
@@ -104,7 +104,7 @@ The final case study was given by [Caroline Rennie](https://twitter.com/cagsr89)
 
 It was great to spend a day immersed in AWS. The cloud technologies continue to grow at an incredible rate, with new concepts and technologies all the time. The summit gave us a great chance to be buried in what people are doing and see successful implementations of various customers. I think one of the big aspects that was emphasised by various of the real world case studies, is that the cloud combined with CI/CD technologies allow for a very fast innovation cycle where we shouldn't be scared to have failed experiments as the cost and blast radius is very small.
 
-As always with these kinds of conferences you hopefully come away enthused with passion for it all. While I doubt I will use everything I saw today, the ideas and experience leads to lots of new avenues.
+As always with these kinds of conferences, you hopefully come away enthused with passion for it all. While I doubt I will use everything I saw today, the ideas and experience lead to lots of new avenues.
 
 ![Cheesy Group Photo](assets/awssummit/group.jpg)
 
