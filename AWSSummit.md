@@ -2,17 +2,17 @@
 
 ![Conference](assets/awssummit/conference.jpg)
 
-A group of my colleagues from Scott Logic and I went to the AWS Global Summit at the ExCel centre this week. It is the biggest of the global summits, and gives a taste of the huge re:Invent conference. This post is my thoughts from my day and the sessions I attended. There is a huge range of sessions (about 75) on offer, and this is just a taste from the ones I went to.
+A group of my colleagues from Scott Logic and I went to the AWS Global Summit at the ExCel centre this week. It is the biggest of the global summits, and gives a taste of the huge re:Invent conference in Las Vegas. This post is my thoughts from my day and the sessions I attended. There is a huge range of sessions (about 75) on offer, and so this is just a taste from the ones I went to.
 
-*You can read my colleagues [Zinat Wali's summary](https://blog.scottlogic.com/2019/05/10/aws-summit-london-2019.html) on [Scott Logic's Blog](https://blog.scottlogic.com/)*
+*You can also read my colleagues [Zinat Wali's summary](https://blog.scottlogic.com/2019/05/10/aws-summit-london-2019.html) on [Scott Logic's Blog](https://blog.scottlogic.com/)*
 
 ## Keynote ([YouTube](https://www.youtube.com/watch?v=77FiG0pZLJY))
 
-The day started with an impressively quick registration process (last time took an age!) and a decent range of coffee and pastries before heading into the keynote. The keynote was presented by Matt Garman, VP of Compute Services at AWS, giving an overview of the current state of the AWS cloud. The platform continues to grow at an astounding rate with an annual run rate now approaching *31 billion* dollars a year, which is a 41% growth for last year.
+The day started with an impressively quick registration process (last time took an age!) and a decent range of coffee and pastries before heading into the keynote. The keynote was presented by Matt Garman, VP of Compute Services at AWS, giving an overview of the current state of the cloud. The platform continues to grow at an astounding rate with an annual run rate now approaching *31 billion* dollars a year, which is a 41% growth for last year.
 
 ![KeyNote Case Studies](assets/awssummit/keynote.jpg)
 
-Two of the customer case studies in the keynote were particularly interesting. The transformation that Sainsbury has been through has been huge and they talked over a lot of the gains they have had moving to a modern platform. The AI and ML capabilities have allowed them to do some impressive things with the Nectar data - aiming to provide a better customer experience. The Ministry of Justice talked about the work of the [Government Digital Services (GDS)](https://gds.blog.gov.uk). The 'Cloud First' guidance is leading to HM Government being huge users of the cloud and getting to adopt new technologies quickly.
+Two of the customer case studies in the keynote were particularly interesting. The transformation that Sainsbury has been through has been huge and they talked over a lot of the gains they have had moving to a modern cloud based architecture. The AI and ML capabilities have allowed them to do some impressive things with the Nectar data - aiming to provide a better customer experience. The Ministry of Justice talked about the work of the [Government Digital Services (GDS)](https://gds.blog.gov.uk). The 'Cloud First' guidance is leading to HM Government being huge users of the cloud and getting to adopt new technologies quickly.
 
 ![GetIT](assets/awssummit/getit.jpg)
 
@@ -60,23 +60,23 @@ Infrastructure as Code is a huge win. Having repeatable and controlled changes t
 
 AWS Code Pipeline is its offering for continuous integration (CI). This allows for various triggers (such as GitHub and CodeCommit) and sources (including webhooks which are a recent addition as a trigger). This can trigger CodeBuild which allows for building of the code. It is controlled by a yaml file allowing easy definition of different build processes.
 
-The final piece of the puzzle AWS offer is Code Deploy its continuous deployment (CD). Originally this just target EC2, but over the years its outputs have been expanded over and over. The hooks built into it allow for you to call lambda at various points and verify things before proceeding. Again the awslabs have a great [repo](https://github.com/awslabs/aws-deployment-framework) walking through the options.
+The final piece of the puzzle AWS offer is Code Deploy for continuous deployment (CD). Originally this just targetted EC2, but over the years its outputs have been expanded over and over. The hooks built into it allow for you to call lambdas at various points and verify things before proceeding. Again the awslabs have a great [repo](https://github.com/awslabs/aws-deployment-framework) walking through the options.
 
 ![Dunelm Pipeline](assets/awssummit/dunelm.jpg)
 
-[Tonino Greco](https//twitter.com/toninog) from Dunelm gave a great overview of the success they have had creating a CI/CD pipeline for their tribes. They use various additional technologies to create an impressive pipeline including Jenkins, Ansible and various serverless technologies. The central management of the build tools has allowed for process that is well audited and has various security and verification steps built in. They include a nice integration with slack as well allowing the teams easy monitoring and control.
+[Tonino Greco](https//twitter.com/toninog) from Dunelm gave an overview of the success they have had creating a CI/CD pipeline for their developer tribes. They use various additional technologies to create an impressive pipeline including Jenkins, Ansible and various serverless technologies. The central management of the build tools has allowed for process that is well audited and has various security and verification stages built in. They include a nice integration with slack as well allowing the teams easy monitoring and control.
 
 ## Modern Cloud Architectures (given by [Ian Massingham](https://twitter.com/IanMmmm))
 
-Ian gave a great talk about building application using modern cloud architectures. The new IT landscape has a rapid rate of change and innovation, with business becoming increasingly data driven. You need to be able to try lots of experiments and be prepared to fail. The cloud makes it easy to reduce 'collateral damage' from failed experiment - no need for large up-front expenditure on hardware.
+Ian gave an interesting talk about building application using modern cloud architectures. The new IT landscape has a rapid rate of change and innovation, with business becoming increasingly data driven. You need to be able to try lots of experiments and be prepared to fail. The cloud makes it easy to reduce 'collateral damage' from failed experiment - especially as there is no need for large up-front expenditure on hardware.
 
 ![Modern Apps Check List](assets/awssummit/modernapps.jpg)
 
-This talk went through a checklist of points to help build moderns apps. As has been a theme with AWS for years, Security is the top priority and needs to be considered from the start of a project through to it running in production. Then moving through both microservices and serverless technologies. It covered some similar ground to the CI/CD one.
+This talk went through a checklist of points to help build moderns apps. As has been a theme with AWS for years, Security is the top priority and needs to be considered from the start of a project through to it running in production. Then moving through both microservices and serverless technologies. It also covered some similar ground to the CI/CD one.
 
 One final area that is often overlooked is gaining insights into your applications from monitoring and using this to help optimise the user experience. A couple of AWS services - X-Ray and Cloud Map were highlighted to help here.
 
-A quick shout out to Ann Ledwith from Sage for giving the customer demo. She was the only one that I saw who did an actual live demo rather than just having slides.
+A quick shout out to Ann Ledwith from Sage for giving the customer demo. She was the only one that I saw who did an actual live demo rather than just having slides - and happily it all worked.
 
 ## Stream Processing and managing Real Time Data (given by [Javier Ramirez](https://twitter.com/supercoco9))
 
@@ -104,7 +104,7 @@ The final case study was given by [Caroline Rennie](https://twitter.com/cagsr89)
 
 It was great to spend a day immersed in AWS. The cloud technologies continue to grow at an incredible rate, with new concepts and technologies all the time. The summit gave us a great chance to be buried in what people are doing and see successful implementations of various customers. I think one of the big aspects that was emphasised by various of the real world case studies, is that the cloud combined with CI/CD technologies allow for a very fast innovation cycle where we shouldn't be scared to have failed experiments as the cost and blast radius is very small.
 
-As always with these kinds of conferences you hopefully come away having 'drunk the kool aid', while I doubt I will use everything I saw today the ideas and experience leads to lots of new avenues.
+As always with these kinds of conferences you hopefully come away enthused with passion for it all. While I doubt I will use everything I saw today, the ideas and experience leads to lots of new avenues.
 
 ![Cheesy Group Photo](assets/awssummit/group.jpg)
 
