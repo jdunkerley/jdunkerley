@@ -154,7 +154,7 @@ Exponential (y=Ae^(Bx)):Exponential
 Power (Y=Ax^B):Power
 ```
 
-We can feed this into a new formula tool after creating `__X__` and `__Y__` to create the adjust(?) series we need.
+We can feed this into a new formula tool after the one creating `__X__` and `__Y__` values, to create the adjusted series we need.
 
 ```
 __X__ = IIF([#1] IN ('Logarithmic', 'Power'),LOG([__X__]),[__X__])
@@ -190,7 +190,7 @@ R Squared is a measure which measures how much of the dependent variable is pred
 
 ![$R^2=1-\frac{\sum_{i=1}^{n}e_i}{\sum_{i=1}^{n}{(y_i-\bar{y})^2}}=1-\frac{\sum_{i=1}^{n}(y_i-f(x_i))^2}{\sum_{i=1}^{n}{(y_i-\bar{y})^2}}$](assets/least-squares/r_sq.svg)
 
-In order to compute this, I needed to join the model values back to the original series. As we might not always have a grouping field, I needed to add a dummy variable, `__D__`, which can be included in all joins to make them(?) value. Dynamically creating joins is a little harder than adding group by clauses (as we must do it twice!). In this case, we need to take something that looks like `"A"|||"B"|||"C"` to something like:
+In order to compute this, I needed to join the model values back to the original series. As we might not always have a grouping field, I needed to add a dummy variable, `__D__`, which can be included in all joins as a common field. Dynamically creating joins is a little harder than adding group by clauses (as we must do it twice!). In this case, we need to take something that looks like `"A"|||"B"|||"C"` to something like:
 
 ```XML
 <Field field="A" />
