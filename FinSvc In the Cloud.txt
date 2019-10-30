@@ -1,0 +1,5 @@
+# Financial Services in the Cloud
+
+## Shared Responsibility Model
+
+Security in the cloud is shared responsibility of both the cloud provider and the customer. The vendor will be responsible to protect the physical security of the infrastructure. 
