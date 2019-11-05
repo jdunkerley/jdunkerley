@@ -157,3 +157,29 @@ Concepts
 *WhitePapers*
 - https://d1.awsstatic.com/whitepapers/Storage/aws-storage-options.pdf
 
+## Security
+
+- Cross Account Authentication
+
+- Shared Responsibility Model
+- Principle of Least Privildge, for temporary time too
+
+- Concepts
+  - Identity - Who you are
+  - Authentication - Prove who you are
+  - Authorization - Are you allowed to do it
+  - Trust - Across account
+
+- SAML vs OAuth vs OpenID
+  - SAML: Authentication and Authorization, XML, SSO for Enterprise
+  - OAuth 2.0: Just Authorization, tokens, API authorization between apps
+  - OpenID Connect: Built on top OAuth 2.0 add Authentication, REST/JSON flows, SSO for consumer
+- Multi-Account Management
+  - Most large orgs will have multiple accounts
+  - Cost allocation or segregation of duty
+  - Need plan to use
+  - When:
+    - Administrative isolation
+    - Limited visibility and discoverability
+    - Isolation to minimise blast radiis
+    - Recover and audit data

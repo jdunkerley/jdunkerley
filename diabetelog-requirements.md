@@ -1,0 +1,3 @@
+# Building A Diabetes Log (Part 3) - Requirements...
+
+So in [my last post](https://jdunkerley.co.uk/2019/10/31/creating-a-diabetes-log-part-2-being-a-diabetic-and-data/), I talked about how I live with diabetes. In this post 
