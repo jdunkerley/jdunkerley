@@ -1,6 +1,6 @@
 # Creating A Quick Python AWS Lambda Using Visual Studio Online
 
-So mostly for entertainment sake and to see how easy it would be, I wondered if I could create a Python based lambda in AWS using GitHub and Visual Studio Online. So, let's see how this goes and how long it takes ...
+So mostly for entertainment sake and to see how easy it would be, I wondered if I could create a Python-based lambda in AWS using GitHub and Visual Studio Online. So, let's see how this goes and how long it takes ...
 
 ## Pre-Requisites
 
@@ -14,15 +14,15 @@ For this little experiment, you will need:
 
 ![New Repository](assets/vsonline/newrepository.jpg)
 
-Lets create an empty repository in GitHub as we need somewhere to keep code! Go to https://github.com/new and create a new repository, I called mine `PythonLambda`. I made it public and with a README (so not empty to start).
+Let's create an empty repository in GitHub as we need somewhere to keep code! Go to https://github.com/new and create a new repository, I called mine `PythonLambda`. I made it public and with a README (so not empty to start).
 
 ![Visual Studio Online](assets/vsonline/vsonlinegetstarted.jpg)
 
-Next hop over to [Visual Studio Online](https://visualstudio.microsoft.com/services/visual-studio-online/) and click get started. You will then need to log in using you Azure account. Then click *Create Environment*. Enter in a name (I chose the same as the GitHub project) and the paste the URL for the GitHub repo into the Git repository. Click create and wait for it to be available. 
+Next hop over to [Visual Studio Online](https://visualstudio.microsoft.com/services/visual-studio-online/) and click get started. You will then need to log in using your Azure account. Then click *Create Environment*. Enter in a name (I chose the same as the GitHub project) and then paste the URL for the GitHub repo into the Git repository. Click create and wait for it to be available. 
 
 ![Create Environment](assets/vsonline/createenvironment.jpg)
 
-Next connect to the environment. A window that looks remarkably like Visual Studio Code will appear; I chose to install support for Python. This took virtually no time whatsoever. Next hit `Ctrl-'` to open the terminal windows. Let's check for python by running `python --version`:
+Next, connect to the environment. A window that looks remarkably like Visual Studio Code will appear; I chose to install support for Python. This took virtually no time whatsoever. Next hit `Ctrl-'` to open the terminal windows. Let's check for python by running `python --version`:
 
 ![Python Version](assets/vsonline/pythonversion.jpg)
 
@@ -34,9 +34,9 @@ So now we have a working development environment. Took about 3 minutes to set th
 
 ## Logging into GitHub and AWS
 
-Next we can edit the README and check we can push back to GitHub as a new branch. Change the README file and save it. You can then go to Source Control tab (press `Ctrl-Shift-G`), commit the files and push to GitHub. It will pop up a window asking you to authorise `microsoft-vs` to access your GitHub account. After that it will push the code to GitHub.
+Next, we can edit the README and check we can push back to GitHub as a new branch. Change the README file and save it. You can then go to Source Control tab (press `Ctrl-Shift-G`), commit the files and push to GitHub. It will pop up a window asking you to authorise `microsoft-vs` to access your GitHub account. After that, it will push the code to GitHub.
 
-Next head to the [AWS IAM console](https://console.aws.amazon.com/iam/home#/home) and log in. Ideally you will create a new user but for the sake of simplicity I will just create a new access key. Go to the `Users` link, find your user, go to `Security Credentials` and select `Create Access Key`. Back within the terminal in Visual Studio Online run `aws configure` and copy the Access Key ID and Secret Access Key into the prompts. 
+Next head to the [AWS IAM console](https://console.aws.amazon.com/iam/home#/home) and log in. Ideally, you will create a new user but for the sake of simplicity, I will just create a new access key. Go to the `Users` link, find your user, go to `Security Credentials` and select `Create Access Key`. Back within the terminal in Visual Studio Online run `aws configure` and copy the Access Key ID and Secret Access Key into the prompts. 
 
 This step took me about 5 minutes. So, we are ready to start building the lambda in about 10 minutes.
 
