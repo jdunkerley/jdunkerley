@@ -1,3 +1,7 @@
+Initial Install:
+- Chrome
+- Office 365
+
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install chocolateygui
@@ -22,4 +26,5 @@ choco list --local-only
 Install:
 - Windows Feature: windows subsystem for Linux
 - Windows Store: Ubuntu
-
+- Adobe Acrobat Reader
+- DropBox
