@@ -31,3 +31,12 @@ Install:
 - JDK
 - JetBrains Toolbox
 - Slack
+- Visio
+
+
+- Tableau
+- Tableau Prep
+- PowerBI
+- Alteryx
+- Alteryx Predictive Tools
+- Visual Studio Professional
