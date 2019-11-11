@@ -41,10 +41,10 @@ Install:
 - Tableau Prep
 - [Syncfusion Metro Studio](https://www.syncfusion.com/downloads/metrostudio)
 - Alteryx
+- Alteryx Predictive Tools
 
 ToDo:
 - PowerBI
-- Alteryx Predictive Tools
 - Visual Studio Professional
 - SnagIt
 - SmallBasic
