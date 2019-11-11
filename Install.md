@@ -28,3 +28,6 @@ Install:
 - Windows Store: Ubuntu
 - Adobe Acrobat Reader
 - DropBox
+- JDK
+- JetBrains Toolbox
+- Slack
