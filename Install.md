@@ -42,10 +42,12 @@ Install:
 - [Syncfusion Metro Studio](https://www.syncfusion.com/downloads/metrostudio)
 - Alteryx
 - Alteryx Predictive Tools
+- PowerBI
 
 ToDo:
-- PowerBI
 - Visual Studio Professional
+- SQL Server Management Studio
+- Microsoft Threat Modelling Tool
 - SnagIt
 - SmallBasic
 - Logi Options
