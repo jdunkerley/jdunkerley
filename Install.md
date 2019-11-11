@@ -49,8 +49,8 @@ Install:
 - Settings for WSL
 - SQL Server Management Studio
 - SmallBasic
+- Microsoft Threat Modelling Tool
 
 ToDo:
 - Visual Studio Professional
-- Microsoft Threat Modelling Tool
 - Microsoft Keyboard Mouse
