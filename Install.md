@@ -32,9 +32,9 @@ Install:
 - JetBrains Toolbox
 - Slack
 - Visio
-
-
 - Tableau
+
+ToDo:
 - Tableau Prep
 - PowerBI
 - Alteryx
