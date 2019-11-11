@@ -20,6 +20,7 @@ choco install pandoc
 choco install putty
 choco install cascadiacode
 choco install treesizefree
+choco install r.studio
 # choco install microsoft-windows-terminal
 choco list --local-only
 ```
@@ -34,11 +35,12 @@ Install:
 - Slack
 - Visio
 - Tableau
-
-ToDo:
 - Tableau Prep
 - [Syncfusion Metro Studio](https://www.syncfusion.com/downloads/metrostudio)
+
+ToDo:
 - PowerBI
 - Alteryx
 - Alteryx Predictive Tools
 - Visual Studio Professional
+- SnagIt
