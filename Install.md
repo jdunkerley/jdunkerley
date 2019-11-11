@@ -43,12 +43,12 @@ Install:
 - Alteryx
 - Alteryx Predictive Tools
 - PowerBI
+- SnagIt
 
 ToDo:
 - Visual Studio Professional
 - SQL Server Management Studio
 - Microsoft Threat Modelling Tool
-- SnagIt
 - SmallBasic
 - Logi Options
 - Microsoft Keyboard Mouse
