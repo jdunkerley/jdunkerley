@@ -34,10 +34,10 @@ Install:
 - Slack
 - Visio
 - Tableau
-- [Syncfusion Metro Studio](https://www.syncfusion.com/downloads/metrostudio)
 
 ToDo:
 - Tableau Prep
+- [Syncfusion Metro Studio](https://www.syncfusion.com/downloads/metrostudio)
 - PowerBI
 - Alteryx
 - Alteryx Predictive Tools
