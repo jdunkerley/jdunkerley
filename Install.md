@@ -45,11 +45,12 @@ Install:
 - PowerBI
 - SnagIt
 - Printer drivers
+- Logi Options
+- Settings for WSL
 
 ToDo:
 - Visual Studio Professional
 - SQL Server Management Studio
 - Microsoft Threat Modelling Tool
 - SmallBasic
-- Logi Options
 - Microsoft Keyboard Mouse
