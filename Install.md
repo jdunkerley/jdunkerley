@@ -48,9 +48,9 @@ Install:
 - Logi Options
 - Settings for WSL
 - SQL Server Management Studio
+- SmallBasic
 
 ToDo:
 - Visual Studio Professional
 - Microsoft Threat Modelling Tool
-- SmallBasic
 - Microsoft Keyboard Mouse
