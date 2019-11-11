@@ -47,3 +47,7 @@ ToDo:
 - Alteryx Predictive Tools
 - Visual Studio Professional
 - SnagIt
+- SmallBasic
+- Logi Options
+- Microsoft Keyboard Mouse
+- Printer drivers
