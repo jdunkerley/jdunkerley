@@ -44,6 +44,7 @@ Install:
 - Alteryx Predictive Tools
 - PowerBI
 - SnagIt
+- Printer drivers
 
 ToDo:
 - Visual Studio Professional
@@ -52,4 +53,3 @@ ToDo:
 - SmallBasic
 - Logi Options
 - Microsoft Keyboard Mouse
-- Printer drivers
