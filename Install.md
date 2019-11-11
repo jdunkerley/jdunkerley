@@ -22,6 +22,7 @@ choco install cascadiacode
 choco install treesizefree
 choco install r.studio
 choco install postman
+choco install paint.net
 # choco install microsoft-windows-terminal
 choco list --local-only
 ```
