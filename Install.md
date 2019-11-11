@@ -47,10 +47,10 @@ Install:
 - Printer drivers
 - Logi Options
 - Settings for WSL
+- SQL Server Management Studio
 
 ToDo:
 - Visual Studio Professional
-- SQL Server Management Studio
 - Microsoft Threat Modelling Tool
 - SmallBasic
 - Microsoft Keyboard Mouse
