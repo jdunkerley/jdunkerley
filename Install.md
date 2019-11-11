@@ -50,7 +50,21 @@ Install:
 - SQL Server Management Studio
 - SmallBasic
 - Microsoft Threat Modelling Tool
+- Visual Studio Professional
+
+Toolbox
+- IntelliJ
+- PyCharm
+- WebStorm
+- DataGrip
+- GoLand
+- Resharper
+
+VS PlugIns
+- Powershell tools for VS
+- Productivity Power Tools
 
 ToDo:
-- Visual Studio Professional
 - Microsoft Keyboard Mouse
+- Desk set up
+- VS Code and Insider plugins
