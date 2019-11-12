@@ -64,7 +64,37 @@ VS PlugIns
 - Powershell tools for VS
 - Productivity Power Tools
 
+VS Code plugins
+```bash
+code --install-extenstion amazonwebservices.aws-toolkit-vscode
+code --install-extenstion dbaeumer.vscode-eslint
+code --install-extenstion donjayamanne.githistory
+code --install-extenstion eamodio.gitlens
+code --install-extenstion eg2.vscode-npm-script
+code --install-extenstion GitHub.vscode-pull-request-github
+code --install-extenstion HookyQR.beautify
+code --install-extenstion humao.rest-client
+code --install-extenstion mauve.terraform
+code --install-extenstion ms-python.python
+code --install-extenstion ms-vscode-remote.remote-wsl
+code --install-extenstion ms-vscode.azure-account
+code --install-extenstion ms-vscode.azurecli
+code --install-extenstion ms-vscode.cpptools
+code --install-extenstion ms-vscode.csharp
+code --install-extenstion ms-vscode.powershell
+code --install-extenstion ms-vsonline.vsonline
+code --install-extenstion msjsdiag.debugger-for-chrome
+code --install-extenstion octref.vetur
+code --install-extenstion vscode-icons-team.vscode-icons
+```
+
+VS Code Insider plugins
+```bash
+code-insiders --install-extenstion mauve.terraform
+code-insiders --install-extenstion ms-vscode-remote.remote-wsl
+```
+
+
 ToDo:
 - Microsoft Keyboard Mouse
 - Desk set up
-- VS Code and Insider plugins
