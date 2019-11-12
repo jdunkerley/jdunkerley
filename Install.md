@@ -26,11 +26,12 @@ choco install paint.net
 choco install nodejs
 # choco install microsoft-windows-terminal
 choco list --local-only
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1804 -OutFile Ubuntu.appx -UseBasicParsing
+Add-AppxPackage .\Ubuntu.appx
 ```
 
 Install:
-- Windows Feature: windows subsystem for Linux
-- Windows Store: Ubuntu
 - Adobe Acrobat Reader
 - DropBox
 - JDK
