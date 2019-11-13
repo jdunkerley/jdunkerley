@@ -95,6 +95,10 @@ code-insiders --install-extenstion mauve.terraform
 code-insiders --install-extenstion ms-vscode-remote.remote-wsl
 ```
 
+Alteryx Extensions
+- Crew Macros
+- Abacus
+- Omnibus
 
 ToDo:
 - Microsoft Keyboard Mouse
