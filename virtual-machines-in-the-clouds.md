@@ -1,6 +1,6 @@
-# Virtual Machines in the Clouds
+# Virtual Machines in the Clouds: AWS, Azure and GCP
 
-As I have ended up doing some work in AWS, Azure and now GCP as well; I thought I would write a quick post comparing the experience of building a simple web hosting site on each of them. There are other cloud providers but the market share of the these three is huge:
+As I have ended up doing some work in AWS, Azure and now GCP as well; I thought I would write a quick post comparing the experience of building a simple web hosting site on each of them. There are other cloud providers but the market share of these three is huge. I don't have experience of the Alibaba cloud (the other major player) so won't cover that here. The chart below shows the market share according to [Gartner](https://www.gartner.com/en/newsroom/press-releases/2019-07-29-gartner-says-worldwide-iaas-public-cloud-services-market-grew-31point3-percent-in-2018) in 2017 and 2018:
 
 -- To Do: Some Market Share Viz --
 
@@ -30,7 +30,7 @@ Likewise, they define different service models:
 - *Platform as a Service (PaaS)* is a complete development and deployment environment in the cloud. It still includes compute, storage and networking but now things like the Operating System and Database Software get managed by the provider. This reduces the operational load for the users and lets them concentrate on their 'value' proposition.
 - *Software as a Service (SaaS)* is hosted applications running in the cloud. In this case, users don't provision machines 
 
-You don't have to use just one model, you can mix and match. For example, run a collection of virual machines (IaaS) connecting to a managed database instance (PaaS). For this blog, I am looking only really at IaaS capabilities.
+You don't have to use just one model, you can mix and match. For example, run a collection of virual machines (IaaS) connecting to a managed database instance (PaaS). For this blog, I am only really looking at IaaS capabilities.
 
 ### Global Infrastructure
 
@@ -44,11 +44,14 @@ Google and Amazon both use nice easy naming conventions, which helps groups the 
 
 Moving out from regions, Azure groups regions in [geographies](https://azure.microsoft.com/en-gb/global-infrastructure/geographies/). These are collections of regions which share the same legal jurisdictions. For the other two providers, there are certain blocks of regions (the *us-* and *europe-* or *eu-* for example) which share similar jurisdiction. As always when handling data, you will need to ensure that you host it in the correct region.
 
-Within a region, all three providers define availability zones. Each availability zone is one or more data centres (though it can often be easiest to think of them as a single data centre) with independent power, connectivity and resources. The zones are physically far enough apart to reduce risk of environmental factors knocking out more than one, but they are close enough together to ensure low latency when communicating within the region. T
+Within a region, all three providers define availability zones. Each availability zone is one or more data centres (though it can often be easiest to think of them as a single data centre) with independent power, connectivity and resources. The zones are physically far enough apart to reduce risk of environmental factors knocking out more than one, but they are close enough together to ensure low latency when communicating within the region. 
 
+Finally, all of the providers have lots of additional 'edge locations' (also called point). These are connection points onto the providers network and serve as <abbr title="Content Delivery Network">CDN</abbr> locations for the
 -- Points of Presence, Edge Locations --
 
 ### Networkings
+
+These locations and all the availavility zones (and hence the regions) are interconnected to each other using the providers dedicated global networks. They all spend huge amount of time and resource designing and building these networks. AWS had a [great session at re:Invent 2016](https://www.youtube.com/watch?v=uj7Ting6Ckk) talking all about this.
 
 VPC, Subnet Firewall, Routing
 
