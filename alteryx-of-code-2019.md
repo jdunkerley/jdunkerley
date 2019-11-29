@@ -33,4 +33,4 @@ Last year, some of the puzzles were beyond our capabilities with these constrain
 
 So as we start another year's challenges, I invite you to come join us and see who can be the Alteryx user to achieve a perfect 25 Gold Stars. 
 
-You can join the Alteryx leaderboard by going to https://adventofcode.com/2019/leaderboard/private and using the code `453066-ca912f80`. Last year we chatted on twitter but felt might be easier to chat on the Alteryx Community where we can share problems and solutions.
+You can join the Alteryx leaderboard by going to https://adventofcode.com/2019/leaderboard/private and using the code `453066-ca912f80`. Last year we chatted on twitter (with the hashtag #AlteryxOfCode) but felt might be easier to chat on the Alteryx Community where we can share problems and solutions.
