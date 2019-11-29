@@ -2,9 +2,9 @@
 
 ![Advent of Code 2019](assets/advent-2019/advent-2019.png)
 
-So the lights are up across London, the weather is attrocious and the trains are going nowhere fast; so it must be time to think about the [Advent of Code](https://adventofcode.com/). For those of you who haven't heard of it, this is a fantastic set of 25 puzzles released one by one every day in December until Christmas Day.
+So the lights are up across London, the weather is atrocious and the trains are going nowhere fast; so it must be time to think about the [Advent of Code](https://adventofcode.com/). For those of you who haven't heard of it, this is a fantastic set of 25 puzzles released one by one every day in December until Christmas Day.
 
-[Jesse Clark](https://community.alteryx.com/t5/user/viewprofilepage/user-id/4671) and I spoke about gamification within Alteryx at Inspire London this year. One of the ways I like to have fun with it is finding challenges which are fun to attempt to solve within the platform. The weekly challenges is a great set, but these are curated specifically for Alteryx. In the Advent of Code, the challenges are general programming problems that start off easy and get progressively harder and harder.
+[Jesse Clark](https://community.alteryx.com/t5/user/viewprofilepage/user-id/4671) and I spoke about gamification within Alteryx at Inspire London this year. One of the ways I like to have fun with it is finding challenges which are fun to attempt to solve within the platform. The weekly challenges are a great set, but these are curated specifically for Alteryx. In the Advent of Code, the challenges are general programming problems that start off easy and get progressively harder and harder.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/PjihHsxxysI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
