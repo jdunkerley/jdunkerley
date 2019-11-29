@@ -4,9 +4,9 @@
 
 So the lights are up across London, the weather is attrocious and the trains are going nowhere fast; so it must be time to think about the [Advent of Code](https://adventofcode.com/). For those of you who haven't heard of it, this is a fantastic set of 25 puzzles released one by one every day in December until Christmas Day.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/PjihHsxxysI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 [Jesse Clark](https://community.alteryx.com/t5/user/viewprofilepage/user-id/4671) and I spoke about gamification within Alteryx at Inspire London this year. One of the ways I like to have fun with it is finding challenges which are fun to attempt to solve within the platform. The weekly challenges is a great set, but these are curated specifically for Alteryx. In the Advent of Code, the challenges are general programming problems that start off easy and get progressively harder and harder.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PjihHsxxysI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 Alteryx is in many ways like a programming language, this naturally led Adam Riley to suggest last year that we try doing the Advent of Code in it. It was a lot of fun if very challenging. Following some very late additional solves [Patrick Digan](https://community.alteryx.com/t5/user/viewprofilepage/user-id/2387) is leading the real Alteryx entries:
 
