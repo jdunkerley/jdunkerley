@@ -46,6 +46,8 @@ Install:
 - Logi Options
 - SQL Server Management Studio
 - Visual Studio Professional
+- Printer
+- Desk set up
 
 Toolbox
 - IntelliJ
@@ -111,7 +113,10 @@ pip install beautifulsoup4
 pip install spacy
 ```
 
-NPM
+Yarn
+```bash
+yarn global add @vue/cli
+```
 
 Alteryx Extensions
 - Crew Macros
@@ -120,8 +125,6 @@ Alteryx Extensions
 
 ToDo:
 - Microsoft Keyboard Mouse
-- Desk set up
-- Printer drivers
 - SmallBasic
 - Slack
 - Visio
