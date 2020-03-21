@@ -118,13 +118,11 @@ Yarn
 yarn global add @vue/cli
 ```
 
+ToDo:
 Alteryx Extensions
 - Crew Macros
 - Abacus
 - Omnibus
 
-ToDo:
 - Microsoft Keyboard Mouse
 - SmallBasic
-- Slack
-- Visio
