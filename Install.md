@@ -47,11 +47,6 @@ Install:
 - SQL Server Management Studio
 - Visual Studio Professional
 
-- Printer drivers
-- SmallBasic
-- Slack
-- Visio
-
 Toolbox
 - IntelliJ
 - PyCharm
@@ -126,3 +121,7 @@ Alteryx Extensions
 ToDo:
 - Microsoft Keyboard Mouse
 - Desk set up
+- Printer drivers
+- SmallBasic
+- Slack
+- Visio
