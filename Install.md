@@ -37,64 +37,86 @@ Install:
 - DropBox
 - JDK
 - JetBrains Toolbox
-- Slack
-- Visio
 - Tableau
-- Tableau Prep
 - [Syncfusion Metro Studio](https://www.syncfusion.com/downloads/metrostudio)
 - Alteryx
 - Alteryx Predictive Tools
 - PowerBI
 - SnagIt
-- Printer drivers
 - Logi Options
-- Settings for WSL
 - SQL Server Management Studio
-- SmallBasic
-- Microsoft Threat Modelling Tool
 - Visual Studio Professional
+
+- Printer drivers
+- SmallBasic
+- Slack
+- Visio
 
 Toolbox
 - IntelliJ
 - PyCharm
-- WebStorm
 - DataGrip
-- GoLand
-- Resharper
+- DotPeek
+- DotTrace
+- DotMemory
 
 VS PlugIns
-- Powershell tools for VS
 - Productivity Power Tools
 
 VS Code plugins
 ```bash
-code --install-extenstion amazonwebservices.aws-toolkit-vscode
-code --install-extenstion dbaeumer.vscode-eslint
-code --install-extenstion donjayamanne.githistory
-code --install-extenstion eamodio.gitlens
-code --install-extenstion eg2.vscode-npm-script
-code --install-extenstion GitHub.vscode-pull-request-github
-code --install-extenstion HookyQR.beautify
-code --install-extenstion humao.rest-client
-code --install-extenstion mauve.terraform
-code --install-extenstion ms-python.python
-code --install-extenstion ms-vscode-remote.remote-wsl
-code --install-extenstion ms-vscode.azure-account
-code --install-extenstion ms-vscode.azurecli
-code --install-extenstion ms-vscode.cpptools
-code --install-extenstion ms-vscode.csharp
-code --install-extenstion ms-vscode.powershell
-code --install-extenstion ms-vsonline.vsonline
-code --install-extenstion msjsdiag.debugger-for-chrome
-code --install-extenstion octref.vetur
-code --install-extenstion vscode-icons-team.vscode-icons
+code --install-extension visualstudioexptteam.vscodeintellicode
+code --install-extension donjayamanne.githistory
+code --install-extension eamodio.gitlens
+code --install-extension mauve.terraform
+code --install-extension ms-python.python
+code --install-extension ms-vscode-remote.remote-wsl
+code --install-extension ms-dotnettools.csharp
+code --install-extension ms-vscode.powershell
+code --install-extension ms-vsonline.vsonline
+code --install-extension msjsdiag.debugger-for-chrome
+code --install-extension octref.vetur
+code --install-extension vscode-icons-team.vscode-icons
+code --install-extension mauve.terraform
+code --install-extension alexcvzz.vscode-sqlite
+code --install-extension eg2.vscode-npm-script
+code --install-extension HookyQR.beautify
 ```
 
 VS Code Insider plugins
 ```bash
-code-insiders --install-extenstion mauve.terraform
-code-insiders --install-extenstion ms-vscode-remote.remote-wsl
+code-insiders --install-extension visualstudioexptteam.vscodeintellicode
+code-insiders --install-extension ms-vscode-remote.remote-wsl
+code-insiders --install-extension donjayamanne.githistory
+code-insiders --install-extension eamodio.gitlens
+code-insiders --install-extension davidanson.vscode-markdownlint
+code-insiders --install-extension streetsidesoftware.code-spell-checker
 ```
+
+Python Packages
+```bash
+python -m pip install --upgrade pip
+pip install pytest
+pip install pylint
+pip install rope
+pip install boto3
+pip install flask
+pip install flask-cors
+pip install requests
+pip install feedparser
+pip install numpy
+pip install scipy
+pip install pandas
+pip install pandas-datareader
+pip install joblib
+pip install peewee
+pip install workalender
+pip install tzlocal
+pip install beautifulsoup4
+pip install spacy
+```
+
+NPM
 
 Alteryx Extensions
 - Crew Macros
