@@ -6,6 +6,7 @@ Initial Install:
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install chocolateygui
 choco install 7zip
+choco install nodejs
 choco install yarn
 choco install filezilla
 choco install git
@@ -14,6 +15,7 @@ choco install pip
 choco install dotnetcore-sdk
 choco install kubernetes-cli
 choco install azure-cli
+choco install awscli
 choco install vscode
 choco install vscode-insiders
 choco install pandoc
@@ -23,7 +25,6 @@ choco install treesizefree
 choco install r.studio
 choco install postman
 choco install paint.net
-choco install nodejs
 # choco install microsoft-windows-terminal
 choco list --local-only
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
