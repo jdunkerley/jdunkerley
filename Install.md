@@ -4,37 +4,38 @@ Initial Install:
 
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-choco install chocolateygui
-choco install 7zip
-choco install nodejs
-choco install yarn
-choco install filezilla
-choco install git
-choco install python
-choco install pip
-choco install dotnetcore-sdk
-choco install kubernetes-cli
-choco install azure-cli
-choco install awscli
-choco install vscode
-choco install vscode-insiders
-choco install pandoc
-choco install putty
-choco install cascadiacode
-choco install treesizefree
-choco install r.studio
-choco install postman
-choco install paint.net
-# choco install microsoft-windows-terminal
-choco list --local-only
+choco install chocolateygui -y
+choco install 7zip -y
+choco install nodejs -y
+choco install yarn -y
+choco install filezilla -y
+choco install git -y
+choco install python -y
+choco install pip -y
+choco install dotnetcore-sdk -y
+choco install kubernetes-cli -y
+choco install azure-cli -y
+choco install awscli -y
+choco install vscode -y
+choco install vscode-insiders -y
+choco install pandoc -y
+choco install putty -y
+choco install cascadiacode -y
+choco install treesizefree -y
+choco install r.studio -y
+choco install postman -y
+choco install paint.net -y
+choco install microsoft-windows-terminal -y
+choco install adobereader -y
+choco install dropbox -y
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
 Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1804 -OutFile Ubuntu.appx -UseBasicParsing
 Add-AppxPackage .\Ubuntu.appx
+wsl --set-default-version 2
 ```
 
 Install:
-- Adobe Acrobat Reader
-- DropBox
 - JDK
 - JetBrains Toolbox
 - Tableau
