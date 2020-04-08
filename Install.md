@@ -28,6 +28,7 @@ choco install paint.net -y
 choco install microsoft-windows-terminal -y
 choco install adobereader -y
 choco install dropbox -y
+choco install jetbrainstoolbox -y
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
 Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
 Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1804 -OutFile Ubuntu.appx -UseBasicParsing
@@ -37,7 +38,6 @@ wsl --set-default-version 2
 
 Install:
 - JDK
-- JetBrains Toolbox
 - Tableau
 - [Syncfusion Metro Studio](https://www.syncfusion.com/downloads/metrostudio)
 - Alteryx
