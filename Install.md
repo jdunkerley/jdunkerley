@@ -1,4 +1,4 @@
-Initial Install:
+    Initial Install:
 - Chrome
 - Office 365
 
