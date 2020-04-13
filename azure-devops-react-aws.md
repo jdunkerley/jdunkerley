@@ -67,7 +67,7 @@ The complete eslint file is available [here](https://gist.github.com/jdunkerley/
 
 ## Running the Test in a CI environment and outputting the results
 
-Create React App sets up a testing framework by default. It is based on top of [Jest](https://jestjs.io/) and easily allows you to test your code as you work. However, the built in `yarn test` command runs in watch mode and doesn't work within a CI environment. To make it work within Azure DevOps, we need to do two things. One set an environment variable called `CI` equal to `true`. Secondly, make the process produce an XML file of test results in JUnit format (which Azure DevOps understands).
+Create React App sets up a testing framework by default. It is based on top of [Jest](https://jestjs.io/) and easily allows you to test your code as you work. However, the built in `yarn test` command runs in watch mode and doesn't work within a CI environment. To make it work within Azure DevOps, we need to do two things. One set an environment variable called `CI` equal to `true`. 
 
 *bash:*
 ```bash
@@ -84,4 +84,59 @@ CI=true yarn test
 set CI=true&&yarn test
 ```
 
-Annoyingly environment variables vary a lot between bash, PowerShell and the Windows Command prompt. The Azure hosted [build environment](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops) can be Windows, Ubuntu or Mac OS X. This
+Annoyingly setting environment variables vary a lot between bash, PowerShell and the Windows Command prompt. The Azure hosted [build environment](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops) can be Windows, Ubuntu or Mac OS X. I chose to build on top of `ubuntu-latest` so will need to use the appropriate command.
+
+After this, we need to make the process produce an XML file of test results in JUnit format (which Azure DevOps understands). There is an npm package jest-junit which provides a JUnit reporter to jest. Run `yarn add --dev jest-junit` and then edit the test command in `packages.json` to:
+
+```bash
+react-scripts test --reporters=default --reporters=jest-junit
+```
+
+Now if you run `yarn test` a new file `junit.xml` will be generated. I added this to my `.gitignore` as didn't want to commit it.
+
+# Creating the Build File
+
+So we're now ready to create the build pipeline. The easiest way to do this is to add a YAML file with the build configuration. I called mine `azure-pipelines.yml` (which is the default name if you use the wizard in Azure DevOps).
+
+```yaml
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+```
+
+This will set up and create the VM and wire it to be build on every commit to master. It also sets the Node.js version. Next lets add the build, lint and tests steps:
+
+```yaml
+- script: |
+    yarn install
+  displayName: 'yarn install'
+
+- script: |
+    yarn lint
+  displayName: 'yarn lint'
+  
+- script: |
+    CI=true yarn test
+  displayName: 'yarn test'
+```
+
+If we push this up to the repo the build pipeline is automatically created. On the next commit, it will be built. The last command for setting up the CI part of the pipeline is to capture the test output:
+
+```yaml
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: '**/junit.xml'
+```
+
+The complete YAML file is [here](https://gist.github.com/jdunkerley/3ee989aa52a6daf3b9dc3810c933c759).
+
