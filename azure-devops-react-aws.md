@@ -140,3 +140,6 @@ If we push this up to the repo the build pipeline is automatically created. On t
 
 The complete YAML file is [here](https://gist.github.com/jdunkerley/3ee989aa52a6daf3b9dc3810c933c759).
 
+# Verifying PRs ...
+
+We now have it building, testing and linting on every commit to master. The next step is to make it so on every pull request to master it is also built.
