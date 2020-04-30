@@ -1,0 +1,239 @@
+S C:\Repos\temp> node
+Welcome to Node.js v13.11.0.
+Type ".help" for more information.
+> oAuth1 = require('node-oauth1')
+{
+  setProperties: [Function: setProperties],
+  percentEncode: [Function: percentEncode],
+  decodePercent: [Function: decodePercent],
+  getParameterList: [Function: getParameterList],
+  getParameterMap: [Function: getParameterMap],
+  getParameter: [Function: getParameter],
+  formEncode: [Function: formEncode],
+  decodeForm: [Function: decodeForm],
+  setParameter: [Function: setParameter],
+  setParameters: [Function: setParameters],
+  completeRequest: [Function: completeRequest],
+  setTimestampAndNonce: [Function: setTimestampAndNonce],
+  addToURL: [Function: addToURL],
+  getAuthorizationHeader: [Function: getAuthorizationHeader],
+  correctTimestampFromSrc: [Function: correctTimestampFromSrc],
+  correctTimestamp: [Function: correctTimestamp],
+  timeCorrectionMsec: 0,
+  timestamp: [Function: timestamp],
+  nonce: [Function: nonce] {
+    CHARS: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'
+  },
+  declareClass: [Function: declareClass],
+  SignatureMethod: [Function: OAuthSignatureMethod] {
+    sign: [Function: sign],
+    newMethod: [Function: newMethod],
+    REGISTERED: {
+      PLAINTEXT: [Function: subClass],
+      'PLAINTEXT-Accessor': [Function: subClass],
+      'HMAC-SHA1': [Function: subClass],
+      'HMAC-SHA1-Accessor': [Function: subClass],
+      'HMAC-SHA256': [Function: subClass],
+      'HMAC-SHA256-Accessor': [Function: subClass]
+    },
+    registerMethodClass: [Function: registerMethodClass],
+    makeSubclass: [Function: makeSubclass],
+    getBaseString: [Function: getBaseString],
+    normalizeUrl: [Function: normalizeUrl],
+    parseUri: [Function: parseUri],
+    normalizeParameters: [Function: normalizeParameters]
+  }
+}
+> oAuth1.SignatureMethod.sign()
+Uncaught TypeError: Cannot read property 'parameters' of undefined
+    at Function.sign (C:\Repos\temp\node_modules\node-oauth1\index.js:423:54)
+> a = { oauth_consumer_key="cQts0LmGOK2M5og2tNyf1g",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1587200332",oauth_nonce="saFrzdvc0in",oauth_version="1.0" }
+...
+...
+> a = { oauth_consumer_key:"cQts0LmGOK2M5og2tNyf1g",oauth_signature_method:"HMAC-SHA256",oauth_timestamp:"1587200332",oauth_nonce:"saFrzdvc0in",oauth_version:"1.0" }
+{
+  oauth_consumer_key: 'cQts0LmGOK2M5og2tNyf1g',
+  oauth_signature_method: 'HMAC-SHA256',
+  oauth_timestamp: '1587200332',
+  oauth_nonce: 'saFrzdvc0in',
+  oauth_version: '1.0'
+}
+> a
+{
+  oauth_consumer_key: 'cQts0LmGOK2M5og2tNyf1g',
+  oauth_signature_method: 'HMAC-SHA256',
+  oauth_timestamp: '1587200332',
+  oauth_nonce: 'saFrzdvc0in',
+  oauth_version: '1.0'
+}
+> method ='post'
+'post'
+> url='https://account.api.here.com/oauth2/token'
+'https://account.api.here.com/oauth2/token'
+> Object.keys(a)
+[
+  'oauth_consumer_key',
+  'oauth_signature_method',
+  'oauth_timestamp',
+  'oauth_nonce',
+  'oauth_version'
+]
+> Object.keys(a).map(key => {key, value: a[key]}
+Object.keys(a).map(key => {key, value: a[key]}
+                                     ^
+
+Uncaught SyntaxError: Unexpected token ':'
+> Object.keys(a).map(key => ({key, value: a[key]}))
+[
+  { key: 'oauth_consumer_key', value: 'cQts0LmGOK2M5og2tNyf1g' },
+  { key: 'oauth_signature_method', value: 'HMAC-SHA256' },
+  { key: 'oauth_timestamp', value: '1587200332' },
+  { key: 'oauth_nonce', value: 'saFrzdvc0in' },
+  { key: 'oauth_version', value: '1.0' }
+]
+> parameters = Object.keys(a).map(key => ({key, value: a[key]}))
+[
+  { key: 'oauth_consumer_key', value: 'cQts0LmGOK2M5og2tNyf1g' },
+  { key: 'oauth_signature_method', value: 'HMAC-SHA256' },
+  { key: 'oauth_timestamp', value: '1587200332' },
+  { key: 'oauth_nonce', value: 'saFrzdvc0in' },
+  { key: 'oauth_version', value: '1.0' }
+]
+> oauth1.normalizeParameters(parameters)
+Uncaught ReferenceError: oauth1 is not defined
+> oAuth1.normalizeParameters(parameters)
+Uncaught TypeError: oAuth1.normalizeParameters is not a function
+> oAuth1.SignatureMethod.normalizeParameters(parameters)
+'=&=&=&=&='
+> parameters.push({key:'grant_type', value:'client_credentials'})
+6
+> message = { action:url, method, parameters }
+{
+  action: 'https://account.api.here.com/oauth2/token',
+  method: 'post',
+  parameters: [
+    { key: 'oauth_consumer_key', value: 'cQts0LmGOK2M5og2tNyf1g' },
+    { key: 'oauth_signature_method', value: 'HMAC-SHA256' },
+    { key: 'oauth_timestamp', value: '1587200332' },
+    { key: 'oauth_nonce', value: 'saFrzdvc0in' },
+    { key: 'oauth_version', value: '1.0' },
+    { key: 'grant_type', value: 'client_credentials' }
+  ]
+}
+> oAuth1.SignatureMethod.getBaseString(message)
+'POST&https%3A%2F%2Faccount.api.here.com%2Foauth2%2Ftoken&%3D%26%3D%26%3D%26%3D%26%3D%26%3D'
+> message = { action:url, method, parameters: parameters.map(p=>[p.key, p.value]) }
+{
+  action: 'https://account.api.here.com/oauth2/token',
+  method: 'post',
+  parameters: [
+    [ 'oauth_consumer_key', 'cQts0LmGOK2M5og2tNyf1g' ],
+    [ 'oauth_signature_method', 'HMAC-SHA256' ],
+    [ 'oauth_timestamp', '1587200332' ],
+    [ 'oauth_nonce', 'saFrzdvc0in' ],
+    [ 'oauth_version', '1.0' ],
+    [ 'grant_type', 'client_credentials' ]
+  ]
+}
+> oAuth1.SignatureMethod.getBaseString(message)
+'POST&https%3A%2F%2Faccount.api.here.com%2Foauth2%2Ftoken&grant_type%3Dclient_credentials%26oauth_consumer_key%3DcQts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_method%3DHMAC-SHA256%26oauth_timestamp%3D1587200332%26oauth_version%3D1.0'
+> oAuth1.SignatureMethod.sign(message)
+Uncaught TypeError: Cannot read property 'accessorSecret' of undefined
+    at subClass.initialize (C:\Repos\temp\node_modules\node-oauth1\index.js:403:26)
+    at Function.newMethod (C:\Repos\temp\node_modules\node-oauth1\index.js:436:24)
+    at Function.sign (C:\Repos\temp\node_modules\node-oauth1\index.js:428:42)
+> oAuth1.SignatureMethod.sign(message, { consumerSecret: 'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ' })
+'UUlqPu5ekYPf82jfVKSdqIkgDn8ldvVfjgxa0QTDUyE='
+> const CryptoJS = require('crypto-js')
+undefined
+> baseString = oAuth1.SignatureMethod.getBaseString(message)
+'POST&https%3A%2F%2Faccount.api.here.com%2Foauth2%2Ftoken&grant_type%3Dclient_credentials%26oauth_consumer_key%3DcQts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_method%3DHMAC-SHA256%26oauth_timestamp%3D1587200332%26oauth_version%3D1.0'
+> CryptoJS.HmacSHA256(baseString, 'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ').toString('=')
+Uncaught TypeError: (encoder || Hex).stringify is not a function
+    at WordArray.init.toString (C:\Repos\temp\node_modules\crypto-js\core.js:215:38)
+> CryptoJS.HmacSHA256(baseString, 'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ').toString(CryptoJS.enc.base64)
+'c6ef8a3b7d7c9fd791b19da3d2cfa65da9111a8215638668e2bd07322aed3379'
+> CryptoJS.HmacSHA256(baseString, 'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ&').toString(CryptoJS.enc.base64)
+'51496a3eee5e9183dff368df54a49da889200e7f2576f55f8e0c5ad104c35321'
+> oAuth1.percentEncode('bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ')
+'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ'
+> secret='bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ'
+'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ'
+> oAuth1.percentEncode(secret)
+'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ'
+> oAuth1.percentEncode(secret) === secret
+true
+> secret='bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ&'
+'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ&'
+> oAuth1.percentEncode(secret) === secret
+false
+> CryptoJS.HmacSHA256(baseString, oAuth1.percentEncode(secret)).toString(CryptoJS.enc.base64)
+'b2d0658eebf05dd38e156a198cd2591884eb484e3be6d63a724a9ee8af9b021d'
+> message
+{
+  action: 'https://account.api.here.com/oauth2/token',
+  method: 'post',
+  parameters: [
+    [ 'oauth_consumer_key', 'cQts0LmGOK2M5og2tNyf1g' ],
+    [ 'oauth_signature_method', 'HMAC-SHA256' ],
+    [ 'oauth_timestamp', '1587200332' ],
+    [ 'oauth_nonce', 'saFrzdvc0in' ],
+    [ 'oauth_version', '1.0' ],
+    [ 'grant_type', 'client_credentials' ],
+    [
+      'oauth_signature',
+      'UUlqPu5ekYPf82jfVKSdqIkgDn8ldvVfjgxa0QTDUyE='
+    ]
+  ]
+}
+> baseString
+'POST&https%3A%2F%2Faccount.api.here.com%2Foauth2%2Ftoken&grant_type%3Dclient_credentials%26oauth_consumer_key%3DcQts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_method%3DHMAC-SHA256%26oauth_timestamp%3D1587200332%26oauth_version%3D1.0'
+> a='POST&https%3a%2f%2faccount.api.here.com%2foauth2%2ftoken&grant_type%3Dclient_credentials%26oauth_consumer_key%3DcQts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_method%3DHMAC-SHA256%26oauth_timestamp%3D1587200332%26oauth_version%3D1.0'
+'POST&https%3a%2f%2faccount.api.here.com%2foauth2%2ftoken&grant_type%3Dclient_credentials%26oauth_consumer_key%3DcQts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_methLmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_meth0'
+od%3DHMAC-SHA256%26oauth_timestamp%3D1587200332%26oauth_version%3D1.0'
+> a===baseString
+false                                                                                                                 Qts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_
+> a='POST&https%3A%2F%2Faccount.api.here.com%2Foauth2%2Ftoken&grant_type%3Dclient_credentials%26oauth_consumer_key%3DcQts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_method%3DHMAC-SHA256%26oauth_timestamp%3D158720033LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_methfalse
+> a='POST&https%3A%2F%2Faccount.api.here.com%2Foauth2%2Ftoken&grant_type%3Dclient_credentials%26oauth_consumer_key%3DcQts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_HA256%26oauth_timestamp%3D1587200332%26oauth_version%3D1.0'
+'POST&https%3A%2F%2Faccount.api.here.com%2Foauth2%2Ftoken&grant_type%3Dclient_credentials%26oauth_consumer_key%3DcQts0LmGOK2M5og2tNyf1g%26oauth_nonce%3DsaFrzdvc0in%26oauth_signature_meth6%26oauth_timestamp%3D1587200332%26oauth_version%3D1.0'
+> a===baseString
+true
+> signer = oAuth1.SignatureMethod(0
+... )
+undefined
+> signer = oAuth1.SignatureMethod.newMethod(message, { consumerSecret: secret })
+Uncaught Error: signature_method_rejected
+    at Function.newMethod (C:\Repos\temp\node_modules\node-oauth1\index.js:439:23) {
+  oauth_acceptable_signature_methods: 'PLAINTEXT&PLAINTEXT-Accessor&HMAC-SHA1&HMAC-SHA1-Accessor&HMAC-SHA256&HMAC-SHA256-Accessor'
+}
+> secret
+'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ&'
+> secret='bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ'
+'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ'
+> signer = oAuth1.SignatureMethod.newMethod('HMAC-SHA256', { consumerSecret: secret })
+subClass {
+  key: 'bDmhOjYVI-7FkweE2HSDip8NQBJzl8MkTZlx2EP3qH6WhrWpTWH2e9hYA0KM1Cz4WsY83OskfCbvkDrfeNIbgQ&'
+}
+> signer.sign(message)
+'UUlqPu5ekYPf82jfVKSdqIkgDn8ldvVfjgxa0QTDUyE='
+> signer.getSignature(baseString)
+'UUlqPu5ekYPf82jfVKSdqIkgDn8ldvVfjgxa0QTDUyE='
+> signer.getSignature
+[Function: getSignature]
+> CryptoJS.HmacSHA256(baseString, signer.key)
+{
+  words: [
+    1363765822,
+    -295792253,
+    -537696033,
+    1420074408,
+    -1994387841,
+    628553055,
+    -1911792943,
+    79909665
+  ],
+  sigBytes: 32
+}
+> CryptoJS.HmacSHA256(baseString, signer.key).toString(CryptoJS.enc.Base64)
+'UUlqPu5ekYPf82jfVKSdqIkgDn8ldvVfjgxa0QTDUyE='
+>

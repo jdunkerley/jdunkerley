@@ -11,6 +11,7 @@ This assumes you have AWS Solution Architect (associate) level knowledge.
 ## Data Stores
 
 Focussing on:
+
 - New and existing solutions
 - Migrations
 - Reliability / High Availability / Business Continuity
@@ -18,10 +19,11 @@ Focussing on:
 - Cost control components
 
 Concepts
+
 - Types:
-    - Persistent: Durable, sticks around over reboots
-        - S3, Glacier, RDS, EBS
-    - Transient: Temporary stored while passed between
+  - Persistent: Durable, sticks around over reboots
+    - S3, Glacier, RDS, EBS
+  - Transient: Temporary stored while passed between
         - SQS, SNS
     - Ephemeral: Only while instance exists, lost in reboot or on EC2 termination
         - Instance store, Memcached
@@ -123,38 +125,39 @@ Concepts
             = Restore other read replicas
         - Avoids backup performance hit if run Multi AZ mode
 - DynamoDB
-    - Paper by Werner: Dynamo - Amazon Highly Available Key Value Store
-      https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf 
-    - Managed Multi AZ NoSQL with Cross Region replication
-    - Eventual consistency (BASE) but can do Strongly
-        - Use DynamoDB Transactions if need ACID compliance
-    - Priced on throughput rather than compute
-    - Provision Read/Write capacity
-        - Can autoscale but some limits
-        - Can use On-demand where no knowledge (premium)
-    - Primary key - either just a Partition key or Partition and Sort keys
-    - Indexes: 
-        - Global secondary index (as Primary Key but different fields)
-        - Local Secondary index (same partition different sort)
-        - Max of 5 Global and 5 Local across at most 20 fields
-        - Increases storage space
-        - Project other properties you need
+  - Paper by Werner: Dynamo - Amazon Highly Available Key Value Store
+    https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf 
+  - Managed Multi AZ NoSQL with Cross Region replication
+  - Eventual consistency (BASE) but can do Strongly
+    - Use DynamoDB Transactions if need ACID compliance
+  - Priced on throughput rather than compute
+  - Provision Read/Write capacity
+    - Can autoscale but some limits
+    - Can use On-demand where no knowledge (premium)
+  - Primary key - either just a Partition key or Partition and Sort keys
+  - Indexes:
+    - Global secondary index (as Primary Key but different fields)
+    - Local Secondary index (same partition different sort)
+    - Max of 5 Global and 5 Local across at most 20 fields
+    - Increases storage space
+    - Project other properties you need
 - RedShift
-    - Petabyte scale data warehouse
-    - Cost effective versus on premise
-    - PostgreSQL compatible, columnar data store, parallel processing
-    - Can use S3 data files RedShift Spectrum (data lake concept)
+  - Petabyte scale data warehouse
+  - Cost effective versus on premise
+  - PostgreSQL compatible, columnar data store, parallel processing
+  - Can use S3 data files RedShift Spectrum (data lake concept)
 - Neptune
-    - Graph database with support from Gremlin and SPARQL
+  - Graph database with support from Gremlin and SPARQL
 - Elasticache
-    - In memory
-    - Either Redis or Memcached
-    - Cost per node and time
-    - Use Redis to work around multicast issue
-    - Memcached is more basic, cache objects, dynamic scaling
-    - Redis has encryption, HIPPA, clustering/replication, pub/sub, geospatial indexes, backup/restore
+  - In memory
+  - Either Redis or Memcached
+  - Cost per node and time
+  - Use Redis to work around multicast issue
+  - Memcached is more basic, cache objects, dynamic scaling
+  - Redis has encryption, HIPPA, clustering/replication, pub/sub, geospatial indexes, backup/restore
 
-*WhitePapers*
+### WhitePapers
+
 - https://d1.awsstatic.com/whitepapers/Storage/aws-storage-options.pdf
 
 ## Security
@@ -183,3 +186,29 @@ Concepts
     - Limited visibility and discoverability
     - Isolation to minimise blast radiis
     - Recover and audit data
+
+## Deployment and Operations Management
+
+- CloudFormation
+  - JSON or YAML
+  - Massive amount of resource types or can use Lambda for a custom resource type
+  - `Template` builds a `Stack` and then a `ChangeSet` is proposed on top to modify a Stack
+  - StackPolicy
+    - Protect from modification or deletion
+    - At creation of stack can be done via console or CLI, later only CLI
+    - Policies can't be removed but can be modified via CLI
+    - Deny all by default
+  - Python helper scripts to install on EC2
+  - Use CF to modify the resource not directly on them
+- Container Services
+  - ECS vs EKS
+  - ECS built on top of AWS services
+  - EKS allows shared access to each other whereas ECS more isolated
+  - EKS allows extension via K8s add ons etc.
+  - Fargate manages instances for you but can use EC2 if need more granular control
+- API Gateway
+  - Can access REST APIs not on AWS
+  - Public, Private or Edge optimised (deployed via CloudFront)
+  - Supports custom domains and SNI
+  - Can be monetised on AWS Marketplace
+- AWS Config
