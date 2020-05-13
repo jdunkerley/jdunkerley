@@ -113,20 +113,44 @@ def solve_tridiagonalsystem(A: List[float], B: List[float], C: List[float], D: L
 
 ## Calculating the Coefficients
 
+So the last step is to convert this into a set of cubic curves. To find the value of the spline at the point *x*, you want to find *j* such that *x<sub>j</sub> &lt; x &lt; x<sub>j+1</sub>*. Lets define *z* as
+
+![Equation:z=\frac{x-x_j}{h_j}](https://math.now.sh?from=z%3D%5Cfrac%7Bx-x_j%7D%7Bh_j%7D)
+
+*z* has property of being 0 when *x* = *x<sub>j</sub>* and 1 when *x* = *x<sub>j+1</sub>*. The value of spline at *x*, *S(x)* is:
+
+![Equation of spline](https://math.now.sh?from=S%28x%29%0A%3D%5Cfrac%7B(M_%7Bj%2B1%7D-M_j)h_j%5E2%7D%7B6%7Dz%5E3%0A%2B%5Cfrac%7BM_jh_j%5E2%7D%7B2%7Dz%5E2%0A%2B(y_%7Bj%2B1%7D-y_j-%5Cfrac%7B(M_%7Bj%2B1%7D%2B2M_j)h_j%5E2%7D%7B6%7D)z%0A%2By_j)
+
+We can now put together the whole function to build the spline coefficients. The final part we need is to wrap it up into a function which will find *j* and then evaluate the spline. There is a great library in python, [bisect](https://docs.python.org/3/library/bisect.html) which will do a binary search to find *j* for us. 
+
+The code below implements this also validates the inputs:
+
 ```python
 def compute_spline(x: List[float], y: List[float]):
     n = len(x)
     if n < 3:
-        raise ValueError("Too short an array")
+        raise ValueError('Too short an array')
     if n != len(y):
-        raise ValueError("Array lengths are different")
+        raise ValueError('Array lengths are different')
 
     h = compute_changes(x)
+    if any(v < 0 for v in h):
+        raise ValueError('X must be strictly increasing')
+
     A, B, C = create_tridiagonalmatrix(n, h)
     D = create_target(n, h, y)
 
     M = solve_tridiagonalsystem(A, B, C, D)
 
-    coefficients = [[(M[i+1]-M[i])/(6*h[i]), M[i]/2, (y[i+1] - y[i]), y[i]] for i in range(n-1)]
+    coefficients = [[(M[i+1]-M[i])*h[i]*h[i]/6, M[i]*h[i]*h[i]/2, (y[i+1] - y[i]-(M[i+1]+2*M[i])*h[i]*h[i]/6), y[i]] for i in range(n-1)]
+
+    def spline(val):
+        idx = min(bisect.bisect_left(x, val), n-2)
+        z = (val - x[idx]) / h[idx]
+        C = coefficients[idx]
+        return (((C[0] * z) + C[1]) * z + C[2]) * z + C[3]
+
+    return spline
 ```
-    
+
+## Recreating In Alteryx
