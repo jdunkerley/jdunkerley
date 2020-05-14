@@ -2,37 +2,37 @@
 
 As a bit of a thought experiment, I wondered if how hard it would be to create a cubic spline interpolation within Alteryx. As with many of my games [*BaseA* rules](https://jdunkerley.co.uk/2019/11/29/lets-alteryx-the-advent-of-code-2019/) apply. 
 
-Stealing an [idea from Tasha Alfano](https://twitter.com/tasha_alfano/status/1257768213300916225), I thought I would do it in both Python and Alteryx from first principles. A quick shout out to [MathAPI](https://math.now.sh/home) - very useful sight and used to render all the LaTeX to SVG.
+Stealing an [idea from Tasha Alfano](https://twitter.com/tasha_alfano/status/1257768213300916225), I thought I would do it in both python and Alteryx from first principles. A quick shout out to [MathAPI](https://math.now.sh/home) - a handy site and used to render all the LaTeX to SVG.
 
-So let's start by reviewing how to create a cubic spline and then build it up. I chose to use the algorithm as described in [Wikiversity](https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation). Specifically with type II simple boundary conditions. I'm not going through the maths but will describe the steps to build the spline.
+So let's start by reviewing how to create a cubic spline and then build it up. I chose to use the algorithm as described in [Wikiversity](https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation). Specifically with type II simple boundary conditions. I'm not going through the maths but will define the steps to build the spline.
 
-## Building a Tri-diagonal Matrix and Vector
+## Building a Tridiagonal Matrix and Vector
 
-First, step is given an *X* array and a *Y* array of equal length *n* (greater than 2), we want to build a *tri-diagonal matrix* which we will then solve to produce the coefficients for the piece-wise spline. The goal of the spline is that it hits every point *(x, y)* and that the first and second derivatives match at these points too.
+First, step is given an *X* array and a *Y* array of equal length *n* (greater than 2), we want to build a *tridiagonal matrix* which we will then solve to produce the coefficients for the piece-wise spline. The goal of the spline is that it hits every point *(x, y)* and that the first and second derivatives match at these points too.
 
 Sticking with notation in the paper, lets define `H` to be an `n-1` length array of the differences in `X`:
 
 ![Equation for H](/assets/spline/equation_h.svg) for ![i=0 to n-2](/assets/spline/i_0_n2.svg)
 
-A [tri-diagonal matrix](https://en.wikipedia.org/wiki/Tridiagonal_matrix) is a square matrix where all values except for the main diagonal and first diagonals below and above this. For example:
+A [tridiagonal matrix](https://en.wikipedia.org/wiki/Tridiagonal_matrix) is a square matrix where all values except for the main diagonal and first diagonals below and above this. For example:
 
-```plaintext
+```text
 1   2   0   0
 2   3   2   0
 0   2   3   2
 0   0   2   1
 ```
 
-One advantage of a tri-diagonal matrix is that they are fairly straight forward to invert and solve linear equations based on them. For the sake of coding up the algorithm - lets define `B` to be the `n` length array holding the diagonal elements, `A` to be the `n-1` length array of the diagonal above this and `C` to be the `n-1` length array of the diagonal below:
+One advantage of a tridiagonal matrix is that they are fairly straight forward to invert and solve linear equations based on them. For the sake of coding up the algorithm - let's define `B` to be the `n` length array holding the diagonal elements, `A` to be the `n-1` length array of the diagonal above this and `C` to be the `n-1` length array of the diagonal below:
 
-```plaintext
+```text
 b0   c0    0    0
 a0   b1   c1    0
  0   a1   b2   c2
  0    0   a2   b3
 ```
 
-Please note the indexes here are different to those used in the Wikiversity article, as they align with a standard array starting at 0. For the spline, these are arrays are given by:
+Please note the indexes here are different from those used in the Wikiversity article, as they align with a standard array starting at 0. For the spline, these are arrays are given by:
 
 ![Equation for A](/assets/spline/equation_a.svg) for ![i=0 to n-3](/assets/spline/i_0_n3.svg)
 
@@ -40,7 +40,7 @@ Please note the indexes here are different to those used in the Wikiversity arti
 
 ![Equation for C](/assets/spline/equation_c.svg) for ![i=1 to n-2](/assets/spline/i_1_n2.svg)
 
-Using the simple boundary condition that the second derivative is equal to 0 at the end, gives the values for c<sub>0</sub> and a<sub>n-2</sub> both equal to 0. This can easily coded up in Python:
+Using the simple boundary condition that the second derivative is equal to 0 at the end, gives the values for c<sub>0</sub> and a<sub>n-2</sub> both equal to 0. This can easily be coded up in python:
 
 ```python
 from typing import Tuple, List
@@ -55,7 +55,7 @@ def create_tridiagonalmatrix(n: int, h: List[float]) -> Tuple[List[float], List[
     return A, B, C
 ```
 
-The next step is to compute the right-hand side of the equation. This will be an array of length `n`. For notation, lets call this `D` - the same as in the Wikiversity article:
+The next step is to compute the right-hand side of the equation. This will be an array of length `n`. For notation, let's call this `D` - the same as in the Wikiversity article:
 
 ![Equation for D(0)](/assets/spline/equation_d0.svg)
 
@@ -70,9 +70,9 @@ def create_target(n: int, h: List[float], y: List[float]):
     return [0] + [6 * ((y[i + 1] - y[i]) / h[i] - (y[i] - y[i - 1]) / h[i - 1]) / (h[i] + h[i-1]) for i in range(1, n - 1)] + [0]
 ```
 
-## Solving the Tri-diagonal Equation
+## Solving the Tridiagonal Equation
 
-To solve a tri-diagonal system, you can use [Thomas Algorithm](https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm). Mapping this onto the terminology above. We first derive length *n* vectors *C'* and *D'*:
+To solve a tridiagonal system, you can use [Thomas Algorithm](https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm). Mapping this onto the terminology above. We first derive length *n* vectors *C'* and *D'*:
 
 ![Equation for C'(0)](/assets/spline/equation_c_0.svg)
 
@@ -113,7 +113,7 @@ def solve_tridiagonalsystem(A: List[float], B: List[float], C: List[float], D: L
 
 ## Calculating the Coefficients
 
-So the last step is to convert this into a set of cubic curves. To find the value of the spline at the point *x*, you want to find *j* such that *x<sub>j</sub> &lt; x &lt; x<sub>j+1</sub>*. Lets define *z* as
+So the last step is to convert this into a set of cubic curves. To find the value of the spline at the point *x*, you want to find *j* such that *x<sub>j</sub> &lt; x &lt; x<sub>j+1</sub>*. Let's define *z* as
 
 ![Equation:z=\frac{x-x_j}{h_j}](/assets/spline/equation_z.svg)
 
@@ -121,7 +121,7 @@ So the last step is to convert this into a set of cubic curves. To find the valu
 
 ![Equation of spline](/assets/spline/spline.svg)
 
-Now to put it all together and create a function to build the spline coefficients. The final part needed is to wrap it up into a function which will find *j* and then evaluate the spline. There is a great library in python, [bisect](https://docs.python.org/3/library/bisect.html) which will do a binary search to find *j* easily and quickly. 
+Now to put it all together and create a function to build the spline coefficients. The final part needed is to create a closure and wrap it up as a function which will find *j* and then evaluate the spline. There is an excellent library in python, [bisect](https://docs.python.org/3/library/bisect.html) which will do a binary search to find *j* easily and quickly. 
 
 The code below implements this, and also validates the input arrays:
 
@@ -159,7 +159,7 @@ The complete python code is available as a [gist](https://gist.github.com/jdunke
 
 ## Testing the Spline
 
-As always, it is important to test to make sure all is working:
+As always, it is essential to test to make sure all is working:
 
 ```python
 import matplotlib.pyplot as plt
@@ -183,13 +183,13 @@ Creates a small spline and ensure that the fitted *y* values match at the input 
 
 ## Recreating In Alteryx
 
-So thats the full process, now to rebuild it in Alteryx using BaseA. For the input, the macro takes two separate inputs - a table of KnownXs and KnownYs and a list of target Xs. Again, the first task is to build *H, A, B, C, D* from the inputs:
+So that's the full process, now to rebuild it in Alteryx using BaseA. For the input, the macro takes two separate inputs - a table of KnownXs and KnownYs and a list of target Xs. Again, the first task is to build *H, A, B, C, D* from the inputs:
 
 ![Create Tri-diagonal System](/assets/spline/create_habcd.png)
 
 Using some [Multi-Row Formula](https://help.alteryx.com/current/designer/multi-row-formula-tool) tools it is fairly easy to create these. The expressions are shown below. In all cases the value is a *Double* and *NULL* is used for row which don't exist:
 
-```plaintext
+```text
 H=[X]-[Row-1:X]
 A=IIF(ISNULL([Row+1:H]),0,[H]/([H]+[Row+1:H]))
 C=IIF(ISNULL([Row-1:H]),0,[H]/([H]+[Row-1:H]))
@@ -198,7 +198,7 @@ B=2
 
 Then using a [Join](https://help.alteryx.com/current/designer/join-tool) (on row position) and a [Union](https://help.alteryx.com/current/designer/union-tool) to add the last row to the set. Finally, *D* is given by:
 
-```plaintext
+```text
 IIF(IsNull([Row-1:X]) or IsNull([Row+1:X]),
     0,
     6 * (([Row+1:Y]-[Y])/[H] - ([Y]-[Row-1:Y])/[Row-1:H]) / ([H]+[Row-1:H])
@@ -209,24 +209,24 @@ IIF(IsNull([Row-1:X]) or IsNull([Row+1:X]),
 
 Now to solve the produced system. In order to save on storage, instead of creating *C'* and *D'*, the multi-row formula tools update the values of *C* and *D*:
 
-```plaintext
+```text
 C=IIF(ISNULL([Row-1:X]),[C]/[B],IIF(ISNULL([Row+1:X]),0,[C]/([B]-[Row-1:C]*[Row-1:A])))
 D=IIF(ISNULL([Row-1:X]),[D]/[B],([D]-[Row-1:D]*[Row-1:A])/([B]-[Row-1:C]*[Row-1:A]))
 ```
 
-In order to compute the solution vector, *M*, it is necessary to reverse the direction of the data. While you can use `Row+1` to access the next row in a multi-row formula tool it won't allow a complete full computation backwards. In order to do this, add a [Record ID](https://help.alteryx.com/current/designer/record-id-tool) and then sort the data on it into descending order. After which *M* can be calculated using another multi-row formula:
+To compute the solution vector, *M*, it is necessary to reverse the direction of the data. While you can use `Row+1` to access the next row in a multi-row formula tool, it won't allow a complete full computation backwards. To do this, add a [Record ID](https://help.alteryx.com/current/designer/record-id-tool) and then sort the data on it into descending order. After which *M* can be calculated using another multi-row formula:
 
-```plaintext
+```text
 M=IIF(IsNull([Row-1:X]),[D],[D]-[C]*[Row-1:M])
 ```
 
-After reverting the sort, we now have all the inputs, and so can move to compute the coefficients for each piece of the spline:
+After reverting the sort, we now have all the inputs. So can move to compute the coefficients for each piece of the spline:
 
 ![Compute Coefficients](/assets/spline/compute_coefficients.png)
 
 One small trick here is to skip the first row and join back to the same stream. This gives *x*, *y* and *M* for the next row. The coefficients are then computed using a normal formula tool:
 
-```plaintext
+```text
 CubeCoefficient=([EndM]-[M])*[H]*[H]/6
 SquareCoefficient=[M]*[H]*[H]/2
 LinearCoefficient=([EndY]-[Y]-([EndM]+2*[M])*[H]*[H]/6)
@@ -237,9 +237,9 @@ The final challenge is to reproduce the *bisect* functionality to find the row f
 
 ![Find StartX](/assets/spline/find_startx.png)
 
-In this case, using a [Multiple Join](https://help.alteryx.com/current/designer/join-multiple-tool) allows to create a full-outer join of known and wanted *X* values. After this, add the first KnownX at the top and use a multi-row formula to fill in the gaps.
+In this case, using a [Multiple Join](https://help.alteryx.com/current/designer/join-multiple-tool) allows creating a full-outer join of known and wanted *X* values. After this, add the first KnownX at the top and use a multi-row formula to fill in the gaps.
 
-The last step is just to compute the spline. First join to get the coefficients and then just a standard formula tool to compute the fitted value.
+The last step is just to compute the spline. First, join to get the coefficients and then just a standard formula tool to calculate the fitted value.
 
 Having wrapped it up as a macro, a quick test to see it worked:
 
