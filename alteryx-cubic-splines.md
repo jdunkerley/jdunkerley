@@ -142,10 +142,10 @@ def compute_spline(x: List[float], y: List[float]):
 
     M = solve_tridiagonalsystem(A, B, C, D)
 
-    coefficients = [[(M[i+1]-M[i])*h[i]*h[i]/6, M[i]*h[i]*h[i]/2, (y[i+1] - y[i]-(M[i+1]+2*M[i])*h[i]*h[i]/6), y[i]] for i in range(n-1)]
+    coefficients = [[(M[i+1]-M[i])*h[i]*h[i]/6, M[i]*h[i]*h[i]/2, (y[i+1] - y[i] - (M[i+1]+2*M[i])*h[i]*h[i]/6), y[i]] for i in range(n-1)]
 
     def spline(val):
-        idx = min(bisect.bisect_left(x, val), n-2)
+        idx = min(bisect.bisect(x, val)-1, n-2)
         z = (val - x[idx]) / h[idx]
         C = coefficients[idx]
         return (((C[0] * z) + C[1]) * z + C[2]) * z + C[3]
@@ -153,4 +153,74 @@ def compute_spline(x: List[float], y: List[float]):
     return spline
 ```
 
+The complete python code is available as a [gist]():
+
+<script src="https://gist.github.com/jdunkerley/e23f29b07cae817203b8157d8a86e8a0.js"></script>
+
+
+## Testing the Spline
+
+As always need to test to make sure all is working:
+
+```python
+import matplotlib.pyplot as plt
+
+test_x = [0,1,2,3]
+test_y = [0,0.5,2,1.5]
+spline = compute_spline(test_x, test_y)
+
+for i, x in enumerate(test_x):
+    assert abs(test_y[i] - spline(x)) < 1e-8, f'Error at {x}, {test_y[i]}'
+
+x_vals = [v / 10 for v in range(0, 50, 1)]
+y_vals = [spline(y) for y in x_vals]
+
+plt.plot(x_vals, y_vals)
+```
+
+Creates a small spline and plots the results:
+
+![Test Plot](/assets/spline/test_plot.png)
+
 ## Recreating In Alteryx
+
+So now we have the process, lets rebuild it in Alteryx. For the input, the macro takes two separate inputs - a table of KnownXs and KnownYs and a list of target Xs. So our first task is to build *H, A, B, C, D* from the inputs:
+
+![Create Tridiagonal System](/assets/spline/create_habcd.png)
+
+Using some [Multi-Row Formula](https://help.alteryx.com/current/designer/multi-row-formula-tool) tools it is fairly easy to create these. The expressions are shown below. In all cases the value is a *Double* and *NULL* is used for row which don't exist:
+
+```
+H=[X]-[Row-1:X]
+A=IIF(ISNULL([Row+1:H]),0,[H]/([H]+[Row+1:H]))
+C=IIF(ISNULL([Row-1:H]),0,[H]/([H]+[Row-1:H]))
+B=2
+```
+
+Then using a [Join](https://help.alteryx.com/current/designer/join-tool) (on row position) and a [Union](https://help.alteryx.com/current/designer/union-tool) to add the last row to the set. Finally, *D* is given by:
+
+```
+IIF(IsNull([Row-1:X]) or IsNull([Row+1:X]),
+    0,
+    6 * (([Row+1:Y]-[Y])/[H] - ([Y]-[Row-1:Y])/[Row-1:H]) / ([H]+[Row-1:H])
+)
+```
+
+![Solve the Tridiagonal System](/assets/spline/solve_tridiagonal.png)
+
+Next up we need to solve the produced system. In order to save on storage, I chose to use a pair of multi-row formula tools to update *C* and *D*:
+
+```
+C=IIF(ISNULL([Row-1:X]),[C]/[B],IIF(ISNULL([Row+1:X]),0,[C]/([B]-[Row-1:C]*[Row-1:A])))
+D=IIF(ISNULL([Row-1:X]),[D]/[B],([D]-[Row-1:D]*[Row-1:A])/([B]-[Row-1:C]*[Row-1:A]))
+```
+
+In order to compute the solution vector, *M*, we need to reverse the direction of the data. While you can use `Row+1` to access the next row in a multi-row formula tool it won't allow a complete iteration backwards. In order to do this, I added a [Record ID](https://help.alteryx.com/current/designer/record-id-tool) and then sorted the data on it descending. After which *M* is given by:
+
+```
+M=IIF(IsNull([Row-1:X]),[D],[D]-[C]*[Row-1:M])
+```
+
+We now have all the inputs, and so can move to compute the coefficients for each piece of the spline:
+
+![Compute Coefficients](/assets/spline/solve_tridiagonal.png)
