@@ -1,8 +1,8 @@
 # Creating a Cubic Spline In Python and Alteryx
 
-As a bit of a thought experiment, I wondered if how hard it would be to create a cubic spline interpolation within Alteryx. As with many of my games [*BaseA* rules](https://jdunkerley.co.uk/2019/11/29/lets-alteryx-the-advent-of-code-2019/) apply. 
+As a bit of a thought experiment, I wondered how hard it would be to create a cubic spline interpolation within Alteryx. As with many of my games [*BaseA* rules](https://jdunkerley.co.uk/2019/11/29/lets-alteryx-the-advent-of-code-2019/) apply. 
 
-Stealing an [idea from Tasha Alfano](https://twitter.com/tasha_alfano/status/1257768213300916225), I thought I would do it in both python and Alteryx from first principles. A quick shout out to [MathAPI](https://math.now.sh/home) - a handy site and used to render all the LaTeX to SVG.
+Stealing an [idea from Tasha Alfano](https://twitter.com/tasha_alfano/status/1257768213300916225), I thought I would do it in both python and Alteryx from first principles. A quick shout out to [MathAPI](https://math.now.sh/home) - a handy site used to render all the LaTeX to SVG.
 
 So let's start by reviewing how to create a cubic spline and then build it up. I chose to use the algorithm as described in [Wikiversity](https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation). Specifically with type II simple boundary conditions. I'm not going through the maths but will define the steps to build the spline.
 
@@ -113,7 +113,7 @@ def solve_tridiagonalsystem(A: List[float], B: List[float], C: List[float], D: L
 
 ## Calculating the Coefficients
 
-So the last step is to convert this into a set of cubic curves. To find the value of the spline at the point *x*, you want to find *j* such that *x<sub>j</sub> &lt; x &lt; x<sub>j+1</sub>*. Let's define *z* as
+So the last step is to convert this into a set of cubic curves. To find the value of the spline at the point *x*, you want to find *j* such that *x<sub>j</sub> &lt; x &lt; x<sub>j+1</sub>*. Let's define *z* as:
 
 ![Equation:z=\frac{x-x_j}{h_j}](/assets/spline/equation_z.svg)
 
@@ -177,7 +177,7 @@ y_vals = [spline(y) for y in x_vals]
 plt.plot(x_vals, y_vals)
 ```
 
-Creates a small spline and ensure that the fitted *y* values match at the input points. Finally, it plots the results:
+Creates a small spline and ensures that the fitted *y* values match at the input points. Finally, it plots the results:
 
 ![Test Plot](/assets/spline/test_plot.png)
 
