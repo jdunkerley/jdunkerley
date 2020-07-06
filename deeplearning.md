@@ -35,3 +35,9 @@ Activation functions:
 - z = w^T X + b where w is a n-vector
 - Sigmoid function = 1 / (1 + e(-z))
 - Goal is to find w and b
+- Loss function as square error isn't good for Logistic regression as creates local minima that gradient descent might find
+- Better one of logistic regression = y log(y^) + (1-y) log (1-y^)
+- For full set of training sum and divide by m, called the cost function (J)
+
+- Gradient descent w = w - alpha dJ(w) / dw
+- alpha is the learning rate
