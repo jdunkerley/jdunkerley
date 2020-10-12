@@ -123,7 +123,9 @@ Producing a 1080p image with this workflow is substantially slower than the iter
 
 My next approach was to use spatial objects and formulas in the Generate Rows tool. This approach was to use the Latitude and Longitude of points as Real and Imaginary values. Each step would add a new point to the current spatial object and then assess when to terminate based on its distance from 0,0 and now many points there are.
 
-This was a failed experiment as it was way slower than either of the above approaches so I didn't complete it.
+This was a failed experiment as it was way slower than either of the above approaches so I didn't complete it. I tried generating rows and using multi-row formulas but again to no significant success.
+
+The one call out from this is the [Spatial Functions](https://help.alteryx.com/current/designer/spatial-functions). They are often overlooked but provide a lot of power in formula tools.
 
 ### Approach 4: Dynamic Formula
 
