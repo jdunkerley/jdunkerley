@@ -69,11 +69,61 @@ Each iteration of the macro does the following:
 3. Split the data set looking at those points which have *di > thres* or if maximum iterations has been reached.
 4. Return those rows to the outer workflow, loop the others with the updated *ri* and *ii* values.
 
-This approach was pretty straight forward and produces a 1080p image in about 19 seconds on my laptop. In this approach the difference between AMP and the old E1 engine was minimal.
+This approach was pretty straight forward and produces a 1080p image in about 45 seconds on my laptop. In this approach the difference between AMP engine came out slightly slower than the old E1 engine - 52.3 seconds vs 41.1 seconds.
 
 ### Approach 2: String States
 
+One approach to iterate a value in Alteryx is to use the [Generate Rows](https://help.alteryx.com/current/designer/generate-rows-tool) tool. This is pretty straight forward to iterate a single value, for example to create 100 rows you can count from 1 to 100. In this case, we need to iterate 3 values - iteration number, real and imaginary values. One simple trick to do this is to keep it as a string:
+
+```text
+<Count> <Real> <Imaginary>
+```
+
+ALteryx provides a very useful function `GetWord` which allows you extract a single word from the text. Combining this with the `ToNumber` and `ToString` functions you can construct the iteration:
+
+![Calculate String](assets/alteryx-mandelbrot/calculate-string.jpg)
+
+The Generate Rows tool is set to create a new `V_String(48)` field. It is initially set to `1 0 0`. The step is given by:
+
+```text
+ToString(ToNumber(GetWord([State], 0)) + 1) + " "
++ 
+ToString(
+Pow(ToNumber(GetWord([State], 1)),2) - Pow(ToNumber(GetWord([State], 2)),2) + [r0]
+) + " "
++ 
+ToString(2 * ToNumber(GetWord([State], 1)) * ToNumber(GetWord([State], 2)) + [i0])
+```
+
+The expression breaks into three parts:
+
+- `ToString(ToNumber(GetWord([State], 0)) + 1)` increments the first value by 1.
+- `ToString(
+Pow(ToNumber(GetWord([State], 1)),2) - Pow(ToNumber(GetWord([State], 2)),2) + [r0]
+)` implements the Real part calculation
+= `ToString(2 * ToNumber(GetWord([State], 1)) * ToNumber(GetWord([State], 2)) + [i0])` implements the Imaginary part.
+
+The `ToNumber(GetWord([State], 1))` allows you to extract one of the values from the string and convert it back to a number. 
+
+The final part of the Generate Rows is the termination condition:
+
+```text
+ToNumber(GetWord([State], 0)) <= [MaxSteps]
+AND
+Pow(ToNumber(GetWord([State], 1)),2) + Pow(ToNumber(GetWord([State], 2)),2) < [Thres]
+```
+
+In this case, the first line checks number of steps executed. The second evaluates if the iteration has broken out.
+
+After this a Sample tool is used pick the final row of each iteration and then a formula tool extracts the initial number.
+
+Producing a 1080p image with this workflow is substantially slower than the iterative macro approach. Using E1 it took about 8 minutes. AMP gave it a nice performance boot up to about 5 minutes 30 seconds. But with either engine a chunck slower.
+
 ### Approach 3: Spatial Objects
+
+My next approach was to use spatial objects and formulas in the Generate Rows tool. This approach was to use the Latitude and Longitude of points as Real and Imaginary values. Each step would add a new point to the current spatial object and then assess when to terminate based on its distance from 0,0 and now many points there are.
+
+This was a failed experiment as it was way slower than either of the above approaches so I didn't complete it.
 
 ### Approach 4: Dynamic Formula
 
