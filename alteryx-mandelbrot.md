@@ -129,7 +129,54 @@ The one call out from this is the [Spatial Functions](https://help.alteryx.com/c
 
 ### Approach 4: Dynamic Formula
 
+My last approach was to use a dynamic formula to build the iteration in a single formula tool. Starting by defining `ri` and `ii` as the current real and imaginary values and initialising them to 0. Additionally, define `i` to be the step of the iteration. The one catch is I need to know when the iteration terminates - I chose to indicate this by switching i to be a negative value. The following three expression evaluate one step of the iteration in a formula tool:
+
+```text
+i: iif([i]<0,[i],iif([i]>=[MaxSteps] OR [ri]*[ri]+[ii]*[ii]>[Thres],-[i],[i]+1))
+t: iif([i]<0,0,[ri]*[ii])
+ri: iif([i]<0,[ri],[ri]*[ri]-[ii]*[ii]+[r0])
+ii: iif([i]<0,[ii],2*[t]+[i0])
+```
+
+Note, *t* is needed as `ri` is mutated prior to computing `ii`.
+
+The next step is to extract the XML for these :
+```xml
+    <FormulaField expression="iif([i]&lt;0,[i],iif([i]&gt;=[MaxSteps] OR [ri]*[ri]+[ii]*[ii]&gt;[Thres],-[i],[i]+1))" field="i" />
+    <FormulaField expression="iif([i]&lt;0,0,[ri]*[ii])" field="t" size="8" type="Double" />
+    <FormulaField expression="iif([i]&lt;0,[ri],[ri]*[ri]-[ii]*[ii]+[r0])" field="ri" />
+    <FormulaField expression="iif([i]&lt;0,[ii],2*[t]+[i0])" field="ii" />
+```
+
+![Create Formula](assets/alteryx-mandelbrot/create-formula.jpg)
+
+The XML can be found by going to the XML tab in the properties pane for the Formula tool. Using a formula tool to create a copy of this XML, and then a Generate Rows tool to repeat it the maximum steps times. This can then be fed into summarise tool in concatenate mode to build a big block of XML.
+
+For initial testing, manual edit the XML to be this long new expression between the `FormulaFields` tags. If all is working, using a simple batch macro to update a formula tool allows this to be more automated:
+
+![Dynamic Formula](assets/alteryx-mandelbrot/dynamic-formula.jpg)
+
+The control panel is fed into the formula tool and using an Action tool to update the inner XML between the `FormulaFields`. The very last thing to remember is `i` will be the negative value at the end so and additional formula tool is needed to switch signs.
+
+![Calculate Formula](assets/alteryx-mandelbrot/calculate-formula.jpg)
+
+Using my same test of producing a 1080p image, the difference between AMP and e1 was minor (1:06 vs 1:10). I also tested without the batch macro and this made next to no difference.
+
 ## Assigning Colours and Rendering the Output
 
+The next step for producing the image is to convert the number of steps taken into a colour.
+
+![Assign Colours](assets/alteryx-mandelbrot/assign-colours.jpg)
+
+Starting with a list colours from the D3 page expressed as hexadecimal strings, add a RecordID. Then using a MOD function you can filter out so only the right number kept. Adding a new RecordID which can then be used with a Find and Replace to join to the computed set. Using Find and Replace avoids the larger data set being resorted but does mean that the record ID needs to be cast as a string using a Select tool.
+
+![Render](assets/alteryx-mandelbrot/render.jpg)
+
+I'm not covering the rendering of a bitmap in this post (hopefully will detail that in a later post) but using a little trickery with blobs and base64 encoding it is possible to render it in a reporting tool. The final output looks like:
+
+![Output](assets/alteryx-mandelbrot/output.jpg)
+
 ## Wrapping Up
+
+Hopefully this post gives you some insight from the different ways I tried to produce the image. The workflows for the 
 
