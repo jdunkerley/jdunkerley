@@ -178,5 +178,8 @@ I'm not covering the rendering of a bitmap in this post (hopefully will detail t
 
 ## Wrapping Up
 
-Hopefully this post gives you some insight from the different ways I tried to produce the image. The workflows for the 
+Hopefully this post gives you some insight from the different ways I tried to produce the image. The workflows for this post available below:
 
+- [Iterative](https://www.dropbox.com/s/do1stzy4qykl2ng/Mandelbrot%20Iterate.yxzp?dl=0)
+- [Strings](https://www.dropbox.com/s/z11iih5h9dzo9ig/Mandelbrot%20String.yxzp?dl=0)
+- [Dynamic Formula](https://www.dropbox.com/s/qrdx80lozmf8rbo/Mandelbrot%20Formula.yxzp?dl=0)
