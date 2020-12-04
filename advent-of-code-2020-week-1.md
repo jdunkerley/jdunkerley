@@ -105,7 +105,43 @@ Having produced this value, you can filter it for when the `Pos=Col`. Finally, a
 
 ## Substrings
 
-# Day 4
+![Danilang's Solution](assets/advent-2020-1/day3.dl.jpg)
+
+[Danilang](https://community.alteryx.com/t5/user/viewprofilepage/user-id/34059)'s solution is a nice improvement to my approach. Instead of parsing the input into a row based data, he used the `Substring` function to pick the specific character out.
+
+Additionally, he chose to use a `RowSkip` so every other row is removed in the specific 2 row case. This is cleaner than switching to use a floating point number. It would allow a cleaner expression of to get the character:
+
+```
+substring([Field_1],
+  MOD([RecordID]/[RowSkip]*[Offset],length(trim([Field_1]))),
+  1)
+```
+
+A nice clean solution and with a win of 7 in Tool Golf!
+
+# [Day 4 - Passport Processing](https://adventofcode.com/2020/day/4)
+
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-4/m-p/675657)
+
+![Toboggan Trees](assets/advent-2020-1/day4.jd.jpg)
+*Tools used: 9, run-time: 0.3s*
+
+So we're back in the land of RegEx. There are a set of fields we need to parse and determine if they are valid. This is a perfect use case for `REGEX_Match`.
+
+The first task of this puzzle is to read the input and identify when each record ends and the next one begins. This is identified by a `null` line (worth noting I had an odd defect when copy and pasting from the input into Alteryx and the empty rows were skipped). After this, using a Regex tool in tokenise mode with expression `(...:\S+)` breaks each field out into its own row. In retrospect, this would have been simpler done using a Text to Column tool with a separator of ` `. After this I chose to use a formula tool to split into `Field` and `Value` (again easier to do with a Text to Columns):
+
+```
+Field=left([Field1],3)
+Value=Substring([Field1],4,1000)
+```
+
+For part one, it's just a case of counting the number of matching valid fields (ignoring the `cid` field for simplicity). For part 2, we need to move on to validating the actual value. I chose to use a Find and Replace to append a validation regex. The image below shows the expressions I used:
+
+![Validation Expressions](assets/advent-2020-1/day4.regex.jpg)
+
+I was in the mood to do everything within regex. This meant I didn't need to do any range checks on top as it was all built into these expressions. So for example to check for a 4 digit year from 1920 to 2002 becomes `19[2-9]\d|200[0-2]`. The first part (`19[2-9]\d`) deals with all values from 1920 to 1999 and the second (`200[0-2]`) deals with the last 3 years needed.
+
+## 
 
 # Day 5 ...
 
