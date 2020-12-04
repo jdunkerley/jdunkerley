@@ -54,20 +54,20 @@ And so we enter the world of [Regular Expressions](https://xkcd.com/1171/). Firs
 
 I then fed this into the filter tool using `REGEX_CountMatches` to count the number of times the specified character occurs: `REGEX_CountMatches([Password], [Char])` and can then compare with `Min` and `Max` to determine valid matches.
 
-For part 2, I relied on the simple `Substring` function to find the characters to compare. Watch out for the [off by 1 error](https://twitter.com/codinghorror/status/506010907021828096?lang=en) - my brain wasn't working well at the time I was building it!
+For part 2, I relied on the simple `Substring` function to find the characters to compare. Watch out for the [off by 1 error](https://twitter.com/codinghorror/status/506010907021828096?lang=en) - my brain wasn't working well at the time when I was building it and became off by 2 before realigning!
 
 ## Regex For The Win
 
 ![ColoradoNed's Solution](assets/advent-2020-1/day2.nh.jpg)
 
-For this puzzle, I had to choose Ned Harding's solution. He won the 'tool golf' challenge with a score of 2 tools! **But this is not for the faint of heart!** Using `REGEX_Replace`, he constructs the regular expression for a `REGEX_Match`:
+For this puzzle, I had to choose [Ned Harding](https://community.alteryx.com/t5/user/viewprofilepage/user-id/149440)'s solution. He won the 'tool golf' challenge with a score of 2 tools! **But this is not for the faint of heart!** Using `REGEX_Replace`, he constructs the regular expression for a `REGEX_Match` in the filter tool:
 
 ```
 REGEX_Match(REGEX_Replace([Field1], ".*:", ""),
 	REGEX_Replace([Field1], "^(\d+)-(\d+) (.).*$", "^[^$3]*\($3[^$3]*\){$1,$2}$"))
 ```
 
-The first `REGEX_Replace` replaces up to and including the `:`. The second takes the `1-8 n` and turns it into `^[^n]*(n[^n]*){1,8}$`. This will ignore everything until the first `n` and then match between 1 and 8 blocks with an `n` at the start followed by some random characters.
+The first `REGEX_Replace` replaces up to and including the `:`. The second takes the `1-8 n` and turns it into `^[^n]*(n[^n]*){1,8}$`. This will ignore everything until the first `n` and then match between 1 and 8 blocks each starting with an `n`, and then followed by some non `n` characters. The `^` and `$` mean it must be the whole password.
 
 For part 2, the formula becomes:
 
@@ -76,7 +76,7 @@ REGEX_Match(REGEX_Replace([Field1], ".*:", ""),
 	REGEX_Replace([Field1], "^(\d+)-(\d+) (.).*$", "\(^\(?=.{$1}[^$3]\)\(?=.{$2}$3\).*$\)|\(^\(?=.{$1}$3\)\(?=.{$2}[^$3]\).*$\)"))
 ```
 
-In this case, the input `1-8 n` is turned into `(^(?=.{1}[^n])(?=.{8}n).*$)|(^(?=.{1}n)(?=.{8}[^n]).*$)`. This is is a substantially more complicated Regex. It consists of 2 scenarios separated by a `|`. The first case is when the 1st character is not `n` and the 8th character is `n`. The `(?=.{1}[^n])` is a non-capturing group checking that the character at second character is not `n`. Note in order to correct for the off by 1 problem Ned, kept a leading space. The second block `(?=.{8}n)` is a non-capturing group checking that character 8 is an `n`.
+In this case, the input `1-8 n` is turned into `(^(?=.{1}[^n])(?=.{8}n).*$)|(^(?=.{1}n)(?=.{8}[^n]).*$)`. This is is a substantially more complicated expression. It consists of 2 scenarios separated by a `|`, I will look at just first as the second just flips the 1 and 8. The first case is looking for when the 1st character is not `n` and the 8th character is `n`. The `(?=.{1}[^n])` is a positive lookahead checking that the character at second character is not `n`. Note in order to correct for the off by 1 problem, Ned kept a leading space. The second block `(?=.{8}n)` is a second positive lookahead checking that character 8 is an `n`. The `.*` then matches the entire string as long as both lookaheads were fulfilled.
 
 Some very clever regular expressions in here but not simple!
 
@@ -93,7 +93,7 @@ In this puzzle, we are given a map of where the trees are. I chose to turn this 
 
 ![Toboggan Trees](assets/advent-2020-1/day3.trees.jpg)
 
-Having got this list of trees, you can then filter it to cases where the column is equal to the `MOD((Row - 1) * Step + 1,Len)`, where `Len` is the length of the input string. For case 1, the step is 2. This works well for all but one of the case 2 scenarios too. In the case of 2 rows for 1 column, you need to amend the expression a little more. I chose to use to make the Position a double and reproduce the `MOD` function but the following 3 steps:
+Having got this list of trees, you can then filter it to cases where the column is equal to the `MOD((Row - 1) * Step + 1,Len)`, where `Len` is the length of the input string. For case 1, the step is 2. This works well for all but one of the case 2 scenarios too. In the case of 2 rows for 1 column, you need to amend the expression a little more. I chose to use to make the `Pos` a double and reproduce the `MOD` function but the following 3 steps:
 
 ```
 Pos=([Row]-1)*[Step] + 1
@@ -101,7 +101,7 @@ Pos=[Pos]-floor([Pos]/[Len])*[Len]
 Pos=iif([Pos]=0,[Len],[Pos])
 ```
 
-Having produced this value, you can filter it for when the `Pos=Col`.
+Having produced this value, you can filter it for when the `Pos=Col`. Finally, a summarize tool and a multi-row formula allow the computation of the counts and the product.
 
 ## Substrings
 
