@@ -17,7 +17,7 @@ A couple of years ago, [Adam Riley](https://twitter.com/AlteryxAd/status/1069619
 
 If you want to join us, we have an Alteryx leaderboard you can join by going to https://adventofcode.com/2019/leaderboard/private and using the code `453066-ca912f80`. We are chatting on the Alteryx Community under the [Advent of Code label](https://community.alteryx.com/t5/forums/filteredbylabelpage/board-id/general-discussions/label-name/advent%20of%20code). The leaderboard awards points by order in which they are solved. As the puzzles are published at midnight Eastern time, this give those who live on the West Coast an advantage. Those of us in the UK, it's 5am which is not a good time for my brain at least! Generally, this means it is fairest to look at total stars rather than points.
 
-For this year, I thought I would write up my solutions with some alternatives solutions from other people every week (well at least while we succeed at solving them!). When building a workflow, there are a couple of other dimensions we can look at beyond just working: how fast is the workflow and 'Tool Golf' (i.e. how few tools can we use)! So I will try and pick different approaches to my own.
+For this year, I thought I would write up my solutions with some alternatives solutions from other people every week (well at least while we succeed at solving them!). When building a workflow, there are a couple of other dimensions we can look at beyond just working: how fast is the workflow and 'Tool Golf' (i.e. how few tools can we use)! So I will try and pick different approaches to my own for each day.
 
 # [Day 1 - Report Repair](https://adventofcode.com/2020/day/1)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-1/m-p/675532)
@@ -25,21 +25,22 @@ For this year, I thought I would write up my solutions with some alternatives so
 ![My solution day 1](assets/advent-2020-1/day1.jd.jpg)
 *Tools used: 10, run-time: 0.3s*
 
-So for this puzzle, you need to find the pair of numbers which totalled 2020. I chose to work out the second number for each one (a new column `Miss`), I can then join this to itself to find the possibilities. I then used a filter tool to pick the `Miss` being greater than the `Field1`. Finally, computed the product with another formula tool.
+So for this puzzle, you need to find the pair of numbers which totalled 2020. I chose to work out the second number for each input row (a new column `Miss`), I can then join this to itself (on `Miss=Field1`) to find the valid possibilities. I then used a filter tool to pick the `Miss` being greater than the `Field1` to get a unique solution. Finally, I computed the product with another formula tool.
 
-For part 2, you need to do the same but with three numbers. First, I chose  to make all possible pairs using an Append Fields tool (set to allow all appends). After this, the process is similar.
+For part 2, you need to do the same but with three numbers. First, I chose  to make all possible pairs using an Append Fields tool (set to allow all appends). After this, the process is similar to compute the missing third number and join.
 
-For best 'tool golf', I could have merged a lot of this into the formula (doing the comparison and only producing a `Miss` if fields will be in order) and join tools.
+For best 'tool golf', I could have merged a lot of this into the formula tool (doing the comparison and only producing a `Miss` if fields will be in order) and then join tool would produce a unique result.
 
 ## All Possible Combinations
 
 ![Jean-B's Solution](assets/advent-2020-1/day1.jb.jpg)
 
-This solution belong's to [@JeanBalteryx](https://community.alteryx.com/t5/user/viewprofilepage/user-id/77398). In this case, first you create all possible pairs (again using Append Fields tool) and filter to the pairs where the total is correct. Using a select tool you get a single unique answer which you then compute the Result on. He also tidies up the data using a Select tool and put the results into a Browse tool (I chose to rely on Browse anywhere as should have a single result).
+This solution belongs to [@JeanBalteryx](https://community.alteryx.com/t5/user/viewprofilepage/user-id/77398). In this case, first he creates all possible pairs (again using Append Fields tool) and then filters to the pairs where the total is correct. Using a Sample tool you get a single unique answer which you then compute the Result on (using the formula tool). He also tidies up the data using a Select tool and puts the results into a Browse tool (mostly I choose to rely on Browse Anywhere for Advent of Code).
 
-For part 2, the process is similar but by append to the full set of pairs, you get the complete set of triplets and again can perform the same filtering and sampling to produce the result.
+For part 2, the process starts from the full set of pairs using another Append Fields tool to get the complete set of triplets. After this performing the same filtering and sampling to produce the required result.
 
 # [Day 2 - Password Philosophy](https://adventofcode.com/2020/day/2)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-2/m-p/675534)
 
 ![Count Matches](assets/advent-2020-1/day2.jd.jpg)
 *Tools used: 5, run-time: 0.4s*
@@ -78,7 +79,31 @@ REGEX_Match(REGEX_Replace([Field1], ".*:", ""),
 In this case, the input `1-8 n` is turned into `(^(?=.{1}[^n])(?=.{8}n).*$)|(^(?=.{1}n)(?=.{8}[^n]).*$)`. This is is a substantially more complicated Regex. It consists of 2 scenarios separated by a `|`. The first case is when the 1st character is not `n` and the 8th character is `n`. The `(?=.{1}[^n])` is a non-capturing group checking that the character at second character is not `n`. Note in order to correct for the off by 1 problem Ned, kept a leading space. The second block `(?=.{8}n)` is a non-capturing group checking that character 8 is an `n`.
 
 Some very clever regular expressions in here but not simple!
-# Day 3
+
+# [Day 3 - Toboggan Trajectory](https://adventofcode.com/2020/day/3)
+
+![Image chose by CGoodman3](https://community.alteryx.com/t5/image/serverpage/image-id/147339iC4B57D693E8D8ABB/image-size/medium?v=1.0&px=400)
+
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-3/m-p/675538)
+
+![Toboggan Trees](assets/advent-2020-1/day3.jd.jpg)
+*Tools used: 11, run-time: 0.4s*
+
+In this puzzle, we are given a map of where the trees are. I chose to turn this into a list of trees with their Row and Column co-ordinates. I used a useful trick of a Regex tool in parse more with an expression of `.` to break each character into a row.
+
+![Toboggan Trees](assets/advent-2020-1/day3.trees.jpg)
+
+Having got this list of trees, you can then filter it to cases where the column is equal to the `MOD((Row - 1) * Step + 1,Len)`, where `Len` is the length of the input string. For case 1, the step is 2. This works well for all but one of the case 2 scenarios too. In the case of 2 rows for 1 column, you need to amend the expression a little more. I chose to use to make the Position a double and reproduce the `MOD` function but the following 3 steps:
+
+```
+Pos=([Row]-1)*[Step] + 1
+Pos=[Pos]-floor([Pos]/[Len])*[Len]
+Pos=iif([Pos]=0,[Len],[Pos])
+```
+
+Having produced this value, you can filter it for when the `Pos=Col`.
+
+## Substrings
 
 # Day 4
 
@@ -90,3 +115,6 @@ So thats week one (well first 5 days) down. Generally, these puzzles have been w
 
 As it stands the leaderboard looks like:
 
+
+
+Lets see what week 2 brings...
