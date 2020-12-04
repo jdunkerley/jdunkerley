@@ -164,7 +164,7 @@ Height: [Concat_Field_11] = "hgt"
    )
 ```
 
-One advantage of this approach is that each expression is simple and easy to debug. Each filter deals with one type of field and then the valid results can be joined together using a Union tool.
+One advantage of this approach is that each expression is simple and easy to debug. Each filter deals with one type of field, and then the valid results can be joined together using a Union tool.
 
 # Day 5 ...
 
