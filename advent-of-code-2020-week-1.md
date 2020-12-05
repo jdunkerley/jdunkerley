@@ -230,7 +230,7 @@ So that's week one (well first 5 days) down. Generally, these puzzles have been 
 - ColoradoNed: https://github.com/NedHarding/Advent2020
 - CGoodman3: https://github.com/ChrisDataBlog/AdventOfCode_2020
 
-As it stands at 2pm on 5th December, the leaderboard looks like:
+As it stands at 2 pm on 5th December, the leaderboard looks like:
 
 ![Alteryx Leaderboard](assets/advent-2020-1/leaderboard.jpg)
 
