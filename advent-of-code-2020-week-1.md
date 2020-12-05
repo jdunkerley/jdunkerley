@@ -196,7 +196,31 @@ ReplaceChar(ReplaceChar(ReplaceChar(ReplaceChar(
 
 There is no need to treat Row and Column separately as the expression combining the two is the same as a 10-bit integer. To find the missing value, I computed the `Next` seat and joined the data to itself. The `L` output then returns 2 rows - the missing row and the final seat.
 
-## Alternative...
+There is a slight improvement (as pointed out to me by Ned):
+
+```
+BinToInt(ReplaceChar(ReplaceChar(
+     [Field1], "RB", "1"),
+               "FL", "0"))
+```
+
+The `ReplaceChar` function allows for a list of target characters so you can reduce to 2 calls instead of 4.
+
+## A Non-BinToInt Approach
+
+The vast majority of submissions for this question were basically the same. There were a few variations. As a bit of a fun experiment, Ned and I came up with an alternative approach:
+
+![No BinToInt](assets/advent-2020-1/day5.nh.jpg)
+
+First, using a generate rows tool to create a `Pos` field going from 1 to the length of `SID` (the input string). Then using the expression:
+
+```
+iif(Substring([SID],Pos-1,1) in ('B','R'), pow(2, length([SID])-[Pos]), 0)
+```
+
+This checks the character and using its position within the input string to turn into its binary place value (`pow(2, length([SID])-[Pos])`). After this, grouping by `SID` and summing these values gives the required value.
+
+To find the missing seat and the maximum, these are then sorted, and a Multi-Row formula is used to compute the difference with the next row. The 2 cases where this is not 1 gives the required output for parts 1 and 2.
 
 # Wrapping Up
 
@@ -206,8 +230,8 @@ So that's week one (well first 5 days) down. Generally, these puzzles have been 
 - ColoradoNed: https://github.com/NedHarding/Advent2020
 - CGoodman3: https://github.com/ChrisDataBlog/AdventOfCode_2020
 
-As it stands, the leaderboard looks like:
+As it stands at 2pm on 5th December, the leaderboard looks like:
 
+![Alteryx Leaderboard](assets/advent-2020-1/leaderboard.jpg)
 
-
-Let's see what week 2 brings...
+Let's see what week 2 brings and how much further we can go!
