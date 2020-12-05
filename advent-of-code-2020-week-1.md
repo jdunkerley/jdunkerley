@@ -82,7 +82,7 @@ Some very clever regular expressions in here but not simple!
 
 # [Day 3 - Toboggan Trajectory](https://adventofcode.com/2020/day/3)
 
-![Image chose by CGoodman3](https://community.alteryx.com/t5/image/serverpage/image-id/147339iC4B57D693E8D8ABB/image-size/medium?v=1.0&px=400)
+![Image chosen by CGoodman3](assets/advent-2020-1/SQCNh1k.gif)
 
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-3/m-p/675538)
 
