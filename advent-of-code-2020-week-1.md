@@ -152,25 +152,58 @@ I was in the mood to do everything within the regex. This meant I didn't need to
 For part 2, Chris chose to implement a filter tool for each expression. A couple of examples of these are shown below:
 
 ```
-Eye Colour: [Concat_Field_11] = "ecl" AND [Concat_Field_12] IN ("amb","blu","brn","gry","grn","hzl","oth")
-Issue Year: [Concat_Field_11] = "iyr" AND [Concat_Field_12] >= "2010" AND [Concat_Field_12] <= "2020"
-Height: [Concat_Field_11] = "hgt"
-   AND ((right([Concat_Field_12],2) = "in" AND 
-        tonumber(left([Concat_Field_12],length([Concat_Field_12])-2)) >= 59 AND
-        tonumber(left([Concat_Field_12],length([Concat_Field_12])-2)) <= 76)
-   OR (right([Concat_Field_12],2) = "cm"
-      AND tonumber(left([Concat_Field_12],length([Concat_Field_12])-2)) >= 150
-      AND tonumber(left([Concat_Field_12],length([Concat_Field_12])-2)) <= 193)
-   )
+Eye Colour:
+   [Concat_Field_11] = "ecl" 
+   AND [Concat_Field_12] IN ("amb","blu","brn","gry","grn","hzl","oth")
+
+Issue Year:
+   [Concat_Field_11] = "iyr" 
+   AND [Concat_Field_12] >= "2010" AND [Concat_Field_12] <= "2020"
+
+Height: 
+   [Concat_Field_11] = "hgt"
+   AND 
+     (
+       (right([Concat_Field_12],2) = "in" 
+       AND tonumber(left([Concat_Field_12],length([Concat_Field_12])-2)) >= 59
+       AND tonumber(left([Concat_Field_12],length([Concat_Field_12])-2)) <= 76)
+     OR 
+       (right([Concat_Field_12],2) = "cm"
+       AND tonumber(left([Concat_Field_12],length([Concat_Field_12])-2)) >= 150
+       AND tonumber(left([Concat_Field_12],length([Concat_Field_12])-2)) <= 193)
+     )
 ```
 
 One advantage of this approach is that each expression is simple and easy to debug. Each filter deals with one type of field, and then the valid results can be joined together using a Union tool.
 
-# Day 5 ...
+# [Day 5 - Binary Boarding](https://adventofcode.com/2020/day/5)
+
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-5/m-p/676290)
+
+![Binary numbers!](assets/advent-2020-1/day5.jd.jpg)
+
+Day 5's problem is the description of the binary representation of an integer wiht 10 bits, with `F` and `L` being `0` and `B` and `R` being `1`. Alteryx has a 'BinToInt' function which takes a binary string and converts to an integer. So the unique seat id is given by:
+
+```
+BinToInt(
+ReplaceChar(ReplaceChar(ReplaceChar(ReplaceChar(
+     [Field1], "B", "1"),
+     "R", "1"),
+     "F", "0"),
+     "L", "0"))
+```
+
+There is no need to treat Row and Column separately as the expression combining the two is the same as a 10 bit integer. To find the missing value, I computed the `Next` seat and joined the data to itself. The `L` output then returns 2 rows - the missing row and the final seat.
+
+## Alternative...
 
 # Wrapping Up
 
-So that's week one (well first 5 days) down. Generally, these puzzles have been well suited to Alteryx. If you want to take a deeper look at my solutions, they are posted to [GitHub](https://github.com/jdunkerley/adventofcode/).
+So that's week one (well first 5 days) down. Generally, these puzzles have been well suited to Alteryx. If you want to take a deeper look at my solutions, they are posted to [GitHub](https://github.com/jdunkerley/adventofcode/). A few other repos are listed below:
+
+- NicoleJohnson: https://github.com/AlteryxNJ/AdventOfCode_2020
+- ColoradoNed: https://github.com/NedHarding/Advent2020
+- CGoodman: https://github.com/ChrisDataBlog/AdventOfCode_2020
 
 As it stands, the leaderboard looks like:
 
