@@ -84,8 +84,15 @@ For part 2, I chose to use a batch macro to vary one instruction at a time and t
 
 ## Macro Free
 
+![ColoradoNed's day 8](assets/advent-2020-2/day8.nh.jpg)
 
+I had to chose Ned Harding's macro free approach for this one. As he says if you can avoid iterative or batch macros, it is easier to debug and much faster (this version runs in 2.9 seconds).
 
+First, Ned combines the expressions into a long single string with each instruction being 5 characters long. The operation is shortened to a single character and the value is padded with spaces to be 4 characters long. Next, a generate rows tool is used to create as many rows as there are instructions plus 1. This is used to mutate any `jmp` to `nop` and vice versa within the set. A unique tool is then used to remove the records which have not been changed.
+
+Each of these 'programs' is then fed into a generate rows tool which creates up to 300 steps for each. Then a multi-row formula tool traces through which instruction would be processed on each step. A second multi-row formula tool then evaluates the value of the accumulator. Finally, a third multi-row formula tool is track the steps which have been executed. If a repeat is detected, this expression will return a `#error`, if it finds the terminating expression then `#success` is written.
+
+A very clever and very quick way to solve this problem.
 # Day 9
 
 # Day 10
