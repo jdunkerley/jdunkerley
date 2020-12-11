@@ -1,5 +1,7 @@
 # Alteryxing The Advent of Code 2020 - Week 2
 
+![Week 2 Graphic](assets/advent-2020-2/logo.jpg)
+
 So [week 1](https://jdunkerley.co.uk/2020/12/05/alteryxing-the-advent-of-code-2020-week-1/) was well suited to Alteryx, lets see how week 2 unfolded! A nice and gentle Sunday puzzle lulled me into the belief that it was going to be an easy week, followed by the first needed use of an iterative macro, and then something that looked far too much like the dreaded [IntCode of 2019](https://adventofcode.com/2019/day/2)...
 
 As with last week, I've picked some examples from around the community for different approaches to my own. This week also saw a [useful macro](https://github.com/NedHarding/Advent2020/blob/main/AdventOfCodeInput.yxmc) by Ned Harding which will download and parse the input from the Advent of Code site. I also played with a version of this, which will [download the leaderboard](https://github.com/jdunkerley/adventofcode/blob/master/Build%20Leaderboard.yxmd) so I could play with the results - and see if anyone had beaten Nicole Johnson yet!
