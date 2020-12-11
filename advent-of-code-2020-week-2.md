@@ -1,10 +1,10 @@
-# Alteryxing The Advent of Code 2020 - Week 1
+# Alteryxing The Advent of Code 2020 - Week 2
 
 So [week 1](https://jdunkerley.co.uk/2020/12/05/alteryxing-the-advent-of-code-2020-week-1/) was well suited to Alteryx, lets see how week 2 unfolded! A nice and gentle Sunday puzzle lulled me into the belief that it was going to be an easy week, followed by the first needed use of an iterative macro, and then something that looked far too much like the dreaded [IntCode of 2019](https://adventofcode.com/2019/day/2)...
 
-As with last week, I've picked some examples from around the community for different approaches to my own. This week also saw a [useful macro](https://github.com/NedHarding/Advent2020/blob/main/AdventOfCodeInput.yxmc) by Ned Harding which will download and parse the input from the Advent of Code site.
+As with last week, I've picked some examples from around the community for different approaches to my own. This week also saw a [useful macro](https://github.com/NedHarding/Advent2020/blob/main/AdventOfCodeInput.yxmc) by Ned Harding which will download and parse the input from the Advent of Code site. I also played with a version of this, which will [download the leaderboard](https://github.com/jdunkerley/adventofcode/blob/master/Build%20Leaderboard.yxmd) so I could play with the results - and see if anyone had beaten Nicole Johnson yet!
 
-Some of the puzzles this week involve some complicate workflows so I will do my best to explain them as clearly as I can.
+Some of the puzzles this week involve some complicate workflows so I will do my best to explain them as clearly as I can. Where I can't find a substantially different approach (or don't understand the other one!) I haven't included below.
 
 # [Day 6 - Custom Customs](https://adventofcode.com/2020/day/6)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-6/m-p/676470)
@@ -54,4 +54,56 @@ shiny gold	12	dotted black
 
 On the next iteration, the new leaf node is `shiny gold` so these 6 rows are written to the output. The iterative loop is then empty so the macro exits. As I calculated the count as I went along parts 1 and 2 are both then solved by just filtering and summarising the rows.
 
-##
+## Simpler Hierarchy Macro
+
+The approaches were all generally similar, but I thought I would highlight [Nicole Johnson](https://community.alteryx.com/t5/user/viewprofilepage/user-id/3824)'s simpler heirarchy macro. She has answered similar questions to this on the community and has a blog post about [Kevin Bacon](https://community.alteryx.com/t5/Engine-Works/Building-a-Hierarchy-With-Kevin-Bacon/ba-p/453715) on the subject.
+
+![Nicole's macro for part 2](assets/advent-2020-2/day7.nj.macro.jpg)
+
+Unlike my macro, Nicole's takes in 2 inputs - the set of all connections (same basic format as my input) and the immediate children of `shiny gold`. Each iteration moves down to the children and multipies the quantity. These rows are output at each step (`R` output) and looped round to be the input to the next loop. When a leaf is reach, there will be no connections joined so the macro will terminate.
+
+# [Day 8 - Handheld Halting](https://adventofcode.com/2020/day/8)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-8/m-p/677337)
+
+![My solution day 8](assets/advent-2020-2/day8.jd.jpg)
+
+![My inner macro](assets/advent-2020-2/day8.jd.macros.jpg)
+*Tools used: 26 (including macros), run-time: 43.8s*
+
+My first reaction was - uh oh this is going to be like Int code and take forever. My approach was fairly straight forward. First, I parsed the instructions and then pass this into the iterative macro. The iterative macro also takes a state input which is looped round in the iteration. This looks like:
+
+```
+Ptr: 1     # Current Instruction
+Value: 0   # Current Value
+Exec: ''   # Set of executed values
+```
+
+On each iteration, the instruction at `Ptr` is looked up. The `Exec` string is checked to see if it contains the `Ptr` already (the termination condition for the loop). If it does then the current row is written to the `R` output and the loop terminates. Otherwise, `Ptr` is added to the `Exec` string and new values for `Ptr` and `Value` are computed and passed to the loop output. The result at each step is also outputted (to the third output) as this is needed for Part 2. The answer for part 1 is given in the `R` output.
+
+For part 2, I chose to use a batch macro to vary one instruction at a time and then run the above iterative macro. In this case, the required answer will be when the iterative macro terminates with a `null` result. You only need to test changing the `nop` and `jmp` operations - this gave a limited set (94) of cases to try. Each case is passed in as control parameter and then the instruction set is altered using a formula tool. Ideally, this would terminate on the first successful result but I never got that termination to work wihtin the batch macro.
+
+## Macro Free
+
+
+
+# Day 9
+
+# Day 10
+
+# Day 11
+
+# Day 12
+
+# Wrapping Up
+
+A significantly harder week but still a lot of success with BaseA. Many have now passed my total of 18 stars from last week and are still going strong. Maybe this year will be the first year of 50 stars in BaseA.
+
+A slightly increased collection of git repos this week:
+
+- Mine: https://github.com/jdunkerley/adventofcode/
+- NicoleJohnson: https://github.com/AlteryxNJ/AdventOfCode_2020
+- ColoradoNed: https://github.com/NedHarding/Advent2020
+- CGoodman3: https://github.com/ChrisDataBlog/AdventOfCode_2020
+- AlteryxAd: https://gitlab.com/adriley/adventofcode2020-alteryx/
+
+Onto week 3!
