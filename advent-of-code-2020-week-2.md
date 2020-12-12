@@ -159,7 +159,19 @@ Using a look back of up to three rows, first, he assesses if each of the precedi
 
 Very nice win for tool golf (5 tools excluding Browse) and speed (0.2s)!
 
-# Day 11
+# [Day 11 - Seating System](https://adventofcode.com/2020/day/11)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-11/m-p/679115)
+
+![My solution day 11](assets/advent-2020-2/day11.jd.jpg)
+
+![My inner macro 11](assets/advent-2020-2/day11.jd.macro.jpg)
+*Tools used: 32 (including iterative macro), run-time: 12.7s*
+
+My first attempt at this puzzles was a complete mess - though did eventually work. This was my second attempt. First, I parsed the input into a list of seats and their row and column positions. I filtered out the non seats to give a smaller set to work with. The prepared input looked like:
+
+![Parsed day 11 input](assets/advent-2020-2/day11.input.jpg)
+
+The next step was to work out the neighbour for each seat if still present in the list. I did this by append a set of directional moves (Up Left, Up, Up Right, Left, Right, Down Left, Down, Down Right) and then joining to the seats to see if the neighbour was present. The result was a list of all seats and their neighbours.
 
 # Day 12
 
