@@ -167,17 +167,38 @@ Very nice win for tool golf (5 tools excluding Browse) and speed (0.2s)!
 ![My inner macro 11](assets/advent-2020-2/day11.jd.macro.jpg)
 *Tools used: 32 (including iterative macro), run-time: 12.7s*
 
-My first attempt at this puzzles was a complete mess - though did eventually work. This was my second attempt. First, I parsed the input into a list of seats and their row and column positions. I filtered out the non seats to give a smaller set to work with. The prepared input looked like:
+My first attempt at this puzzle was a complete mess - though did eventually work. This was my second attempt. First, I parsed the input into a list of seats and their row and column positions. I filtered out the non-seats to give a smaller set to work with. The prepared input looked like:
 
 ![Parsed day 11 input](assets/advent-2020-2/day11.input.jpg)
 
-The next step was to work out the neighbour for each seat if still present in the list. I did this by append a set of directional moves (Up Left, Up, Up Right, Left, Right, Down Left, Down, Down Right) and then joining to the seats to see if the neighbour was present. The result was a list of all seats and their neighbours.
+The next step was to work out the neighbour for each seat if still present in the list. I did this by appending a set of directional moves (Up Left, Up, Up Right, Left, Right, Down Left, Down, Down Right) and then joining to the seats to see if the neighbour was present. The result was a list of all seats and their neighbours.
 
-# Day 12
+![Parsed day 11 input](assets/advent-2020-2/day11.neighbours.jpg)
+
+The iterative macro takes this set of neighbours, and the input and then for every seat counts the occupied neighbours and then switches as needed. If something changes the new seat state is looped around; otherwise, the result is returned.
+
+For part 2, the only difference was that you need to move outwards from the chair in each of the 8 directions until either you reach the end or you find a seat. This was done by generating rows and picking the lowest matching chair. The same iterative macro then produces the correct result.
+
+## A Spatial Alternative
+
+![AlteryxAd's Solution](assets/advent-2020-2/day11.aa.jpg)
+
+For an alternative, I choose to take [AdamR](https://community.alteryx.com/t5/user/viewprofilepage/user-id/120)'s spatial based solution. The inner iterative macro is very similar to mine (with an optimisation that each seat is assigned a unique id), so I am just going to talk about the spatial approach to find the neighbours.
+
+For each seat, the x and y values are divided by 10. These are then used as Latitude and Longitude inputs into a Create Points tool. Around each point a polygon is created moving 0.15° North/South, East/West to create a rectangle. Then using a Spatial Match tool identifies the neighbour seats.
+
+For part 2, lines are extended from the original seat in the eight specified directions. These lines are then buffered to create a region which can then be used to find the other seats which are within the buffered regions. Next, a distance tool is used to work out how far each matched seat is from the original. The minimum distance for each seat and direction is kept to produce the pairs for part 2.
+
+Clever use of the spatial tools to find the neighbours.
+
+# [Day 12 - Rain Risk](https://adventofcode.com/2020/day/12)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-11/m-p/679115)
 
 # Wrapping Up
 
-A significantly harder week but still a lot of success with BaseA. Many have now passed my total of 18 stars from last year and are still going strong. Maybe this year will be the first year of 50 stars.
+A significantly harder week but still a lot of success with BaseA. Lots of practice on doing iterations in Alteryx - either via Generate Rows or Iterative Macros. Many people have now passed my total of 18 stars from last year and are still going strong. Maybe this year will be the first year of 50 stars.
+
+
 
 An increased collection of git repositories this week:
 
