@@ -159,7 +159,7 @@ Using a look back of up to three rows, first, he assesses if each of the precedi
 
 Very nice win for tool golf (5 tools excluding Browse) and speed (0.2s)!
 
-# [Day 11 - Seating System](https://adventofcode.com/2020/day/11)
+## [Day 11 - Seating System](https://adventofcode.com/2020/day/11)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-11/m-p/679115)
 
 ![My solution day 11](assets/advent-2020-2/day11.jd.jpg)
@@ -179,7 +179,7 @@ The iterative macro takes this set of neighbours, and the input and then for eve
 
 For part 2, the only difference was that you need to move outwards from the chair in each of the 8 directions until either you reach the end or you find a seat. This was done by generating rows and picking the lowest matching chair. The same iterative macro then produces the correct result.
 
-## A Spatial Alternative
+### A Spatial Alternative
 
 ![AlteryxAd's Solution](assets/advent-2020-2/day11.aa.jpg)
 
@@ -191,14 +191,50 @@ For part 2, lines are extended from the original seat in the eight specified dir
 
 Clever use of the spatial tools to find the neighbours.
 
-# [Day 12 - Rain Risk](https://adventofcode.com/2020/day/12)
+## [Day 12 - Rain Risk](https://adventofcode.com/2020/day/12)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-11/m-p/679115)
 
-# Wrapping Up
+![My solution day 12](assets/advent-2020-2/day12.jd.jpg)
+*Tools used: 10, run-time: 0.2s*
+
+For this problem, a lot of multi-row formula tools was my way to go. First, I computed the angle the boat was facing and normalised this to be between 0 and 359. Then I computed the `X`  for the boat with a second multi-row formula. Then a third multi-row computes `Y`.
+
+For part 2, the added complication is the waypoint rotating around the boat. This means that you need to mutate both the waypoint X and Y at the same time. I choose to do this by storing them as a string of `<X> <Y>`. Then a multi-row formula tool can evaluate it using an expression of:
+
+```
+iif([Instruction] in ('F','R','L'),
+  SWITCH(mod(360+[Facing]-[Row-1:Facing],360),
+    [Row-1:WP],
+    90,ToString( ToNumber(GetWord([Row-1:WP],1)))+" "+
+       ToString(-ToNumber(GetWord([Row-1:WP],0))),
+   180,ToString(-ToNumber(GetWord([Row-1:WP],0)))+" "+
+       ToString(-ToNumber(GetWord([Row-1:WP],1))),
+   270,ToString(-ToNumber(GetWord([Row-1:WP],1)))+" "+
+       ToString( ToNumber(GetWord([Row-1:WP],0)))
+  ),
+  ToString(
+    IIF([Row-1:WP]="",10,tonumber(GetWord([Row-1:WP],0)))
+    + switch([Instruction],0,"E",1,"W",-1) * [Value]
+  ) + " " + ToString(
+    IIF([Row-1:WP]="",1,tonumber(GetWord([Row-1:WP],1)))
+    + switch([Instruction],0,"N",1,"S",-1) * [Value]
+  )
+)
+```
+
+The `GetWord` allows easy reading of the two parts. The one trick is handling the rotations. Working it through a rotation of 90° results in `(X,Y)` going to `(Y,-X)`. Likewise 180° results in `(-X,-Y)` and finally 270° is `(-Y,X)`.
+
+### Iterative Alternative
+
+![Danilang's iterative macro](assets/advent-2020-2/day12.dl.jpg)
+
+Most people seem to have gone with the multi-row formulas for part 1. For part 2, the only alternative approach I saw was using an Iterative macro. I choose to show [Danilang](https://community.alteryx.com/t5/user/viewprofilepage/user-id/34059)'s iterative macro for part 2. It is a very elegant solution, every row has a `WayX`, `WayY`, `X` and `Y` as well as the instruction and row being applied. On each iteration, the row is applied to the state columns and the first row is removed before looping the remaining rows around and repeating.
+
+## Wrapping Up
 
 A significantly harder week but still a lot of success with BaseA. Lots of practice on doing iterations in Alteryx - either via Generate Rows or Iterative Macros. Many people have now passed my total of 18 stars from last year and are still going strong. Maybe this year will be the first year of 50 stars.
 
-
+![Leaderboard as of 12/12/2020](assets/advent-2020-2/leaderboard.jpg)
 
 An increased collection of git repositories this week:
 
@@ -209,5 +245,7 @@ An increased collection of git repositories this week:
 - AlteryxAd: https://gitlab.com/adriley/adventofcode2020-alteryx/
 - NiklasEk: https://github.com/NiklasJEk/AdventOfCode_2020
 - peter_gb: https://github.com/peter-gb/AdventofCode
+
+As the community is a competitive bunch, [grossal](https://community.alteryx.com/t5/user/viewprofilepage/user-id/123220) has put a [Google sheet](https://docs.google.com/spreadsheets/d/1p8sSy4kdCOa54sytcxnB0N3qpjuoZ9wBmqDlG7pe-BQ/edit?usp=sharing) together where we can compare the speed of solutions.
 
 Onto week 3 and possibly passing my high score of 33 stars!
