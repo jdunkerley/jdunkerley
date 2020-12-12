@@ -6,7 +6,7 @@ So [week 1](https://jdunkerley.co.uk/2020/12/05/alteryxing-the-advent-of-code-20
 
 As with last week, I've picked some examples from around the community for different approaches to my own. This week also saw a [useful macro](https://github.com/NedHarding/Advent2020/blob/main/AdventOfCodeInput.yxmc) by Ned Harding which will download and parse the input from the Advent of Code site. I also played with a version of this, which will [download the leaderboard](https://github.com/jdunkerley/adventofcode/blob/master/Build%20Leaderboard.yxmd) so I could play with the results - and see if anyone had beaten Nicole Johnson yet!
 
-Some of the puzzles this week involve some complicate workflows so I will do my best to explain them as clearly as I can. Where I can't find a substantially different approach (or don't understand the other one!) I haven't included below.
+Some of the puzzles this week involve some complicated workflows so I will do my best to explain them as clearly as I can. Where I can't find a substantially different approach (or don't understand the other one!) I haven't included below.
 
 ## [Day 6 - Custom Customs](https://adventofcode.com/2020/day/6)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-6/m-p/676470)
@@ -16,9 +16,9 @@ Some of the puzzles this week involve some complicate workflows so I will do my 
 
 A well-suited problem for Alteryx. First, using a multi-row formula tool to identify each group, with the `null` rows delimiting when a group ends. The old trick of a Regex tool in tokenise mode with expression of `.` will break each character into a separate record. A summarise tool grouping by `Group` and `Char` will produce a record for each meaning the answer for part 1 is just the row count.
 
-For part 2, you need to know how many people each group and then join this with those characters within that group which has the same count. This can easily be done using a Join tool on `Group` and `Count`, with the `J` output record count giving the answer for part 2.
+For part 2, you need to know how many people are in each group and then join this with those characters within that group which has the same count. This can easily be done using a Join tool on `Group` and `Count`, with the `J` output record count giving the answer for part 2.
 
-There weren't any real big alternative approaches to this one. A few people used a Unique tool for part 1 to produce a unique set.
+There weren't any real alternative approaches to this one. A few people used a Unique tool for part 1 to produce a unique set.
 
 ## [Day 7 - Handy Haversacks](https://adventofcode.com/2020/day/7)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-7/m-p/676704)
@@ -72,7 +72,7 @@ Unlike my macro, Nicole's takes in 2 inputs - the set of all connections (same b
 ![My inner macro](assets/advent-2020-2/day8.jd.macros.jpg)
 *Tools used: 26 (including macros), run-time: 43.8s*
 
-My first reaction was - uh oh this is going to be like Int code and take forever. My approach was fairly straight forward. First, I parsed the instructions and then pass this into the iterative macro. The iterative macro also takes a state input which is looped round in the iteration. This looks like:
+My first reaction was - uh oh this is going to be like Int code and take forever. However, it turned out to be a lot easier. My approach was fairly straight forward. First, I parsed the instructions and then pass this into the iterative macro. The iterative macro also takes a state input which is looped round in the iteration. This looks like:
 
 ```
 Ptr: 1     # Current Instruction
