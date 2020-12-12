@@ -14,9 +14,9 @@ Some of the puzzles this week involve some complicated workflows so I will do my
 ![My solution day 6](assets/advent-2020-2/day6.jd.jpg)
 *Tools used: 6, run-time: 0.2s*
 
-A well-suited problem for Alteryx. First, using a multi-row formula tool to identify each group, with the `null` rows delimiting when a group ends. The old trick of a Regex tool in tokenise mode with expression of `.` will break each character into a separate record. A summarise tool grouping by `Group` and `Char` will produce a record for each meaning the answer for part 1 is just the row count.
+A well-suited problem for Alteryx. First, using a multi-row formula tool to identify each group, with the `null` rows delimiting when a group ends. The old trick of a Regex tool in tokenise mode with an expression of `.` will break each character into a separate record. A summarise tool grouping by `Group` and `Char` will produce a record for each meaning the answer for part 1 is just the row count.
 
-For part 2, you need to know how many people are in each group and then join this with those characters within that group which has the same count. This can easily be done using a Join tool on `Group` and `Count`, with the `J` output record count giving the answer for part 2.
+For part 2, you need to know how many people are in each group and then join this with those characters within that group which has the same count. This can easily be done using a Join tool on `Group` and `Count`, with the `J` output record count answering part 2.
 
 There weren't any real alternative approaches to this one. A few people used a Unique tool for part 1 to produce a unique set.
 
@@ -43,7 +43,7 @@ vibrant plum	5	faded blue
 vibrant plum	6	dotted black
 ```
 
-`Dark olive` and `vibrant plum` are the leaf nodes. The last four lines are written as an output and the input for the next iteration becomes:
+`Dark olive` and `vibrant plum` are the leaf nodes. The last four lines are written as an output, and the input for the next iteration becomes:
 
 ```
 shiny gold	1	dark olive
@@ -54,7 +54,7 @@ shiny gold	10	faded blue
 shiny gold	12	dotted black
 ```
 
-On the next iteration, the new leaf node is `shiny gold` so these 6 rows are written to the output. The iterative loop is then empty so the macro exits. As I calculated the count as I went along parts 1 and 2 are both then solved by just filtering and summarising the rows.
+On the next iteration, the new leaf node is `shiny gold`, so these 6 rows are written to the output. The iterative loop is then empty hence the macro exits. As I calculated the count as I went along parts 1 and 2 are both then solved by just filtering and summarising the rows.
 
 ### Simpler Hierarchy Macro
 
@@ -72,7 +72,7 @@ Unlike my macro, Nicole's takes in 2 inputs - the set of all connections (same b
 ![My inner macro](assets/advent-2020-2/day8.jd.macros.jpg)
 *Tools used: 26 (including macros), run-time: 43.8s*
 
-My first reaction was - uh oh this is going to be like Int code and take forever. However, it turned out to be a lot easier. My approach was fairly straight forward. First, I parsed the instructions and then pass this into the iterative macro. The iterative macro also takes a state input which is looped round in the iteration. This looks like:
+My first reaction was - uh oh this is going to be like Int code and take forever. However, it turned out to be a lot easier. My approach was fairly straight forward. First, I parsed the instructions and then passed this into the iterative macro. The iterative macro also takes a state input which is looped round in the iteration. This looks like:
 
 ```
 Ptr: 1     # Current Instruction
@@ -80,9 +80,9 @@ Value: 0   # Current Value
 Exec: ''   # Set of executed values
 ```
 
-On each iteration, the instruction at `Ptr` is looked up. The `Exec` string is checked to see if it contains the `Ptr` already (the termination condition for the loop). If it does then the current row is written to the `R` output and the loop terminates. Otherwise, `Ptr` is added to the `Exec` string and new values for `Ptr` and `Value` are computed and passed to the loop output. The result at each step is also outputted (to the third output) as this is needed for Part 2. The answer for part 1 is given in the `R` output.
+On each iteration, the instruction at `Ptr` is looked up. The `Exec` string is checked to see if it contains the `Ptr` already (the termination condition for the loop). If it does then the current row is written to the `R` output, and the loop terminates. Otherwise, `Ptr` is added to the `Exec` string and new values for `Ptr` and `Value` are computed and passed to the loop output. The result at each step is also outputted (to the third output) as this is needed for Part 2. The answer for part 1 is given in the `R` output.
 
-For part 2, I chose to use a batch macro to vary one instruction at a time and then run the above iterative macro. In this case, the required answer will be when the iterative macro terminates with a `null` result. You only need to test changing the `nop` and `jmp` operations - this gave a limited set (94) of cases to try. Each case is passed in as control parameters and then the instruction set is altered using a formula tool. Ideally, this would terminate on the first successful result but I never got that termination to work within the batch macro.
+For part 2, I chose to use a batch macro to vary one instruction at a time and then run the above iterative macro. In this case, the required answer will be when the iterative macro terminates with a `null` result. You only need to test changing the `nop` and `jmp` operations - this gave a limited set (94) of cases to try. Each case is passed in as control parameters, and then the instruction set is altered using a formula tool. Ideally, this would terminate on the first successful result, but I never got that termination to work within the batch macro.
 
 ### Macro Free
 
@@ -90,11 +90,11 @@ For part 2, I chose to use a batch macro to vary one instruction at a time and t
 
 I had to choose Ned Harding's macro-free approach for this one. As he says if you can avoid iterative or batch macros, it is easier to debug and much faster (this version runs in 2.9 seconds).
 
-First, Ned combines the expressions into a long single string with each instruction being 5 characters long. The operation is shortened to a single character and the value is padded with spaces to be 4 characters long. Next, a generate rows tool is used to create as many rows as there are instructions plus 1. This is used to mutate any `jmp` to `nop` and vice versa within the set. A unique tool is then used to remove the records which have not been changed.
+First, Ned combines the expressions into a long single string with each instruction being 5 characters long. The operation is shortened to a single character, and the value is padded with spaces to be 4 characters long. Next, a generate rows tool is used to create as many rows as there are instructions plus 1. This is used to mutate any `jmp` to `nop` and vice versa within the set. A unique tool is then used to remove the records which have not been changed.
 
 Each of these 'programs' is then fed into a generate rows tool which creates up to 300 steps for each. Then a multi-row formula tool traces through which instruction would be processed on each step. A second multi-row formula tool then evaluates the value of the accumulator. Finally, a third multi-row formula tool tracks the steps which have been executed. If a repeat is detected, this expression will return a `#error`, if it finds the terminating expression then `#success` is written.
 
-A very clever and very quick way to solve this problem.
+A very clever and speedy way to solve this problem.
 
 ## [Day 9 - Encoding Error](https://adventofcode.com/2020/day/9)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-9/m-p/678004)
@@ -104,7 +104,7 @@ A very clever and very quick way to solve this problem.
 
 Following Ned's demonstration for day 8, I chose to go macro-free for this one. First, I add a RecordID to the input data. Next using a multi-row formula tool, I concatenate the numbers together keeping the last 25 values in a string. This is then exploded into 25 rows for each RecordID. Then it is a case of following the same idea as day 1 and computing the difference missing and joining onto itself. Using a multi-row tool to identify the missing row (when the step goes up by more than 1) and then joining back to the input gives the missing value.
 
-For part 2, I first computed the running sum and then append the target value. It is then easy to work out the missing value and join this to the set of running sums. This then creates the block of rows needed and using a summarise tool to pick the minimum and maximum before calculating the difference.
+For part 2, I first computed the running sum and then appended the target value. It is then easy to work out the missing value and join this to the set of running sums. This then creates the block of rows needed and using a summarise tool to pick the minimum and maximum before calculating the difference.
 
 One feature I used, in this case, was to hold the number of rows (25 for the real set, 5 for the test) as a workflow constant. It meant I could refer to it in all the formula and change in a single place as needed.
 
@@ -112,7 +112,7 @@ One feature I used, in this case, was to hold the number of rows (25 for the rea
 
 ![Peter_gb's solution to part 1](assets/advent-2020-2/day9.pgb.jpg)
 
-For an alternative, I choose to look at [peter_gb](https://community.alteryx.com/t5/user/viewprofilepage/user-id/6624)'s solution. For the first part, instead of building a string and split, a generate rows tool is used to create 25 extra rows. This is then used to join the RecordID to get the set of input values. A second join is then used to create all possible pairs of numbers and then it is just a case of filtering to find a valid pair.
+For an alternative, I choose to look at [peter_gb](https://community.alteryx.com/t5/user/viewprofilepage/user-id/6624)'s solution. For the first part, instead of building a string and split, a generate rows tool is used to create 25 extra rows. This is then used to join the RecordID to get the set of input values. A second join is then used to create all possible pairs of numbers, and then it is just a case of filtering to find a valid pair.
 
 ![Peter_gb's solution to part 1](assets/advent-2020-2/day9.pgb.macro.jpg)
 
@@ -126,7 +126,7 @@ For part 2, Peter uses an iterative macro removing one row at a time from the fr
 
 Part 1 of this problem was very straight forward. Sort the data set, work out the row differences (turned out to always be 1 or 3) and then using a CrossTab to count the number of each. The answer is then given by a formula tool (remembering to add 1).
 
-Part 2 however includes this warning:
+Part 2, however, includes this warning:
 
 ![Beware!](assets/advent-2020-2/day10.warning.jpg)
 
@@ -147,7 +147,7 @@ I then just counted blocks of 1 to see how many there were in each section and t
 
 ![Balders Solution](assets/advent-2020-2/day10.ib.jpg)
 
-For the elegance and simplicity of his part 2 solution, I choose [Balders](https://community.alteryx.com/t5/user/viewprofilepage/user-id/9267) answer as an alternative. Part 1 is exactly the same but for part 2, he uses a single multi-row formula with the expression:
+For the elegance and simplicity of his part 2 solution, I choose [Balders](https://community.alteryx.com/t5/user/viewprofilepage/user-id/9267) answer as an alternative. Part 1 is exactly the same, but for part 2, he uses a single multi-row formula with the expression:
 
 ```
 IF [Row-3:data] + 3 >= [data] THEN MAX([Row-3:ans],1) ELSE 0 ENDIF +
