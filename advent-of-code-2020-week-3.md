@@ -156,19 +156,19 @@ I do not believe it is possible to do part 2 within BaseA rules in anything rese
 
 The first task was to parse the input. This input contains a set of rules, each looking like `seat: 2-3 or 7-9`, and a set of tickets each being a comma separated list. Using a Regex tool and Text to columns I ended up with:
 
-![My solution day 16](assets/advent-2020-3/day16.parsedrules.jpg)
+![Parsed rules](assets/advent-2020-3/day16.parsedrules.jpg)
 
-![My solution day 16](assets/advent-2020-3/day16.parsedtickets.jpg)
+![Parsed tickets](assets/advent-2020-3/day16.parsedtickets.jpg)
  
 Having parsed the input, the next task is to filter the tickets fields to see which rules are valid for which fields. I choose to use an append fields to add every possible rule to every ticket and column. You can then join this to the set of ticket to produce the tickets where no field passed any rule (the unique tool in my workflow is not needed - bad tool golf!).
 
 For part 2, you need to work out which rule applies to which column. I chose to use an iterative macro to solve this. Firstly, I filtered out the invalid tickets (using a join tool). After this I filter down to the valid Tickets, Columns and Rules. For each rule, I count the number of valid tickets and compare this with the distinct count of valid tickets. This gives the set of valid rules for each column:
 
-![My solution day 16](assets/advent-2020-3/day16.validrules.jpg)
+![Valid tickets](assets/advent-2020-3/day16.validrules.jpg)
 
 The last step is the iterative macro:
 
-![My solution day 16](assets/advent-2020-3/day16.jd.macro.jpg)
+![Rule assignment macro](assets/advent-2020-3/day16.jd.macro.jpg)
 
 In this case, each iteration picks out `ColumnName`s that only occur once in the list. The `Column` associated with this is then returned with the name and all other rows with the same `Column` value are removed and the iteration repeats. This is pretty similar to previous macros. Having solved this the answer to the puzzle is easily obtained with a join and summarise.
 
@@ -176,15 +176,43 @@ Good to be back to pure BaseA!
 
 ### Macro Free
 
-![]()
+![Danilang's solution to build the hierarchy](assets/advent-2020-3/day16.dl.jpg)
+
+Most solutions for part 1 were pretty similar. So I chose to focus on [Danilang](https://community.alteryx.com/t5/user/viewprofilepage/user-id/34059)'s macro free solution to build the column assignments. As with my macro approach, first, the results are filtered down to just the possible ones. Next, for each rule a count of the possible matching columns is added (using the summary and join).
+
+For each row a concatenated string of the possible columns number is created and assigned to a value of the number of possible fields plus 1. By joining this to the rule set, it is possible work out which column has not been used and produce the required column mapping. 
+
+## [Day 17 - Conway Cubes](https://adventofcode.com/2020/day/17)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-17/m-p/681643)
+
+![My solution day 17](assets/advent-2020-3/day17.jd.jpg)
+
+![Inner macro](assets/advent-2020-3/day17.macro.jpg)
+*Tools used: 39, run-time: 23s*
+
+The main issue I had with day 17 was understanding the example! I must have read it about 5 times before I cottoned on what was happening. As this only needed to be run 6 times and standard macros are a lot easier to debug than iterative macros I chose to copy the macro 6 times! My macro works for both parts 1 and 2 (i.e. it has been updated to work with 4 dimensions!).
+
+![Parsed input](assets/advent-2020-3/day17.parsed.jpg)
+
+Much like [day 11](https://jdunkerley.co.uk/2020/12/13/alteryxing-the-advent-of-code-2020-week-2/), the first task is to parse the input into the set of active cubes each with a `x`, `y`, `z` and `w` co-ordinate. This is then the input into the macro. The macro performs one iteration following the rules of the puzzle.
+
+Within the macro, I chose to work out the minimum and maximums for each dimension and then created a 4 dimensional grid one larger in each dimension. For every cell, I also create the shift up and down by 1 in dimension (for part 1, I disable the `w` shifts). Having created this grid with the shift it is then a case of joining into the active cube set and it becomes a straight forward summation and formula to compute the new set of active cells. The answer for the puzzle is just given by the number of rows in after the final macro.
+
+My macro also produced a diagnostic output reproducing the string input in puzzle. This allowed me to work out what was going on with the example and ensure I produced the same results.
+
+### 
+
+## [Day 18 - Operation Order](https://adventofcode.com/2020/day/18)
+
+## [Day 19 - Monster Messages](https://adventofcode.com/2020/day/19)
 
 ## Wrapping Up
 
-I am really pleased to have passed my total stars from 2018 this week. I did have to solve 2 using Abacus functions, but still great to see how far we have got using Alteryx.
+I am really pleased to have passed my total stars from 2018 this week (33 stars in that year). I did have to solve 2 using Abacus functions, but still great to see how far we have got using Alteryx.
 
 ![Leaderboard as of 19/12/2020](assets/advent-2020-3/leaderboard.jpg)
 
-A few more git repositories added this week:
+Still a fair number of people trying to solve these each day, and over 40 people have solved one or more! A few more git repositories added this week:
 
 - Mine: https://github.com/jdunkerley/adventofcode/
 - NicoleJohnson: https://github.com/AlteryxNJ/AdventOfCode_2020
@@ -196,4 +224,4 @@ A few more git repositories added this week:
 - AkimasaKajitani: https://github.com/AkimasaKajitani/AdventOfCode
 - dsmdavid: https://github.com/dsmdavid/AdventCode2020
 
-Onto the final six days. Hopefully, someone can get the first 50 stars using Alteryx (with as much as possible in BaseA) this year!
+Onto the final six days. Hopefully, someone can get the first 50 stars using Alteryx (with as much as possible in BaseA) this year - though as always its a busy time of the year and the puzzles are getting harder!
