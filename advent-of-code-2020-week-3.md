@@ -11,7 +11,7 @@ As with a couple of years ago, doing the Advent of Code, inspired me to do more 
 - `Int64Div(a,b)` - computes `a / b` using integer division (i.e. returns `Floor(a / b)`)
 - `Int64Mod(a,b)` - computes `a % b` (i.e. returns the remainder of `a / b`)
 
-Anyway onto the puzzles!
+Anyway, onto the puzzles!
 
 ## [Day 13 - Shuttle Search](https://adventofcode.com/2020/day/13)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-13/m-p/679903)
@@ -81,7 +81,7 @@ After this, its just a case of using a summarise tool to pick the final value (t
 
 For part 2, the meaning of the mask was changed. In this case, it is applied to the address rather than the value. Additionally, the `0`s are ignored. The `1`s are set on the address. The `X`s become wildcards meaning that treating both as `0` and `1` and both should be evaluated. 
 
-For simplicity of diagnosing problems, I chose to use the `IntToBin` function to write the address as a 36 character binary string and applied the `1`s. Then using some generate rows I created a row for every permutation and then using regular expressions created the new address values. Finally, after this, the same double summarise tools produced the answer.
+For simplicity of diagnosing problems, I chose to use the `IntToBin` function to write the address as a 36 character binary string and applied the `1`s. Then using some generate rows, I created a row for every permutation and then using regular expressions created the new address values. Finally, after this, the same double summarise tools produced the answer.
 
 ## [Day 15 - Rambunctious Recitation](https://adventofcode.com/2020/day/15)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-15/td-p/680525)
@@ -93,7 +93,7 @@ This puzzle reminded me of [day 9 from 2018](https://adventofcode.com/2018/day/9
 
 ![My solution day 15](assets/advent-2020-3/day15.state.jpg)
 
-A generate rows tool is used to create 2020 rows and then the state is generated using a multi-row formula with the expression:
+A generate rows tool is used to create 2020 rows, and then the state is generated using a multi-row formula with the expression:
 
 ```
 [Row-1:State] + " " +
@@ -117,7 +117,7 @@ iif(
 
 On each row, the current value is read from the last line of the string. If this value is present in the list (checked using the Regex_CountMatches) more than once, then we count the number of spaces between the last instance and the end of the string. If it wasn't present then a 0 is added.
 
-For part 2, you need to do 30,000,000 iterations. This is clearly not possible with this string state I was keeping. It would involve a string with at least 60,000,000 characters. My first idea was to change to storing the state as key and value in the string for example:
+For part 2, you need to do 30,000,000 iterations. This is clearly not possible with this string state I was keeping. It would involve a string with at least 60,000,000 characters. My first idea was to change to storing the state as key and value in the string, for example:
 
 ![My solution day 15](assets/advent-2020-3/day15.state2.jpg)
 
@@ -138,11 +138,11 @@ iif([RowCount]<=[Init],
 )
 ```
 
-The row value is just the current value and the last time each row was accessed is stored in the `VarNum` variables. This allows Alteryx to complete the 30 million rows in about 4 minutes.
+The row value is just the current value, and the last time each row was accessed is stored in the `VarNum` variables. This allows Alteryx to complete the 30 million rows in about 4 minutes.
 
 ### Other Solutions
 
-For part 1, a few went with the iterative macro approach to solving this. This was generally successful but significantly slower (4 minutes or so) versus the generate rows approach. That being said [AkimasaKajitani](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-15/m-p/680864/highlight/true#M3486) found a huge performance boost by using the AMP engine.
+For part 1, a few went with the iterative macro approach to solving this. This was generally successful but significantly slower (4 minutes or so) versus the generate rows approach. That being said, [AkimasaKajitani](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-15/m-p/680864/highlight/true#M3486) found a huge performance boost by using the AMP engine.
 
 I do not believe it is possible to do part 2 within BaseA rules in anything resembling a sensible time. Some resorted to the python tool to solve this which allowed for answers in a few seconds.
 
@@ -152,7 +152,7 @@ I do not believe it is possible to do part 2 within BaseA rules in anything rese
 ![My solution day 16](assets/advent-2020-3/day16.jd.jpg)
 *Tools used: 30, run-time: 0.7s*
 
-The first task was to parse the input. This input contains a set of rules, each looking like `seat: 2-3 or 7-9`, and a set of tickets each being a comma-separated list. Using a Regex tool and Text to columns I ended up with:
+The first task was to parse the input. This input contains a set of rules, each looking like `seat: 2-3 or 7-9`, and a set of tickets each being a comma-separated list. Using a Regex tool and Text to Columns, I ended up with:
 
 ![Parsed rules](assets/advent-2020-3/day16.parsedrules.jpg)
 
@@ -168,7 +168,7 @@ The last step is the iterative macro:
 
 ![Rule assignment macro](assets/advent-2020-3/day16.jd.macro.jpg)
 
-In this case, each iteration picks out `ColumnName`s that only occur once in the list. The `Column` associated with this is then returned with the name and all other rows with the same `Column` value are removed and the iteration repeats. This is pretty similar to previous macros. Having solved this the answer to the puzzle is easily obtained with a join and summarise.
+In this case, each iteration picks out `ColumnName`s that only occur once in the list. The `Column` associated with this is then returned with the name, and all other rows with the same `Column` value are removed, and the iteration repeats. This is pretty similar to previous macros. Having solved this, the answer to the puzzle is easily obtained with a join and summarise.
 
 Good to be back to pure BaseA!
 
@@ -194,7 +194,7 @@ The main issue I had with day 17 was understanding the example! I must have read
 
 Much like [day 11](https://jdunkerley.co.uk/2020/12/13/alteryxing-the-advent-of-code-2020-week-2/), the first task is to parse the input into the set of active cubes each with a `x`, `y`, `z` and `w` co-ordinate. This is then the input into the macro. The macro performs one iteration following the rules of the puzzle.
 
-Within the macro, I chose to work out the minimum and maximums for each dimension and then created a 4-dimensional grid one larger in each dimension. For every cell, I also create the shift up and down by 1 in dimension (for part 1, I disable the `w` shifts). Having created this grid with the shift it is then a case of joining into the active cube set and it becomes a straight forward summation and formula to compute the new set of active cells. The answer for the puzzle is just given by the number of rows in after the final macro.
+Within the macro, I chose to work out the minimum and maximums for each dimension and then created a 4-dimensional grid one larger in each dimension. For every cell, I also create the shift up and down by 1 in dimension (for part 1, I disable the `w` shifts). Having created this grid with the shift it is then a case of joining into the active cube set, and it becomes a straight forward summation and formula to compute the new set of active cells. The answer for the puzzle is just given by the number of rows in after the final macro.
 
 My macro also produced a diagnostic output reproducing the string input in the puzzle. This allowed me to work out what was going on with the example and ensure I produced the same results.
 
@@ -214,13 +214,13 @@ I: iif(Contains([Field1],"("),
   0)
 ```
 
-This will look for the innermost paired brackets and counts the characters up to this point otherwise it leaves the index at 0. After this it picks out the block to evaluate using:
+This will look for the innermost paired brackets and counts the characters up to this point; otherwise, it leaves the index at 0. After this, it picks out the block to evaluate using:
 
 ```
 ToEval: REGEX_Replace([Field1], ".{" + ToString(I) + "}(\([^)]+\)|[^(]+).*", "$1")
 ```
 
-This will either be the entire expression of the inner most bracket. Within this bracket, it then either picks the first 2 values and the operator or if in addition first move (denoted by `#1` being true), it hunts for the first `+`:
+This will either be the entire expression of the inner most bracket. Within this bracket, it then either picks the first 2 values and the operator or if in addition first mode (denoted by `#1` being true), it hunts for the first `+`:
 
 ```
 Ex: REGEX_Replace(Substring([ToEval],Index), "(\(?\d+ [[*+] \d+\)?).*","$1")
@@ -237,7 +237,7 @@ ToString(iif(Contains(Ex, "*"),
 + iif(right(Ex,1)=")" and left(Ex,1)!="(",")","")
 ```
 
-After this it is just a case of substituting back into the outer expression. If the expression still has any operators in it then the iteration runs again. To answer the puzzle all is left to do is cast to an integer and sum the result.
+After this, it is just a case of substituting back into the outer expression. If the expression still has any operators in it, then the iteration runs again. To answer the puzzle, all is left to do is cast to an integer and sum the result.
 
 ## [Day 19 - Monster Messages](https://adventofcode.com/2020/day/19)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-19/m-p/682736)
@@ -255,11 +255,11 @@ Once more diving into regular expressions. This time the input defines an expres
 5: "b"
 ```
 
-The macro I build removes the " from 4 and 5 and adds a lot of brackets so that 3 gets evaluated to: `((ab)|(ba))`. Clearly this could be simplified to `(ab|ba)` but as it was working I left it as it was. The full expression ends up with a lot of brackets! Having built the expression for 0, part 1 is given just by using a `REGEX_Match` filter.
+The macro I build removes the " from 4 and 5 and adds a lot of brackets so that 3 gets evaluated to: `((ab)|(ba))`. Clearly, this could be simplified to `(ab|ba)`, but as it was working, I left it as it was. The full expression ends up with a lot of brackets! Having built the expression for 0, part 1 is given just by using a `REGEX_Match` filter.
 
-Part 2 involved a little more thought. Having looked through the expression for 0, you can evaluate it by removing pairs of blocks - matching expression 42 at the start and expression 31 at the end, and if you end up with something which matches repeated expression 42 then it is valid. I chose to do this with a generate rows tool removing the paired blocks, one pair for each generated rows. Then finally it looks to see if it matches repeat blocks of expression 42 using a filter tool.
+Part 2 involved a little more thought. Having looked through the expression for 0, you can evaluate it by removing pairs of blocks - matching expression 42 at the start and expression 31 at the end. If you end up with something which matches repeated expression 42, then it is valid. I chose to do this with a generate rows tool removing the paired blocks, one pair for each generated rows. Then finally it looks to see if it matches repeat blocks of expression 42 using a filter tool.
 
-All of the solutions posted to the community end up looking very similar though with slightly different approaches to solving part 2. A shout out to [stephM](https://community.alteryx.com/t5/user/viewprofilepage/user-id/72436) for coming up with a solution which [doesn't involve an iterative macro](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-19/m-p/682808/highlight/true#M3539).
+All of the solutions posted to the community end up looking very similar, though with slightly different approaches to solving part 2. A shout out to [stephM](https://community.alteryx.com/t5/user/viewprofilepage/user-id/72436) for coming up with a solution which [doesn't involve an iterative macro](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-19/m-p/682808/highlight/true#M3539).
 
 ## Wrapping Up
 
@@ -267,7 +267,7 @@ So many iterative macros! However, I am really pleased to have passed my total s
 
 ![Leaderboard as of 19/12/2020](assets/advent-2020-3/leaderboard.jpg)
 
-Still a fair number of people trying to solve these each day, and over 40 people have solved one or more! A few more git repositories added this week:
+There are still a fair number of people trying to solve these each day, and over 40 people have solved one or more! A few more git repositories added this week:
 
 - Mine: https://github.com/jdunkerley/adventofcode/
 - NicoleJohnson: https://github.com/AlteryxNJ/AdventOfCode_2020
@@ -279,4 +279,4 @@ Still a fair number of people trying to solve these each day, and over 40 people
 - AkimasaKajitani: https://github.com/AkimasaKajitani/AdventOfCode
 - dsmdavid: https://github.com/dsmdavid/AdventCode2020
 
-Onto the final six days. Hopefully, someone can get the first 50 stars using Alteryx (with as much as possible in BaseA) this year - though as always its a busy time of the year and the puzzles are getting harder!
+Onto the final six days. Hopefully, someone can get the first 50 stars using Alteryx (with as much as possible in BaseA) this year - though as always it's a busy time of the year and the puzzles are getting harder!
