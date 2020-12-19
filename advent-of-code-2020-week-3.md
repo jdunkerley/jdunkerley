@@ -152,15 +152,15 @@ I do not believe it is possible to do part 2 within BaseA rules in anything rese
 ![My solution day 16](assets/advent-2020-3/day16.jd.jpg)
 *Tools used: 30, run-time: 0.7s*
 
-The first task was to parse the input. This input contains a set of rules, each looking like `seat: 2-3 or 7-9`, and a set of tickets each being a comma separated list. Using a Regex tool and Text to columns I ended up with:
+The first task was to parse the input. This input contains a set of rules, each looking like `seat: 2-3 or 7-9`, and a set of tickets each being a comma-separated list. Using a Regex tool and Text to columns I ended up with:
 
 ![Parsed rules](assets/advent-2020-3/day16.parsedrules.jpg)
 
 ![Parsed tickets](assets/advent-2020-3/day16.parsedtickets.jpg)
- 
-Having parsed the input, the next task is to filter the tickets fields to see which rules are valid for which fields. I choose to use an append fields to add every possible rule to every ticket and column. You can then join this to the set of ticket to produce the tickets where no field passed any rule (the unique tool in my workflow is not needed - bad tool golf!).
 
-For part 2, you need to work out which rule applies to which column. I chose to use an iterative macro to solve this. Firstly, I filtered out the invalid tickets (using a join tool). After this I filter down to the valid Tickets, Columns and Rules. For each rule, I count the number of valid tickets and compare this with the distinct count of valid tickets. This gives the set of valid rules for each column:
+Having parsed the input, the next task is to filter the tickets fields to see which rules are valid for which fields. I choose to use an append fields tool to add every possible rule to every ticket and column. You can then join this to the set of tickets to produce the tickets where no field passed any rule (the unique tool in my workflow is not needed - bad tool golf!).
+
+For part 2, you need to work out which rule applies to which column. I chose to use an iterative macro to solve this. Firstly, I filtered out the invalid tickets (using a join tool). After this, I filter down to the valid Tickets, Columns and Rules. For each rule, I count the number of valid tickets and compare this with the distinct count of valid tickets. This gives the set of valid rules for each column:
 
 ![Valid tickets](assets/advent-2020-3/day16.validrules.jpg)
 
@@ -176,9 +176,9 @@ Good to be back to pure BaseA!
 
 ![Danilang's solution to build the hierarchy](assets/advent-2020-3/day16.dl.jpg)
 
-Most solutions for part 1 were pretty similar. So I chose to focus on [Danilang](https://community.alteryx.com/t5/user/viewprofilepage/user-id/34059)'s macro free solution to build the column assignments. As with my macro approach, first, the results are filtered down to just the possible ones. Next, for each rule a count of the possible matching columns is added (using the summary and join).
+Most solutions for part 1 were pretty similar. So I chose to focus on [Danilang](https://community.alteryx.com/t5/user/viewprofilepage/user-id/34059)'s macro-free solution to build the column assignments. As with my macro approach, first, the results are filtered down to just the possible ones. Next, for each rule, a count of the possible matching columns is added (using the summary and join).
 
-For each row a concatenated string of the possible columns number is created and assigned to a value of the number of possible fields plus 1. By joining this to the rule set, it is possible work out which column has not been used and produce the required column mapping. 
+For each row, a concatenated string of all the possible column numbers is created and assigned to a value of the number of possible fields plus 1. By joining this to the ruleset, it is possible to work out which column has not been used and produce the required column mapping.
 
 ## [Day 17 - Conway Cubes](https://adventofcode.com/2020/day/17)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-17/m-p/681643)
