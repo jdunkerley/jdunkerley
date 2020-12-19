@@ -89,11 +89,11 @@ For simplicity of diagnosing problems, I chose to use the `IntToBin` function to
 ![My solution day 15](assets/advent-2020-3/day15.jd.jpg)
 *Tools used: 13, run-time: 3m49s*
 
-This puzzle reminded me of [day 9 from 2018](https://adventofcode.com/2018/day/9). You need to hold a lot of state and keep iterating. For part 1, at each step you add a new number to the list. I chose to do this by keeping the current list as a string:
+This puzzle reminded me of [day 9 from 2018](https://adventofcode.com/2018/day/9). You need to hold a lot of state information and keep iterating. For part 1, at each step, you add a new number to the list. I chose to do this by keeping the current list as a string:
 
 ![My solution day 15](assets/advent-2020-3/day15.state.jpg)
 
-A generate rows tool is used to create 2020 rows and then the state is generated using a multi-row formula with expression:
+A generate rows tool is used to create 2020 rows and then the state is generated using a multi-row formula with the expression:
 
 ```
 [Row-1:State] + " " +
@@ -198,15 +198,72 @@ Within the macro, I chose to work out the minimum and maximums for each dimensio
 
 My macro also produced a diagnostic output reproducing the string input in puzzle. This allowed me to work out what was going on with the example and ensure I produced the same results.
 
-### 
-
 ## [Day 18 - Operation Order](https://adventofcode.com/2020/day/18)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-18/m-p/682294)
+
+![My solution day 18](assets/advent-2020-3/day18.jd.jpg)
+
+![Inner macro](assets/advent-2020-3/day18.macro.jpg)
+*Tools used: 8, run-time: 0.6s*
+
+This puzzles involves implementing a custom order of execution. I chose to do this using an iterative macro evaluating one operation at a time. The macro was adapted to cope with the addition ahead of multiplication so solves both parts 1 and 2. The first question is whether the expression contains any brackets and if it does it zooms in onto that part:
+
+```
+I: iif(Contains([Field1],"("),
+  Length(REGEX_Replace([Field1], "(.*?)(\([0-9 *+]+\)).*", "$1")),
+  0)
+```
+
+This will look for the inter most paired brackets and counts the characters up to this point otherwise it leaves the index at 0. After this it picks out the block to evaluate using:
+
+```
+ToEval: REGEX_Replace([Field1], ".{" + ToString(I) + "}(\([^)]+\)|[^(]+).*", "$1")
+```
+
+This will either be the entire expression of the inner most bracket. Within this bracket it then either picks the first 2 values and the operator or if in addition first move (denoted by `#1` being true), it hunts for the first plus:
+
+```
+Ex: REGEX_Replace(Substring([ToEval],Index), "(\(?\d+ [[*+] \d+\)?).*","$1")
+```
+
+`Ex` includes leading and trailing brackets allowing for these to be preserved during the evaluation:
+
+```
+Eval: 
+iif(right(Ex,1)!=")" and left(Ex,1)="(", "(", "") +
+ToString(iif(Contains(Ex, "*"),
+  ToNumber(GetWord(Trim(Ex,"()"),0)) * ToNumber(GetWord(Trim(Ex,"()"),2)),  
+  ToNumber(GetWord(Trim(Ex,"()"),0)) + ToNumber(GetWord(Trim(Ex,"()"),2))))
++ iif(right(Ex,1)=")" and left(Ex,1)!="(",")","")
+```
+
+After this it is just a case of substituting back into the outer expression. If the expression still has any operators in it then the iteration runs again. To answer the puzzle all is left to do is cast to an integer and sum the result.
 
 ## [Day 19 - Monster Messages](https://adventofcode.com/2020/day/19)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-19/m-p/682736)
+
+![My solution day 19](assets/advent-2020-3/day19.jd.jpg)
+
+![Inner macro](assets/advent-2020-3/day19.macro.jpg)
+*Tools used: 20, run-time: 0.5s*
+
+Once more diving into regular expressions. This time the input defines an expression tree which can be built into a regular expression. This becomes yet another hierarchy walking iterative macro with it substituting the leaves into the parent building a very long (and hard to read!) regular expression. I use far too many brackets in my building up. So consider the input:
+
+```
+3: 4 5 | 5 4
+4: "a"
+5: "b"
+```
+
+The macro I build removes the " from 4 and 5 and adds a lot of brackets so that 3 gets evaluated to: `((ab)|(ba))`. Clearly this could be simplified to `(ab|ba)` but as it was working I left it as it was. The full expression ends up with a lot of brackets! Having built the expression for 0, part 1 is given just by using a `REGEX_Match` filter.
+
+Part 2 involved a little more thought. Having looked through the expression for 0, you can evaluate it by removing pairs of blocks - matching expression 42 at the start and expression 31 at the end, and if you end up with something which matches repeated expression 42 then it is valid. I chose to do this with a generate rows tool removing the paired blocks, one pair for each generated rows. Then finally it looks to see if it matches repeat blocks of expression 42 using a filter tool.
+
+All of the solutions posted to the community end up looking very similar though with slightly different approaches to solving part 2. A shout out to [stephM](https://community.alteryx.com/t5/user/viewprofilepage/user-id/72436) for coming up with a solution which [doesn't involve an iterative macro](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-19/m-p/682808/highlight/true#M3539).
 
 ## Wrapping Up
 
-I am really pleased to have passed my total stars from 2018 this week (33 stars in that year). I did have to solve 2 using Abacus functions, but still great to see how far we have got using Alteryx.
+So many iterative macros! However, I am really pleased to have passed my total stars from 2018 this week (33 stars in that year). I did have to solve 2 using Abacus functions, but still great to see how far we have got using Alteryx.
 
 ![Leaderboard as of 19/12/2020](assets/advent-2020-3/leaderboard.jpg)
 
