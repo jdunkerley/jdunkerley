@@ -194,9 +194,9 @@ The main issue I had with day 17 was understanding the example! I must have read
 
 Much like [day 11](https://jdunkerley.co.uk/2020/12/13/alteryxing-the-advent-of-code-2020-week-2/), the first task is to parse the input into the set of active cubes each with a `x`, `y`, `z` and `w` co-ordinate. This is then the input into the macro. The macro performs one iteration following the rules of the puzzle.
 
-Within the macro, I chose to work out the minimum and maximums for each dimension and then created a 4 dimensional grid one larger in each dimension. For every cell, I also create the shift up and down by 1 in dimension (for part 1, I disable the `w` shifts). Having created this grid with the shift it is then a case of joining into the active cube set and it becomes a straight forward summation and formula to compute the new set of active cells. The answer for the puzzle is just given by the number of rows in after the final macro.
+Within the macro, I chose to work out the minimum and maximums for each dimension and then created a 4-dimensional grid one larger in each dimension. For every cell, I also create the shift up and down by 1 in dimension (for part 1, I disable the `w` shifts). Having created this grid with the shift it is then a case of joining into the active cube set and it becomes a straight forward summation and formula to compute the new set of active cells. The answer for the puzzle is just given by the number of rows in after the final macro.
 
-My macro also produced a diagnostic output reproducing the string input in puzzle. This allowed me to work out what was going on with the example and ensure I produced the same results.
+My macro also produced a diagnostic output reproducing the string input in the puzzle. This allowed me to work out what was going on with the example and ensure I produced the same results.
 
 ## [Day 18 - Operation Order](https://adventofcode.com/2020/day/18)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-18/m-p/682294)
@@ -206,7 +206,7 @@ My macro also produced a diagnostic output reproducing the string input in puzzl
 ![Inner macro](assets/advent-2020-3/day18.macro.jpg)
 *Tools used: 8, run-time: 0.6s*
 
-This puzzles involves implementing a custom order of execution. I chose to do this using an iterative macro evaluating one operation at a time. The macro was adapted to cope with the addition ahead of multiplication so solves both parts 1 and 2. The first question is whether the expression contains any brackets and if it does it zooms in onto that part:
+This puzzle involves implementing a custom order of execution. I chose to do this using an iterative macro evaluating one operation at a time. The macro was adapted to cope with addition being evaluated ahead of multiplication, so it solves both parts 1 and 2. The first question is whether the expression contains any brackets and if it does it zooms in onto that part:
 
 ```
 I: iif(Contains([Field1],"("),
@@ -214,13 +214,13 @@ I: iif(Contains([Field1],"("),
   0)
 ```
 
-This will look for the inter most paired brackets and counts the characters up to this point otherwise it leaves the index at 0. After this it picks out the block to evaluate using:
+This will look for the innermost paired brackets and counts the characters up to this point otherwise it leaves the index at 0. After this it picks out the block to evaluate using:
 
 ```
 ToEval: REGEX_Replace([Field1], ".{" + ToString(I) + "}(\([^)]+\)|[^(]+).*", "$1")
 ```
 
-This will either be the entire expression of the inner most bracket. Within this bracket it then either picks the first 2 values and the operator or if in addition first move (denoted by `#1` being true), it hunts for the first plus:
+This will either be the entire expression of the inner most bracket. Within this bracket, it then either picks the first 2 values and the operator or if in addition first move (denoted by `#1` being true), it hunts for the first `+`:
 
 ```
 Ex: REGEX_Replace(Substring([ToEval],Index), "(\(?\d+ [[*+] \d+\)?).*","$1")
