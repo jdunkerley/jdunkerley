@@ -2,9 +2,9 @@
 
 ![Week 3 Graphic](assets/advent-2020-3/logo.jpg)
 
-So [week 2](https://jdunkerley.co.uk/2020/12/05/alteryxing-the-advent-of-code-2020-week-1/) and [week 2](https://jdunkerley.co.uk/2020/12/13/alteryxing-the-advent-of-code-2020-week-2/) were both possible in BaseA Alteryx, although getting harder as the puzzles progress. Week 3 was the first time I needed to go beyond BaseA to find a solution for a couple of the parts (though in at least one case the community found a BaseA solution).
+So [week 1](https://jdunkerley.co.uk/2020/12/05/alteryxing-the-advent-of-code-2020-week-1/) and [week 2](https://jdunkerley.co.uk/2020/12/13/alteryxing-the-advent-of-code-2020-week-2/) were both possible in BaseA Alteryx, although getting harder as the puzzles progress. Week 3 was the first time I needed to go beyond BaseA to find a solution for a couple of the parts (though in at least one case the community found a BaseA solution).
 
-As with a couple of years ago, doing the Advent of Code, inspired me to do more work on the [Abacus](https://github.com/jdunkerley/AlteryxFormulaAddOns) library. This time I added four functions allowing for 64-bit integer based arithmetic. The numbers need to be passed as strings and are returned as strings. The new functions are:
+As with a couple of years ago, doing the Advent of Code, inspired me to do more work on the [Abacus](https://github.com/jdunkerley/AlteryxFormulaAddOns) library. This time I added four functions allowing for 64-bit integer-based arithmetic. The numbers need to be passed as strings and are returned as strings. The new functions are:
 
 - `Int64Add(a,b,c...)` - sums all the inputs
 - `Int64Mult(a,b,c...)` - products all the inputs
@@ -31,13 +31,11 @@ I took a look at the python code from [Rosetta Code](https://rosettacode.org/wik
 
 ![Day 13 error](assets/advent-2020-3/day13.error.jpg)
 
-The problem is Alteryx formulas are always evaluted as doubles. This is only a problem in step 4, where the values get very high. One feature I didn't know is that the summarise tool will accurately sum fixed decimal types (thanks to Ned for this hint). This allows we to complete step 4 but still leaves me stuck on step 5. This is where I went to the Abacus library and implemented the needed 64-bit integer functions. Having done this a formula of `Int64Mod([Sum_v], [Product])` having converted the values to strings computes the correct answer.
+The problem is Alteryx formulas are always evaluated as doubles. This is only a problem in step 4, where the values get very high. One feature I didn't know is that the summarise tool will accurately sum fixed decimal types (thanks to Ned for this hint). This allows me to complete step 4 but still leaves me stuck on step 5. This is where I went to the Abacus library and implemented the needed 64-bit integer functions. Having done this a formula of `Int64Mod([Sum_v], [Product])` taking the values converted into strings, computes the correct answer to the puzzle.
 
 ### Other Workarounds in BaseA
 
-[CGoodman3](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-13/m-p/679966/highlight/true#M3456) implemented an additional generate rows to try 300 values around the result produced by Alteryx and see if it solves the equations.
-
-[Ned Harding](https://github.com/NedHarding/Advent2020/blob/main/BigMult.yxmc) produced a macro which will handle big integer multiplication in BaseA. A useful tool if you need to deal with these huge numbers.
+[CGoodman3](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-13/m-p/679966/highlight/true#M3456) implemented an additional generate rows to try 300 values around the result produced by Alteryx and see if it solves the equations. [Ned Harding](https://github.com/NedHarding/Advent2020/blob/main/BigMult.yxmc) produced a macro which will handle big integer multiplication in BaseA. A useful tool if you need to deal with these huge numbers.
 
 ### Iterative Macro - Solving One Equation at a Time
 
@@ -72,7 +70,7 @@ A great solution - and BaseA without issue.
 ![My solution day 14](assets/advent-2020-3/day14.jd.jpg)
 *Tools used: 16, run-time: 4.6s*
 
-Back into a comfortable for Alteryx. This problem involved some binary masking operations. For part 1, you needed to ignore the `X`s and to set the bits of the value to `0` when the mask was `0` and `1` when the mask was `1`. A couple of expressions easily achieved this:
+Back into a comfortable puzzle for Alteryx. This problem involved some binary masking operations. For part 1, you needed to ignore the `X`s and to set the bits of the value to `0` when the mask was `0` and `1` when the mask was `1`. A couple of expressions easily achieved this:
 
 ```
 BinaryOr([Computed], BinToInt(ReplaceChar([Mask], "X", "0")))  # Set the 1 mask bits
@@ -81,9 +79,9 @@ BinaryAnd([Computed],BinToInt(ReplaceChar([Mask], "X", "1")))  # Set the 0 mask 
 
 After this, its just a case of using a summarise tool to pick the final value (this could also have been done with a sample tool), and then a final summarise to total all the values.
 
-For part 2, the meaning of the mask was changed. In this case, it is applied to the address rather than the value. Additionally the `0`s are ignored. The `1`s are set on the address. The `X`s become wildcards mean both `0` and `1` and both should be evaluated. 
+For part 2, the meaning of the mask was changed. In this case, it is applied to the address rather than the value. Additionally, the `0`s are ignored. The `1`s are set on the address. The `X`s become wildcards meaning that treating both as `0` and `1` and both should be evaluated. 
 
-For simplicity of diagnosing problems, I chose to use the `IntToBin` function to write the address as a 36 character binary string and applied the `1`s. Then using some generate rows I created a row for every permutation and then using regular expressions created the new address values. Finally, after this the same double summarise tools produced the answer.
+For simplicity of diagnosing problems, I chose to use the `IntToBin` function to write the address as a 36 character binary string and applied the `1`s. Then using some generate rows I created a row for every permutation and then using regular expressions created the new address values. Finally, after this, the same double summarise tools produced the answer.
 
 ## [Day 15 - Rambunctious Recitation](https://adventofcode.com/2020/day/15)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-15/td-p/680525)
