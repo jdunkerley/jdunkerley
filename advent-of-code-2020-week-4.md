@@ -154,8 +154,71 @@ The final piece of the complicated formula is working out how to resolve a game 
 Putting it altogether gives a very long expression but one which will run the whole recursive game in an iterative way! I added a small additional step which meant an extra formula tool wasn't needed. The long strings and hence slow manipulation makes this a long process to complete but it does work in BaseA!
 
 ## [Day 23 - Crab Cups](https://adventofcode.com/2020/day/23)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-23/m-p/684349)
 
+![My solution](assets/advent-2020-4/day23.jd.jpg)
 
+![My iterative macro](assets/advent-2020-4/day22.macro.jpg)
+*Tools used: 16 (including the Python tool and iterative macro), run-time: 1min*
+
+Part 1 of this puzzles was a straight forward iterative macro. Carrying a current value and the order of the 9 number ring, each iteration finds the new value and mutates the ring state. Running this 100 times produces the required answer.
+
+For part 2, instead of a ring of 9 you need a ring of 1,000,000 numbers and to iterate it 10,000,000 times. This is impossible within BaseA rules as far as I know. I tried adding a `VarListIndexOf` function to the Abacus library which would allow the iteration to be run within a generate rows but so far I haven't managed to make it a reasonable solution.
+
+I chose to solve this using the Python tool, but minimising its use to just the permutation step. First I generate the 1,000,000 rows in Alteryx and then use python to compute the iteration. The python tool allowed me to create a linked list with a dictionary giving a pointer by value to the entry in the linked list. This meant that the operation was O(n) so performant enough. The code is below:
+
+```python
+from ayx import Alteryx
+import pandas as pd 
+df = Alteryx.read("#1")
+vals = list(df['V'])
+l = len(vals)
+
+class Cup:
+    def __init__(self, v: int):
+        self.v = v
+        self.next = None
+    
+    def __repr__(self):
+        return f'C({self.v}:{self.next.v})'
+
+d = {}
+for i, v in enumerate(vals):
+    c = Cup(v)
+    if i > 0:
+        d[vals[i - 1]].next = c
+        
+    d[v] = c
+d[vals[-1]].next = d[vals[0]]
+
+current = d[vals[0]]
+
+for i in range(df['games'][0]):
+    c_next = current.next
+    current.next = current.next.next.next.next
+    pickup = [c_next.v, c_next.next.v, c_next.next.next.v]
+
+    i = 1
+    while (current.v - i if current.v - i > 0 else current.v - i + l) in pickup:
+        i += 1
+    i = (current.v - i if current.v - i > 0 else current.v - i + l)
+    t_next = d[i].next
+    d[i].next = c_next
+    c_next.next.next.next = t_next
+    
+    current = current.next
+
+current = d[1]
+output = []
+while (current.next.v != 1):
+    output.append(current.v)
+    current = current.next
+
+df = pd.DataFrame(output)
+Alteryx.write(df,1)
+```
+
+If I can find a way to make it work using the Abacus function, I will publish it. Possibly with some optimisation, it will be fast enough to find a solution in a reasonable time.
 
 ## Day 24
 
