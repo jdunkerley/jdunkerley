@@ -2,9 +2,15 @@
 
 ![Week 4 Graphic](assets/advent-2020-4/logo.jpg)
 
-It's the end of the Advent of Code for 2020. The last week was tough - the part 1s were fairly easily doable but part 2s often were a lot harder. In the end I managed to solve all of this weeks but 1 in BaseA Alteryx. For the one I couldn't, I used BaseA Alteryx as much as possible and the Python tool for one step.
+It's the end of the Advent of Code for 2020. The last week was tough - the part 1s were fairly easily doable but part 2s often were a lot harder. In the end, I managed to solve all of this weeks but 1 in BaseA Alteryx. For the one I couldn't, I used BaseA Alteryx as much as possible and the Python tool for one step.
 
 As Christmas approaches we all get busier so there are less of us still going strong. I will still pick the odd alternative solution where I found ones that are sufficiently different from my own and interesting. **A word of warning**, some of my approaches to solve within BaseA rules are complicated and not for the faint of heart!
+
+My previous summaries can be found:
+
+- [Week 1](https://jdunkerley.co.uk/2020/12/05/alteryxing-the-advent-of-code-2020-week-1/)
+- [Week 2](https://jdunkerley.co.uk/2020/12/13/alteryxing-the-advent-of-code-2020-week-2/)
+- [Week 3](https://jdunkerley.co.uk/2020/12/20/alteryxing-the-advent-of-code-2020-week-3/)
 
 Anyway onto the final 6 challenges.
 
@@ -40,7 +46,7 @@ For part 2, the first problem was putting the picture together. I chose to first
 |RL|RT|RL (Left)|RT (Top)|
 |RB|RL|RB (Bottom)|RL (Left)|
 
-I then produced a map of the joins as a single string. I did some pre-computation on this. If two tiles were both aligned the original way up then the `RR` on the first tile would join to a `FL` on the second tile, hence I need to flip `R` and `F`. The map was such that the second tile's entry would be the opposite to the join. In this example if tile 1234 was up the original way next to 4321 the entry would be `1234RR ==> 4321RR`. I encoded all of this into a long string that looked lie:
+I then produced a map of the joins as a single string. I did some pre-computation on this. If two tiles were both aligned the original way up then the `RR` on the first tile would join to a `FL` on the second tile, hence I need to flip `R` and `F`. The map was such that the second tile's entry would be the opposite side of where the join was. In this example, if tile 1234 was up the original way next to 4321 the entry would be `1234RR ==> 4321RR`. I encoded all of this into a long string that looked like:
 
 ```
 1907FB:2111FR 1907RB:2111RR 2017FL:3343FR 2017RL:3343RR 2477FR:3613FB 2477RR:3613RB 3671FR:2411RL ...
@@ -50,11 +56,11 @@ After this, using a generate rows tool, I walked right from the starting corner 
 
 ![Tile layout](assets/advent-2020-4/day20.layout.jpg)
 
-I won't go over all the remaining step in full detail as this post would be enormous but will summarise instead. First, for every tile, I produced 8 copies in each of the possible rotations and reflections. This could then be joined to the layout to produce the full picture I needed.
+I won't go over all the remaining step in full detail as this post would be enormous but will give the rough steps instead. First, for every tile, I produced 8 copies in each of the possible rotations and reflections. This could then be joined to the layout to produce the full picture I needed, with some concatenations producing the full lines.
 
-Within the full picture you needed to hunt for sea monsters. I chose to search using a regular expression for the middle line of the sea monster. Again the picture could be in one of 8 orientations however you only needed to check the four rotations to find out which rotation was correct. Having done that a multi-row formula allowed me to check if the previous and following rows matched for the found monster.
+Within the full picture you needed to hunt for sea monsters. I chose to search using a regular expression for the middle line (replacing spaces with `.` was all that was needed) of the sea monster. Again the picture could be in one of 8 orientations, however, you only needed to check the four rotations to find out which orientation was correct (as the monster would just be upside down). Having done that a multi-row formula allowed me to check if the previous and following rows matched for the found monster.
 
-The second stage of this problem was fiddly to say the least, but fun thinking it through and though the workflow is massive actually quite a clean solution when complete.
+The second stage of this problem was fiddly to say the least (and took a fair amount if debugging), but fun thinking it through and though the workflow is massive, it is a fairly clean solution when complete.
 
 ## [Day 21 - Allergen Assessment](https://adventofcode.com/2020/day/21)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-21/m-p/683023)
@@ -70,7 +76,7 @@ For part 2, it was again the case of walking a hierarchy. This should probably h
 
 ![Danilang's solution](assets/advent-2020-4/day21.dl.jpg)
 
-I think my approach over complicated the first part somewhat. The much more sensible approach to solving part one was produced by [Danilang](https://community.alteryx.com/t5/user/viewprofilepage/user-id/34059). This involved just looking at the counts of allergens versus the ingredient/allergen count. It made the joins a lot cleaner to see what is going on (as opposed to making a dynamic regular expression as I did!).
+I think my approach over complicated the first part somewhat. A much more sensible approach to solving part one was produced by [Danilang](https://community.alteryx.com/t5/user/viewprofilepage/user-id/34059). This involved just looking at the counts of allergens versus the ingredient/allergen count. It made the joins a lot cleaner to see what is going on (as opposed to making a dynamic regular expression as I did!).
 
 Danilang also chose to use an iterative macro to fill all the possible rows. The iteration is as described above but involved less copy and pasting!
 
@@ -82,7 +88,7 @@ Danilang also chose to use an iterative macro to fill all the possible rows. The
 
 This puzzle was basically a simplified version of Top Trumps. My two children would have been pleased. Part 1 was just an iteration and could be solved with an iterative macro - however the solution I present was built to allow me to solve part 2 (albeit very slowly!!!).
 
-My input had a range of 1 to 50. I chose to encode these as characters so they would be 1 character each. To make debugging easier I chose it so that 1 mapped to character 1, 2 to 2, 3 to 3 up to 9 and then following with the next ASCII character (e.g. 10 to :). A formula of `CharFromInt(48+ToNumber([Field1]))` does this. I then joined the characters for each player into a string separated by a string. The example ends up as `92631 5847:`.  Then using a generate rows tool, I can iterate comparing the first letter of each word and moving round until only one word remains.
+My input had a range of 1 to 50. I chose to encode these as ASCII characters so they would be 1 character each regardless of value. To make debugging easier, I chose it so that 1 mapped to character 1, 2 to 2, 3 to 3 up to 9 and then following with the next ASCII character (e.g. 10 to :). A formula of `CharFromInt(48+ToNumber([Field1]))` does this. I then joined the characters for each player into a string separated by a space. The example ends up as `92631 5847:`.  Then using a generate rows tool, I can iterate comparing the first letter of each word and moving round until only one word remains.
 
 ```
 iif(CharToInt(GetWord(C,0))>CharToInt(GetWord(C,1)), // Player 1 wins
@@ -111,7 +117,7 @@ In this case we need to keep a record of where we have been and also deal with r
     + Regex_Replace(C,"^[^ ]+ [^ ]+ ?", " ")
 ```
 
-This handles playing the turn and adding a new word representing the current state as `<Player1>#<Player2>` (`#` is safe to use as it's ASCII code is less than 47). You can then look for this string in existing string to see if you have already played this.
+This handles playing the turn and adding a new word representing the current state as `<Player1>#<Player2>` (`#` is safe to use as it's ASCII code is less than 47). You can then look for this string in the current state string to see if you have already played this.
 
 ```
 ELSEIF Contains(REGEX_Replace(C, " ! .*$", ""),GetWord(C,0) + "#" + GetWord(C,1)) THEN
@@ -128,7 +134,7 @@ This gives a sequence like:
 19564 :8273 319564#7:82 63195#47:82 263195#847: 92631#5847:
 ```
 
-The next problem is how to deal with a recursive step being needed. The start of a subgame can be easily detected by looking at the lengtb of the first word versus it's ASCII code:
+The next problem is how to deal with a recursive step being needed. The start of a sub-game can be easily detected by looking at the lengths of the first two words versus their first character's ASCII code:
 
 ```
 ELSEIF CharToInt(GetWord(C,0)) - 48 < Length(GetWord(C,0)) and CharToInt(GetWord(C,1))-48 < Length(GetWord(C,1)) THEN
@@ -136,7 +142,7 @@ ELSEIF CharToInt(GetWord(C,0)) - 48 < Length(GetWord(C,0)) and CharToInt(GetWord
     Substring(GetWord(C,0),1,CharToInt(GetWord(C,0)) - 48) + " " + Substring(GetWord(C,1),1,CharToInt(GetWord(C,1))-48) + " ! "+ C
 ```
 
-That happens here is that 2 new words representing the starting positions of the sub-game are added followed by a `!` to represent the end of the sub-game. This sub-game can then be played until a winner is found.
+When the condition is true, the process needs to recurse; 2 new words representing the starting positions of the sub-game are added at the start of the string, followed by a `!` to represent the end of the sub-game. This sub-game can then be played until a winner is found of it (or a new sub-game is needed).
 
 The final piece of the complicated formula is working out how to resolve a game or sub-game when a player wins. In this case, either it ends with a single word (as per part 1) or adjusting the parent game's state. The expression below represents player 1 winning:
 
@@ -151,7 +157,9 @@ The final piece of the complicated formula is working out how to resolve a game 
         Substring(GetWord(C,0),1) + Left(GetWord(C,0),1) + Left(GetWord(C,1),1))
 ```
 
-Putting it altogether gives a very long expression but one which will run the whole recursive game in an iterative way! I added a small additional step which meant an extra formula tool wasn't needed. The long strings and hence slow manipulation makes this a long process to complete but it does work in BaseA!
+If the string doesn't contain a `!` then outer game has been completed and final single word is produced and the generate rows ends. Alternatively, everything is deleted up to and including the first `!`. Then the next two words are adjusted to account for the winner of the subgame and the state of the parent game is added to the existing string. The parent game then continues to be played.
+
+Putting it altogether gives a very long expression but one which will run the whole recursive game within a generate rows tool! I added a small additional step which meant an extra formula tool wasn't needed. The long strings and hence slow manipulation makes this a long process to complete but it does work in BaseA!
 
 ## [Day 23 - Crab Cups](https://adventofcode.com/2020/day/23)
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-23/m-p/684349)
@@ -163,9 +171,9 @@ Putting it altogether gives a very long expression but one which will run the wh
 
 Part 1 of this puzzles was a straight forward iterative macro. Carrying a current value and the order of the 9 number ring, each iteration finds the new value and mutates the ring state. Running this 100 times produces the required answer.
 
-For part 2, instead of a ring of 9 you need a ring of 1,000,000 numbers and to iterate it 10,000,000 times. This is impossible within BaseA rules as far as I know. I tried adding a `VarListIndexOf` function to the Abacus library which would allow the iteration to be run within a generate rows but so far I haven't managed to make it a reasonable solution.
+For part 2, instead of a ring of 9 you need a ring of 1,000,000 numbers and to iterate it 10,000,000 times. This is impossible within BaseA rules as far as I know. I tried adding a `VarListIndexOf` function to the Abacus library which would allow the iteration to be run within a generate rows but so far I haven't managed to make it a reasonable solution (the look up is `O(n)` operation so the process is 1 with 13 zeros after it!).
 
-I chose to solve this using the Python tool, but minimising its use to just the permutation step. First I generate the 1,000,000 rows in Alteryx and then use python to compute the iteration. The python tool allowed me to create a linked list with a dictionary giving a pointer by value to the entry in the linked list. This meant that the operation was O(n) so performant enough. The code is below:
+I chose to solve this using the Python tool, but minimising its use to just the iteration step. First I generate the 1,000,000 rows in Alteryx and then use python to run the process. The python tool allowed me to create a linked list with a dictionary mapping value to the pointer of the entry in the linked list. This meant that the operation was O(n) so performant enough to run in reasonable time. The code is below:
 
 ```python
 from ayx import Alteryx
@@ -218,15 +226,30 @@ df = pd.DataFrame(output)
 Alteryx.write(df,1)
 ```
 
-If I can find a way to make it work using the Abacus function, I will publish it. Possibly with some optimisation, it will be fast enough to find a solution in a reasonable time.
+If I can find a way to make it work using the Abacus function, I will publish it. I'm not sure if it will be possible without speciailised functions which don't seem a valid solution.
 
-## Day 24
+## [Day 24 - Lobby Layout](https://adventofcode.com/2020/day/24)
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-24/m-p/684881)
+
+![My solution](assets/advent-2020-4/day24.jd.jpg)
+
+![My macro](assets/advent-2020-4/day24.macro.jpg)
+*Tools used: 24 (including iterative macro), run-time: 3.3s*
+
+The first challenge for today was to workout how to represent a hexgrid within Alteryx. I chose to think of it like:
+
+![My solution](assets/advent-2020-4/hexgrid.jpg)
+
+It's worth noting that this is not exact (the middle of the row above should actual be at 15 not at 10 but it was easier to think in steps of 10)! My solution to part one was to 
+
 
 ## Day 25
+- [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-25/m-p/685259)
 
+![My solution](assets/advent-2020-4/day25.jd.jpg)
 ## Wrapping Up
 
-There we have it. Advent of Code 2020 done. The table below shows my successes (* - BaseA, A - Abacus, P - Python tool):
+There we have it. Advent of Code 2020 done. The table below shows my successes (* - BaseA, **A** - Abacus, **P** - Python tool):
 
 |Day   |1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|
 |------|-|-|-|-|-|-|-|-|-| -| -| -| -| -| -| -| -| -| -| -| -| -| -| -| -|
