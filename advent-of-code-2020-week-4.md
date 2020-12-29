@@ -240,13 +240,20 @@ The first challenge for today was to workout how to represent a hexgrid within A
 
 ![My solution](assets/advent-2020-4/hexgrid.jpg)
 
-It's worth noting that this is not exact (the middle of the row above should actual be at 15 not at 10 but it was easier to think in steps of 10)! My solution to part one was to 
+It's worth noting that this is not correct. Assuming the x co-ordinates are correct then the centres are 10 apart. The side length of the hexagon is actually then `10/√3`, so the y co-ordinate should be about 8.66. For what was needed for this puzzle, it was simpler to treat it as 10.
 
+ My solution to part one was to first parse the input string into rows using a regular expression of `ne|nw|se|sw|e|w`. I then choose to use a couple of multi-row formula tools to compute the current `x` and `y` values for each row. Finally, a sample tool picked the final cell reached.
+
+ For part 2, I chose to build an iterative macro. I passed the set of filled hexagons as the input. For each of these cells, I moved east, west, northeast, northwest, southeast and southwest (by using an append fields tool and a couple of formulas) to get all the neighbours. Having got these 6 new co-ordinates, it is then a case of joining back to the set of filled hexagons. This allows you to produce both the filled cells flipping white and the white cells becoming filled (in both cases by summing and filtering). The resulting set of filled cells can then be looped round. Using a final filter tool on `Engine.IterationNumber` allows for the macro to terminate easily.
 
 ## Day 25
 - [Community Discussion](https://community.alteryx.com/t5/General-Discussions/Advent-of-Code-2020-BaseA-Style-Day-25/m-p/685259)
 
 ![My solution](assets/advent-2020-4/day25.jd.jpg)
+*Tools used: 8, run-time: 21.5s*
+
+And so we come to the final day. The first part of this was a simple generate rows tool running an iteration to work out the required number of steps. A second generate row tool then can compute the required result. A nice and gentle finish to the puzzles.
+
 ## Wrapping Up
 
 There we have it. Advent of Code 2020 done. The table below shows my successes (* - BaseA, **A** - Abacus, **P** - Python tool):
@@ -272,4 +279,4 @@ The list of repositories I know of is below (no new ones added this week):
 - AkimasaKajitani: https://github.com/AkimasaKajitani/AdventOfCode
 - dsmdavid: https://github.com/dsmdavid/AdventCode2020
 
-That's a wrap for 2020 - it's been a lot of fun. I look forward to 2021 and the next set of challenges. A great thanks to [Eric Wastl](http://was.tl/) for setting the amazing puzzles.
+That's a wrap for 2020 - it's been a lot of fun. Hopefully, my overviews have given you an insight into the thought processes I used to solve these puzzles and this will help you when solving your own challenges. I look forward to 2021 and the next set of challenges. A final huge thanks to [Eric Wastl](http://was.tl/) for setting the amazing puzzles and all the work that entails.
