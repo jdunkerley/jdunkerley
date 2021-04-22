@@ -9,6 +9,7 @@ The simplest types of options are vanilla options - these give the holder the ri
 In order to work out the current fair value of an option, we need two things the expected value of *S*, *E(S)*, at expiry in time *t*, and the risk free interest rate, *r*. The fair value of an option is given by `premium=payoff(E(S))e^-rt`. In this case, a simulation can be used to estimate the value of *E(S)* and hence the fair value of the option. There is a formula for pricing these options, the Black-Scholes model, which we can use to check the output of the simulation.
 
 ![Black-Scholes for Call Option](assets/montecarlo/blackscholes_call.svg)
+
 ![Black-Scholes for Put Option](assets/montecarlo/blackscholes_put.svg)
 
 A barrier option adds an extra complication by adding a price level at which if the price breaks the option is either cancelled (a knock-out) or has no value before (a knock-in). These options are described as path dependent because the final payout is dependent on the underlying prices prior to expiry as well as the final price. Again there are closed formed equations for this create by Merton (1973) and Reiner and Rubenstein (1991). These are significantly more complicated 
