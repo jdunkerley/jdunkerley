@@ -73,3 +73,26 @@ for i in range(20):
 
 ## Pricing an Option
 
+```python
+def price_option(strike, spot, time, volatility, risk_free, call_or_put='c', knockin=None, knockout=None, simulations=2000, steps_per_unit = 365):
+    if knockin and knockout:
+        raise Exception("Unable to cope with 2 barriers!")
+
+    cp = 1 if call_or_put == 'c' else -1
+
+    premiums = []
+    for i in range(simulations):
+        path = create_path(spot, time, time * steps_per_unit, volatility, risk_free)
+        if knockin and knockin > spot and max(path) < knockin: # Up and In
+            premiums.append(0)
+        elif knockin and knockin < spot and min(path) > knockin: # Down and In
+            premiums.append(0)
+        elif knockout and knockout < spot and min(path) < knockin: # Down and Out
+            premiums.append(0)
+        elif knockout and knockout > spot and max(path) > knockout: # Up and Out
+            premiums.append(0)
+        else:
+            premiums.append(max(0, cp * (path[-1] - strike)))
+
+    return sum(premiums) / simulations * exp(-time * risk_free)
+```
