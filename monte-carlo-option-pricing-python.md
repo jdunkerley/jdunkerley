@@ -93,7 +93,7 @@ for i in range(20):
 
 ## Pricing an Option
 
-Now, we have the ability to generate a path. To price an option we want to generate a set of paths and determine the value of the option at the end and then discount back to the present value.
+Now, we have the ability to generate a path. To price an option we want to generate a set of paths and determine the value of the option at the end and then discount back to the present value on each path. We can then estimate the current value of the option by averaging the output. Something like:
 
 ```python
 def price_option(strike, spot, time, volatility, risk_free, call_or_put='c', knockin=None, knockout=None, simulations=2000, steps_per_unit = 365):
@@ -118,3 +118,4 @@ def price_option(strike, spot, time, volatility, risk_free, call_or_put='c', kno
 
     return sum(premiums) / simulations * exp(-time * risk_free)
 ```
+
