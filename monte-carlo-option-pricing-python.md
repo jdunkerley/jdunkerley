@@ -20,7 +20,9 @@ In this case, a simulation can be used to estimate the value of *E(S)*. Using th
 
 ![Black-Scholes for Put Option](assets/montecarlo/blackscholes_put.svg)
 
-A barrier option adds an extra complication by adding a price level at which if the price breaks the option is either cancelled (a knock-out) or has no value before (a knock-in). These options are described as path dependent because the final payout is dependent on the underlying prices prior to expiry as well as the final price. Again there are closed formed equations for this create by Merton (1973) and Reiner and Rubenstein (1991). These are significantly more complicated and beyond the scope of this post.
+A barrier option adds an extra complication by adding a price level at which if the price breaks the option is either cancelled (a knock-out) or has no value before (a knock-in). These options are described as path dependent because the final payout is dependent on the underlying prices prior to expiry as well as the final price. 
+
+Again there are closed formed equations for this create by Merton (1973) and Reiner and Rubenstein (1991). These are significantly more complicated and beyond the scope of this post.
 
 ## Simulating the Underlying Price
 
