@@ -26,7 +26,7 @@ Again there are closed formed equations for this create by Merton (1973) and Rei
 
 ## Simulating the Underlying Price
 
-Within Black-Scholes model, the value of the underlying is modeled as if it follows [geometric Brownian motion](https://www.quantstart.com/articles/Geometric-Brownian-Motion/), ![Random Walk](assets/montecarlo/randomwalk.svg). We can simulate this process by creating a change in S, ![dS](assets/montecarlo/dS.svg), for small change in t, ![dT](assets/montecarlo/dT.svg):
+Within Black-Scholes model, the value of the underlying is modeled as if it follows [geometric Brownian motion](https://www.quantstart.com/articles/Geometric-Brownian-Motion/), ![Random Walk](assets/montecarlo/randomwalk.svg). We can simulate this process by creating a change in S, ![dS](assets/montecarlo/dS.svg), for small change in t, ![dT](assets/montecarlo/dT.svg) (while the maths for this is not too complicated it is beyond the scope of this post):
 
 ![Discrete Walk](assets/montecarlo/discretewalk.svg)
 
@@ -119,3 +119,18 @@ def price_option(strike, spot, time, volatility, risk_free, call_or_put='c', kno
     return sum(premiums) / simulations * exp(-time * risk_free)
 ```
 
+So let's test it pricing a 105 strike 1 year call option with a spot of 100, volatility of 20% and risk free of 5%:
+
+```python
+spot=100
+strike=105
+vol=0.2
+risk_free=0.05
+price_option(strike, spot, 1, vol, risk_free)
+```
+
+In my test run (with 2,000 simulations and 365 steps), this came out as about 7.41. Using a [Black-Scholes pricer](https://goodcalculators.com/black-scholes-calculator/), this should be 8.02. So quite an error. The more simulations, we run the closer result should be. The chart below shows running pricing the option 20 times at different numbers of simulation and then shows the range of results and the average:
+
+![Call option pricing vs simulation count](assets/montecarlo/accuracy.jpg)
+
+As you can see the uncertainty in the pricing decreases as the number of runs increases. The problem is the time taken goes up! With the current code running 50,000 simulated paths this code takes 15.2 seconds.
