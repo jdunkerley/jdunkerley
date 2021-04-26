@@ -134,3 +134,22 @@ In my test run (with 2,000 simulations and 365 steps), this came out as about 7.
 ![Call option pricing vs simulation count](assets/montecarlo/accuracy.jpg)
 
 As you can see the uncertainty in the pricing decreases as the number of runs increases. The problem is the time taken goes up! With the current code running 50,000 simulated paths this code takes 15.2 seconds.
+
+## Performance Tuning
+
+Currently, to generate 50,000 simulations each with 365 points, we need to call the `box_muller_rand` function more than 18 million times. So performance of this function is critical to the pricing function. Python is an interpreted language but there is a library called [numba](http://numba.pydata.org/) which allows for just in time compilation within python. Numba can't deal with everything in python but it can cope with a lot of mathematical computations. If we add the `njit` decorator to the function then Numba will compile the function on first call can then use the compiled version. It's worth noting that you pay a cost on the first execution but then it is a lot quicker:
+
+```python
+from numba import njit
+
+@njit(fastmath=True)
+def box_muller_rand():
+    while True:
+        x = random() * 2.0 - 1
+        y = random() * 2.0 - 1
+        d = x * x + y * y 
+        if d < 1:
+            return x * sqrt(-2 * log(d) / d)
+```
+
+Having put this in, the execution time for pricing at 50,000 simulations is now 5.2s. Normally, moving to a built-in function will speed things up so lets try using `numpy.random.normal`. If we just put that into the create_path function instead of the `box_muller_rand` call then it is much slower ()
