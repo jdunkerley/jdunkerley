@@ -1,5 +1,10 @@
 # Monte-Carlo Pricing of Barrier Options in Python
 
+[![Roulette Wheel](assets/montecarlo/roulette.jpg)](https://www.flickr.com/photos/dahlstroms/5276348473)
+<div style="text-align:right; padding-bottom: 10px;">
+<a href="https://www.flickr.com/photos/dahlstroms/5276348473/">Photo</a> by Hakan Dahlstrom. Used under Creative Commons License.
+</div>
+
 Monte-Carlo simulation is a very useful technique in quantitative finance. The core premise is to use a random process to generate lots of simulations and using these to value complex instruments. The advantage of this technique is often doesn't involve advanced maths to be able to do this, and all you need to do to improve accuracy is run more simulations.
 
 This post will take the simple example of pricing a knock-out barrier option by simulating the underlying price. The code will built up in python starting with a simple naive approach and improving it to produce a reasonably fast implementation.
@@ -30,7 +35,7 @@ Within Black-Scholes model, the value of the underlying is modeled as if it foll
 
 ![Discrete Walk](assets/montecarlo/discretewalk.svg)
 
-The ![phi](assets/montecarlo/phi.svg) value is a random number drawn from a standard Normal distribution. The smaller the value of ![dT](assets/montecarlo/dT.svg) the smaller the error in the approximation to the true random walk. 
+The ![phi](assets/montecarlo/phi.svg) value is a random number drawn from a standard Normal distribution. The smaller the value of ![dT](assets/montecarlo/dT.svg) the smaller the error in the approximation to the true continuous random walk, but the more computation needed.
 
 The first step in the implementation is to generate such a random number:
 
@@ -47,7 +52,7 @@ def box_muller_rand():
             return x * sqrt(-2 * log(d) / d)
 ```
 
-This is a simple implementation of the [Box Muller](https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform) transformation which takes two uniform random numbers and produces a normally distributed one. As a simple test, we can generate a 1,000,000 numbers using this and see how it is distributed:
+This is an implementation of the [Box Muller](https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform) transformation which takes two uniform random numbers and produces a normally distributed one. As a simple test, we can generate a 1,000,000 numbers using this and see how it is distributed:
 
 ```python
 import matplotlib.pyplot as plt
@@ -133,11 +138,66 @@ In my test run (with 2,000 simulations and 365 steps), this came out as about 7.
 
 ![Call option pricing vs simulation count](assets/montecarlo/accuracy.jpg)
 
-As you can see the uncertainty in the pricing decreases as the number of runs increases. The problem is the time taken goes up! With the current code running 50,000 simulated paths this code takes 15.2 seconds.
+As you can see the uncertainty in the pricing decreases as the number of runs increases. The problem is the time taken goes up! With the [current code](https://gist.github.com/jdunkerley/323b0d1d2a9b7f96d570778402389566/abbe7fa3292572f845e087b34fb2f9914a915967) running 50,000 simulated paths this code takes 14.5 seconds. We can do some simple optimisations to make the code better (and hopefully a little quicker).
 
-## Performance Tuning
+- Only need the minimum, maximum and final value of the path not the whole path
+- The values of `dt` and the `drift` are constant across all simulations
+- Only the running total of all premiums is needed to work out the average
 
-Currently, to generate 50,000 simulations each with 365 points, we need to call the `box_muller_rand` function more than 18 million times. So performance of this function is critical to the pricing function. Python is an interpreted language but there is a library called [numba](http://numba.pydata.org/) which allows for just in time compilation within python. Numba can't deal with everything in python but it can cope with a lot of mathematical computations. If we add the `njit` decorator to the function then Numba will compile the function on first call can then use the compiled version. It's worth noting that you pay a cost on the first execution but then it is a lot quicker:
+Using these changes, the `create_path` function gets replaced with:
+
+```python
+def path_final_min_max(initial, steps, sdt, volatility, drift):
+    current = initial
+    minimum = current
+    maximum = current
+    for i in range(steps - 1):
+        current = current * drift * exp(sdt * volatility * box_muller_rand())
+        if minimum > current:
+            minimum = current
+        if maximum < current:
+            maximum = current
+
+    return current, minimum, maximum
+```
+
+And the `price_option` function with:
+
+```python
+def price_option(strike, spot, time, volatility, risk_free, call_or_put='c', knockin=None, knockout=None, simulations=2000, steps_per_unit = 365):
+    if knockin and knockout:
+        raise Exception("Unable to cope with 2 barriers!")
+
+    cp = 1 if call_or_put == 'c' else -1
+    dt = 1 / steps_per_unit
+    steps = int(time * steps_per_unit)
+    sdt = sqrt(dt)
+    drift = exp((risk_free - 0.5 * volatility * volatility) * dt)
+
+    total_premium = 0
+    for i in range(simulations):
+        value, minimum, maximum = path_final_min_max(spot, steps, sdt, volatility, drift)
+        if knockin and knockin > spot and maximum < knockin: # Up and In
+            pass
+        elif knockin and knockin < spot and minimum > knockin: # Down and In
+            pass
+        elif knockout and knockout < spot and minimum < knockin: # Down and Out
+            pass
+        elif knockout and knockout > spot and maximum > knockout: # Up and Out
+            pass
+        else:
+            total_premium += max(0, cp * (value - strike))
+
+    return total_premium / simulations * exp(-time * risk_free)
+```
+
+Having made these changes, the version takes about 13.3s. For reference, a [C++ implementation](https://gist.github.com/jdunkerley/b289489d26b34a6b0ec00191723ca60e) of the same code takes 1.2s.
+
+## Speeding it up with Numba
+
+Python is an interpreted language but there is a library called [numba](http://numba.pydata.org/) which allows for just in time (JIT) compilation within python. Numba can't deal with everything in python but it can cope with a lot of mathematical computations. If we add the `njit` decorator to the function then it will be compiled on the first call, and then the compiled version will be used going forward. It's worth noting that you pay a cost on the first execution but then it is a lot quicker. This can have a lot of benefit in a function as a service environment (such as AWS Lambda), where the static state would be shared across invocations.
+
+Currently, to generate 50,000 simulations each with 365 points, we need to call the `box_muller_rand` function more than 18 million times. So performance of this function is critical to the overall pricing function. This is hence a good place to start with numba:
 
 ```python
 from numba import njit
@@ -152,4 +212,37 @@ def box_muller_rand():
             return x * sqrt(-2 * log(d) / d)
 ```
 
-Having put this in, the execution time for pricing at 50,000 simulations is now 5.2s. Normally, moving to a built-in function will speed things up so lets try using `numpy.random.normal`. If we just put that into the create_path function instead of the `box_muller_rand` call then it is much slower ()
+Having put this in, the execution time for pricing at 50,000 simulations is now 5.8s. We can next look to refactor and break up the 
+
+## What About Numpy?
+
+Normally, moving to a built-in function will speed things up so lets try using the [numpy](https://numpy.org/) libraries `random.normal` function. Numpy is a highly optimised C library for python for doing numerical computation. If we just put the `normal` function into `path_final_min_max` instead of the `box_muller_rand` call then it is much slower (taking 43.4s). However, numpy is designed to work on whole arrays and working on them in a single operation. Rewriting the `path_final_min_max` using this approach it becomes:
+
+```python
+import numpy
+from numpy.random import normal
+
+def path_final_min_max(initial, steps, sdt, volatility, drift):
+    randoms = numpy.exp(normal(size=steps)*volatility*sdt) * drift
+    randoms[0] = 1
+    factors = numpy.cumprod(randoms) * initial
+    return factors[-1], numpy.min(factors), numpy.max(factors)
+```
+
+Note, you cannot use `numba` to help on this function as it doesn't yet have support for the `size` parameter in the normal function (it does have most of the numpy functions). This also means we need to remove the `njit` decorator and `prange` call from the `price_option` function. Even without the jitting, the benefits of using numpy are large. The new version now takes on 2.5s.
+
+## Comparing Approaches
+
+Now I have two approaches, lets pricing multiple options:
+
+```python
+spot=100
+vol=0.2
+risk_free=0.05
+print(price_option(105, spot, 1, vol, risk_free, 'c', simulations=500000))
+print(price_option(105, spot, 1, vol, risk_free, 'p', simulations=500000))
+print(price_option(105, spot, 1, vol, risk_free, 'c', knockin=103, simulations=500000))
+print(price_option(105, spot, 1, vol, risk_free, 'c', knockout=110, simulations=500000))
+print(price_option(105, spot, 1, vol, risk_free, 'c', knockout=120, simulations=500000))
+```
+

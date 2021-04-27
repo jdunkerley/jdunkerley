@@ -6,22 +6,10 @@
 namespace barrierpricer {
     static std::random_device rd;
     static std::mt19937_64 rand_generator(rd());
-    static std::uniform_real_distribution<> dis(0.0, 1.0);
-
-    double random() {
-        return dis(rand_generator);
-    }
+    static std::normal_distribution<> dis;
 
     double box_muller_rand() {
-        double x, y, d;
-        while (1) {
-            x = 2.0 * random() - 1.0;
-            y = 2.0 * random() - 1.0;
-            d = x * x + y * y;
-            if (d < 1) {
-                return x * std::sqrt(-2 * std::log(d) / d);
-            }
-        }
+        return dis(rand_generator);
     }
 
     void path_final_min_max(
