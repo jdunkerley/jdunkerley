@@ -212,11 +212,13 @@ def box_muller_rand():
             return x * sqrt(-2 * log(d) / d)
 ```
 
-Having put this in, the execution time for pricing at 50,000 simulations is now 5.8s. We can next look to refactor and break up the 
+Having put this in, the execution time for pricing at 50,000 simulations is now 5.8s. We can add the same decorator to the `path_final_min_max`. The final step is to refactor the `price_option` function into two parts - a `payoff` function and the iteration part. Numba also provides the ability to run a range in a parallel manner with the `prange` function and an optional argument of `parallel=True` on the decorator. At 50,000 iterations the benefit of running across multiple threads is low but as the number of simulations increases this effect is larger. This version takes 2.5s.
+
+<script src="https://gist.github.com/jdunkerley/253271867d90760d036b86e00fb736ab.js"></script>
 
 ## What About Numpy?
 
-Normally, moving to a built-in function will speed things up so lets try using the [numpy](https://numpy.org/) libraries `random.normal` function. Numpy is a highly optimised C library for python for doing numerical computation. If we just put the `normal` function into `path_final_min_max` instead of the `box_muller_rand` call then it is much slower (taking 43.4s). However, numpy is designed to work on whole arrays and working on them in a single operation. Rewriting the `path_final_min_max` using this approach it becomes:
+Normally, moving to a built-in function will speed things up so lets try using the [numpy](https://numpy.org/) libraries `random.normal` function. Numpy is a highly optimised C library for doing numerical computation in python. If we just put the `normal` function into `path_final_min_max` instead of the `box_muller_rand` call then it is much slower (taking over 40s). However, numpy is designed to work on whole arrays and working on them in a single operation. Rewriting the `path_final_min_max` using this approach it becomes:
 
 ```python
 import numpy
@@ -229,20 +231,27 @@ def path_final_min_max(initial, steps, sdt, volatility, drift):
     return factors[-1], numpy.min(factors), numpy.max(factors)
 ```
 
-Note, you cannot use `numba` to help on this function as it doesn't yet have support for the `size` parameter in the normal function (it does have most of the numpy functions). This also means we need to remove the `njit` decorator and `prange` call from the `price_option` function. Even without the jitting, the benefits of using numpy are large. The new version now takes on 2.5s.
+Note, you cannot use `numba` to help on this function as it doesn't yet have support for the `size` parameter in the normal function (it does have most of the numpy functions). This also means we need to remove the `njit` decorator and `prange` call from the `price_option` function. We can still jit the `payoff` function but thats about it. This version also takes about 2.5s.
+
+<script src="https://gist.github.com/jdunkerley/88015433a0311260ec34a8bf31bee3a2.js"></script>
 
 ## Comparing Approaches
 
-Now I have two approaches, lets pricing multiple options:
+Now I have two approaches (as well as a reference C++ version), lets try a pricing a small portfolio of options:
 
-```python
-spot=100
-vol=0.2
-risk_free=0.05
-print(price_option(105, spot, 1, vol, risk_free, 'c', simulations=500000))
-print(price_option(105, spot, 1, vol, risk_free, 'p', simulations=500000))
-print(price_option(105, spot, 1, vol, risk_free, 'c', knockin=103, simulations=500000))
-print(price_option(105, spot, 1, vol, risk_free, 'c', knockout=110, simulations=500000))
-print(price_option(105, spot, 1, vol, risk_free, 'c', knockout=120, simulations=500000))
-```
+- 110 Call with a 1 year expiry: should be 6.04
+- 100 Put with a 1 year expiry: should be 5.57
+- 120 Call with a 2 year expiry: should be 7.93
+- 100 Put with a 2 year expiry: should be 6.61
+- 110 Call with a 1 year expiry and 115 knock out: should be ???
+- 100 Put with a 1 year expiry and 95 knock out: should be ???
+- 110 Call with a 1 year expiry and 108 knock in: should be ???
+- 100 Put with a 1 year expiry and 102 knock in: should be ???
 
+This could also be done by pricing the whole portfolio on each path but for this post will treat as pricing each option separately. Additionally, running this at different numbers of simulations - 10000, 50000, 250000, 500000.
+
+... To Do ...
+
+## Wrapping Up
+
+The simple set up to create a Monte-Carlo simulation is great but getting reasonable results needs a high number of simulations. There are improvements that can be made to reduce the number of simulations needed. Both numba and numpy have the ability to make Python code reasonably fast (though still beaten by a naive C++ implementation). While in this specific case, they couldn't be used together in many cases they can be and this can result in near compiled code performance.
