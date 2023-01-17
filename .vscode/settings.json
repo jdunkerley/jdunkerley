@@ -1,0 +1,9 @@
+{
+    "grammarly.selectors": [
+        {
+            "language": "markdown",
+            "scheme": "file",
+            "pattern": "enso-advent-of-code-2022/post.md"
+        }
+    ]
+}
