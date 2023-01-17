@@ -12,7 +12,7 @@ This post summarises a few of the puzzles we tried and some of the challenges we
 
 - https://adventofcode.com/2022/day/1
 
-Initial task of Advent of Code are usually quite simple. However that's great, especially when starting with new language and/or new IDE. As such, let's take a look at calorie counting and how that could be done with Enso. I'll do my best to share what I learned while going thru the task.
+Initial tasks of Advent of Code are usually quite simple. However that's great, especially when starting with new language and/or new IDE. As such, let's take a look at calorie counting and how that could be done with Enso. I'll do my best to share what I learned while going thru the task.
 
 I was not new to the Enso language - e.g. it wasn't a problem to express the algorithm. However I usually coded Enso in text editor. This time I wanted to taste the real Enso IDE experience.
 
