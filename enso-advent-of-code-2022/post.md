@@ -12,6 +12,22 @@ This post summarises a few of the puzzles we tried and some of the challenges we
 
 - https://adventofcode.com/2022/day/1
 
+Initial tasks of Advent of Code are usually quite simple. That is great, especially when one is starting with a new language and/or a new IDE. As such, let's take a look at _calorie counting_ task and how it can be solved with Enso and its IDE. I'll do my best to share what I learned while going thru the task. I was not new to the Enso language - e.g. it wasn't a problem to express the algorithm. However I usually coded Enso in a text editor. This time I wanted to taste the real Enso IDE experience.
+
+Problem #1 - how do I read a file? When you create a project you get an `src` directory. However you can also create a `data` directory sibling and put there various files to work with. You can then reference that directory as `enso_project.data` in your code. Reading a textual file as is simple as
+
+```haskell
+enso_project.data/"aoc1-test.txt" . read
+```
+
+Problem #2 - working with the textual file requires you to split the text to lines. Great, there is `.lines` function. But then there are groups of lines awaiting to be processed. My original solution just `.fold` over the lines and passed in a `Pair` of two numbers. However there is a much nicer solution: `operator1.split '\n\n'` - split the text on two new lines! Then one gets the needed groups easily.
+
+Problem #3 is to convert the text lines to numbers. It is as simple as `_.map Integer.parse` - however here I learned a really useful trick. You can collapse a graph of nodes into a new function. You can then use the function at multiple pleases. Not just that, when double-clicking on the function name, you can tell the Enso IDE to open up the collapsed function and you can refine it. That's really cool as it allows one to keep the program clean, focused on individual tasks and nicely organized inside of a single project.
+
+Problem #4 is to do some statistics on the obtained data. If you are like me, you just do some artimetics yourself, but the cool kids (those who know all the Enso libraries) use `Statistic` library functions. Then it is just about requesting `Statistic.Maximum` or `Statistic.Sum`. Really nice, powerful and easy to obtain the desired results.
+
+The calorie counting was a dumb task, but it opened me the door to the Enso IDE, its concepts and power of the libraries it offers. I really recommend trying this simple task yourself. It is fun and it worths it!
+
 ## Day 8 - Treetop Tree House
 
 - https://adventofcode.com/2022/day/8
