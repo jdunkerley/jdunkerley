@@ -1,0 +1,10 @@
+name: Aoc_12
+namespace: local
+version: 0.0.1
+license: ''
+authors:
+  - name: Radosław Waśko
+    email: radoslaw.wasko@enso.org
+maintainers: []
+edition: 2023.1.1-nightly.2023.1.14
+prefer-local-libraries: true
