@@ -6,7 +6,7 @@ Some members of the team building [Enso](https://enso.org/) decided to try and t
 
 For those not familiar with the Advent of Code, every year [Eric Wastl](https://twitter.com/ericwastl) creates a set of 25 programming puzzles posted once a day over December. Each puzzle has two related parts with an example set of values and the expected result based on these. Often, the second part is a more challenging extension of the first part. Generally, there should be a solution that can complete within a few seconds (although we didn't always find that one!).
 
-This post summarises a few of the puzzles we tried and some of the challenges we faced, giving the views and experience of myself, Jaroslav Tulach, and Radosław Waśko of us trying to solve them.
+This post summarises a few of the puzzles we tried and some of the challenges we faced, giving the views and experience of myself, [Jaroslav Tulach](http://apidesign.org), and [Radosław Waśko](https://radeusgd.com/) of us trying to solve them.
 
 ## Jaroslav's Experience with Day 1 - Calorie Counting
 
