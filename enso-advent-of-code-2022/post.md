@@ -1,6 +1,6 @@
 # Solving Advent of Code 2022 with Enso
 
-<!-- Put an image here -->
+![Advent of Code meets Enso](./enso_aoc.jpg)
 
 Some members of the team building [Enso](https://enso.org/) decided to try and tackle last year's [Advent of Code](https://adventofcode.com/2022/) using the language and see how far we could get. I've previously tried [solving Advent of Code in Alteryx](https://jdunkerley.co.uk/2020/12/05/alteryxing-the-advent-of-code-2020-week-1/) and was personally interested to know whether it is easier or more challenging with what we are building.
 
@@ -54,7 +54,7 @@ Part 2 was a straightforward adjustment to the process, looking out from a tree 
 
 *Since building this workflow, we have added the ability to compute running statistics which would have made these computations easier. Likewise, the issue we had at the time with `Vector.distinct` has been resolved, so the need to convert to a table is removed.*
 
-## Day xx 
+## Radosław's Experience with Day xx 
 
 ## Some of the Challenges
 
