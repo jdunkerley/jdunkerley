@@ -64,7 +64,55 @@ This was obviously a task for a BFS algorithm and starting to write it, I decide
 
 So I did just that:
 
-<!-- It would be neat to give these some syntax coloring, but I'm not sure how we can do that with a custom grammar-->
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: monospace}
+pre {color: #000000; background-color: #ffffff; font-family: monospace}
+table {color: #000000; background-color: #e9e8e2; font-family: monospace}
+.ST1 {font-family: monospace; font-weight: bold}
+.ST0 {color: #969696}
+.ST3 {color: #1e9347}
+.ST2 {color: #336bdd}
+-->
+</style>
+<pre>
+<span class="ST0">##</span><span class="ST0"> A helper that updates a 2d array,</span>
+<span class="ST0">   setting the entry at coordinates [vx, vy] to the value `val`.</span>
+<span class="ST1">set</span> <span class="ST1">visits</span> <span class="ST1">vx</span> <span class="ST1">vy</span> <span class="ST1">val</span>  =
+    operator8 = <span class="ST1">visits</span>.<span class="ST1">map_with_index</span> <span class="ST1">y</span>-&gt; <span class="ST1">v</span>-&gt; <span class="ST2">if</span> <span class="ST1">y</span> == <span class="ST1">vy</span> <span class="ST2">then</span> (<span class="ST1">v</span>.<span class="ST1">map_with_index</span> <span class="ST1">x</span>-&gt; <span class="ST1">e</span>-&gt; <span class="ST2">if</span> <span class="ST1">x</span> == <span class="ST1">vx</span> <span class="ST2">then</span> <span class="ST1">val</span> <span class="ST2">else</span> <span class="ST1">e</span>) <span class="ST2">else</span> <span class="ST1">v</span>
+    operator8
+
+<span class="ST0">##</span><span class="ST0"> Checks if the new coordinate was already visited, or is out of bounds</span>
+<span class="ST0">   (then we also treat it as &#39;visited&#39;, to not go outside the map).</span>
+<span class="ST1">is_visited</span> <span class="ST1">visits</span> <span class="ST1">x</span> <span class="ST1">y</span> =
+    <span class="ST2">if</span> (<span class="ST1">x</span> &lt; <span class="ST3">0</span>) || (<span class="ST1">x</span> &gt;= <span class="ST1">visits</span>.<span class="ST1">first</span>.<span class="ST1">length</span>) <span class="ST2">then</span> True <span class="ST2">else</span>
+        <span class="ST2">if</span> (<span class="ST1">y</span> &lt; <span class="ST3">0</span>) || (<span class="ST1">y</span> &gt;= <span class="ST1">visits</span>.<span class="ST1">length</span>) <span class="ST2">then</span> True <span class="ST2">else</span>
+            <span class="ST1">visits</span>.<span class="ST1">at</span> <span class="ST1">y</span> . <span class="ST1">at</span> <span class="ST1">x</span>
+
+<span class="ST0">##</span><span class="ST0"> The core BFS loop.</span>
+<span class="ST0">   The looping is done by tail-recursive calls.</span>
+<span class="ST1">bfs</span> <span class="ST1">heights</span> <span class="ST1">visits</span> <span class="ST1">queue</span> <span class="ST1">dists</span> =
+    <span class="ST2">if</span> <span class="ST1">queue</span>.<span class="ST1">is_empty</span> <span class="ST2">then</span> <span class="ST1">dists</span> <span class="ST2">else</span>
+        <span class="ST1">q</span> = <span class="ST1">queue</span>.<span class="ST1">first</span>
+        <span class="ST1">x</span> = <span class="ST1">q</span>.<span class="ST1">at</span> <span class="ST3">0</span>
+        <span class="ST1">y</span> = <span class="ST1">q</span>.<span class="ST1">at</span> <span class="ST3">1</span>
+        <span class="ST1">d</span> = <span class="ST1">q</span>.<span class="ST1">at</span> <span class="ST3">2</span>
+        n1 = [[<span class="ST1">x</span>+<span class="ST3">1</span>, <span class="ST1">y</span>], [<span class="ST1">x</span>-<span class="ST3">1</span>, <span class="ST1">y</span>], [<span class="ST1">x</span>, <span class="ST1">y</span>+<span class="ST3">1</span>], [<span class="ST1">x</span>, <span class="ST1">y</span>-<span class="ST3">1</span>]]
+        n2 = n1.<span class="ST1">filter</span> <span class="ST1">v</span>-&gt; <span class="ST1">is_visited</span> <span class="ST1">visits</span> <span class="ST1">v</span>.<span class="ST1">first</span> <span class="ST1">v</span>.<span class="ST1">second</span> . <span class="ST1">not</span>
+        <span class="ST1">height</span> <span class="ST1">p</span> = <span class="ST1">heights</span>.<span class="ST1">at</span> <span class="ST1">p</span>.<span class="ST1">second</span> . <span class="ST1">at</span> <span class="ST1">p</span>.<span class="ST1">first</span>
+        n3 = n2.<span class="ST1">filter</span> <span class="ST1">p</span>-&gt; (<span class="ST1">height</span> <span class="ST1">p</span>) &lt;= (<span class="ST1">height</span> [<span class="ST1">x</span>, <span class="ST1">y</span>] + <span class="ST3">1</span>)
+        <span class="ST1">next</span> = n3.<span class="ST1">map</span> <span class="ST1">v</span>-&gt; <span class="ST1">v</span>+[<span class="ST1">d</span>+<span class="ST3">1</span>]
+        visits2 = <span class="ST1">next</span>.<span class="ST1">fold</span> <span class="ST1">visits</span> (<span class="ST1">acc</span>-&gt; <span class="ST1">p</span>-&gt; <span class="ST1">set</span> <span class="ST1">acc</span> <span class="ST1">p</span>.<span class="ST1">first</span> <span class="ST1">p</span>.<span class="ST1">second</span> True)
+        dists2 = <span class="ST1">next</span>.<span class="ST1">fold</span> <span class="ST1">dists</span> (<span class="ST1">acc</span>-&gt; <span class="ST1">p</span>-&gt; <span class="ST1">set</span> <span class="ST1">acc</span> <span class="ST1">p</span>.<span class="ST1">first</span> <span class="ST1">p</span>.<span class="ST1">second</span> (<span class="ST1">d</span>+<span class="ST3">1</span>))
+        queue2 = <span class="ST1">queue</span>.<span class="ST1">drop</span> <span class="ST3">1</span> + <span class="ST1">next</span>
+        @Tail_Call <span class="ST1">bfs</span> <span class="ST1">heights</span> visits2 queue2 dists2
+
+<span class="ST0">##</span><span class="ST0"> Prepares and runs a BFS from the given start point.</span>
+<span class="ST1">start_bfs</span> <span class="ST1">start</span> <span class="ST1">heights</span> <span class="ST1">visits</span> =
+    visits2 = <span class="ST1">set</span> <span class="ST1">visits</span> <span class="ST1">start</span>.<span class="ST1">first</span> <span class="ST1">start</span>.<span class="ST1">second</span> True
+    <span class="ST1">dists</span> = visits2.<span class="ST1">map</span> <span class="ST1">v</span>-&gt; <span class="ST1">v</span>.<span class="ST1">map</span> <span class="ST1">x</span>-&gt; <span class="ST2">if</span> <span class="ST1">x</span> <span class="ST2">then</span> <span class="ST3">0</span> <span class="ST2">else</span> Number.<span class="ST1">positive_infinity</span>
+    <span class="ST1">bfs</span> <span class="ST1">heights</span> visits2 [<span class="ST1">start</span>+[<span class="ST3">0</span>]] <span class="ST1">dists</span>
+</pre>
 
 ```
 ## A helper that updates a 2d array,
