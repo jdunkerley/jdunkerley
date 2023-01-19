@@ -1,0 +1,64 @@
+from Standard.Base import all
+from Standard.Table import all
+from Standard.Database import all
+from Standard.Table.Data.Column import Column
+from Standard.Table.Data.Join_Condition import Join_Condition
+from Standard.Table.Data.Join_Kind import Join_Kind
+import Standard.Visualization
+
+func1 operator2 text1 =
+    operator3 = operator2.map_with_index ix-> elem-> [elem.locate text1, ix]
+    operator4 = operator3.filter v-> v.first.is_nothing.not
+    operator5 = operator4.first
+    operator6 = operator5.first.start
+    operator7 = operator5.second
+    var1 = [operator6, operator7]
+    var1
+
+set visits vx vy val  =
+    operator8 = visits.map_with_index y-> v-> if y == vy then (v.map_with_index x-> e-> if x == vx then val else e) else v
+    operator8
+
+is_visited visits x y =
+    if (x < 0) || (x >= visits.first.length) then True else
+        if (y < 0) || (y >= visits.length) then True else
+            visits.at y . at x
+
+bfs heights visits queue dists =
+    if queue.is_empty then dists else
+        q = queue.first
+        x = q.at 0
+        y = q.at 1
+        d = q.at 2
+        n1 = [[x+1, y], [x-1, y], [x, y+1], [x, y-1]]
+        n2 = n1.filter v-> is_visited visits v.first v.second . not
+        height p = heights.at p.second . at p.first
+        n3 = n2.filter p-> (height p) >= (height [x, y] - 1)
+        next = n3.map v-> v+[d+1]
+        visits2 = next.fold visits (acc-> p-> set acc p.first p.second True)
+        dists2 = next.fold dists (acc-> p-> set acc p.first p.second (d+1))
+        queue2 = queue.drop 1 + next
+        @Tail_Call bfs heights visits2 queue2 dists2
+
+start_bfs start heights visits =
+    visits2 = set visits start.first start.second True
+    dists = visits2.map v-> v.map x-> if x then 0 else Number.positive_infinity
+    bfs heights visits2 [start+[0]] dists
+
+main =
+    quotient1 = enso_project.data / "aoc12-input.txt"
+    quotient2 = enso_project.data / "aoc12-test.txt"
+    delimited1 = Delimited " "
+    operator1 = Data.read quotient2 delimited1
+    operator2 = operator1.at 0 . to_vector
+    var1 = Main.func1 operator2 "S"
+    operator3 = Main.func1 operator2 "E"
+    operator4 = operator2.map .characters
+    operator5 = operator4.map v-> v.map x-> if x == 'S' then 'a' else if x == 'E' then 'z' else x
+    operator6 = operator5.map v-> v.map x-> x.utf_8.first - "a".utf_8.first
+    operator7 = operator6.map v-> v.map _-> False
+    dists = start_bfs operator3 operator6 operator7
+    starts0 = operator5.map_with_index y-> v-> v.map_with_index x-> e-> if e == 'a' then [x, y] else Nothing
+    starts = starts0.flatten.filter e-> e.is_nothing.not
+    start_dists = starts.map p-> dists.at p.second . at p.first
+    shortest = start_dists.compute Statistic.Minimum
