@@ -1,6 +1,6 @@
 # Solving Advent of Code 2022 with Enso
 
-![Advent of Code meets Enso](./enso_aoc.jpg)
+![Advent of Code meets Enso](./enso_aoc.png)
 
 <style type="text/css">
 <!--
