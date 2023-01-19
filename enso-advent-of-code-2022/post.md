@@ -168,11 +168,10 @@ Using the IDE daily to solve these puzzles rapidly drove the development and imp
 - Overhauled and enhanced JSON support.
 - Stabilized the visualization of data within the IDE.
 
-In the end, we managed to solve virtually every puzzle. We even [automated posting a scoreboard](link to png) of how we were doing to our discord conversation every day so the whole team could see.
+In the end, we managed to solve virtually every puzzle. We even [automated posting a scoreboard](https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/enso-advent-of-code-2022/scoreboard.jpg) of how we were doing to our discord conversation every day so the whole team could see.
 
 ![Final Leaderboard](./leaderboard.jpg)
 
-Redo...
-Having managed to solve the challenges, Enso, as a general-purpose programming language, has grown a long way over the last year. Compared to solving similar problems in previous years within Alteryx some were much easier, and some were harder (giving us some hints on what we need to fix!). The IDE and API improvements over December made the solving experience smoother and more pleasant.
+Enso, as a general-purpose programming language, has grown significantly over the last year - solving the challenges showed this. Compared to solving similar problems in previous years within Alteryx, I found that some were much more straightforward and others harder (giving us some hints on what we need to fix and improve!). The IDE and API improvements over December made the solving experience smoother and more pleasant.
 
-Next year, we look forward to trying it again with a more open competition to the Enso community.
+Next year, we look forward to trying it again with a more open competition with the community.
