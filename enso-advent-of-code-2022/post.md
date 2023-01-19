@@ -48,7 +48,7 @@ Again the first challenge is loading the data and shaping it into something we c
 
 ![Fetching the data](./day_8_fetch_data.png)
 
-I chose to fetch the data directly from the website using `Data.fetch`. This API reads the URL, and if in a format Enso recognizes will automatically parse it. In this case, the data is just text. In this case, I wanted to parse the text into a 2D vector of integers, which is easily accomplished by breaking into lines (using `.lines`) and then parsing each character (the `.map s-> s.characters.map Integer.parse`).
+I chose to fetch the data directly from the website using `Data.fetch`. This API reads the URL, and if in a format Enso recognizes will automatically parse it. In this case, the data is just text. I wanted to parse the text into a 2D vector of integers, which is easily accomplished by breaking it into lines (using `.lines`) and then parsing each character (the `.map s-> s.characters.map Integer.parse`).
 
 The next task is to find how many trees are visible outside the grid. Taking just the horizontal scan, I build a small function (using the approach Jaroslav describes above by grouping nodes):
 
@@ -152,12 +152,27 @@ With that, I've found all points on the height map that have height `a` and read
 
 However, Enso also has some abilities to visualize data, so I thought it was worth using these capabilities to show the height map and the distance map generated from it. I added a simple helper function that converts a 2d array of numbers into an Enso `Table` with the correct columns for the heatmap visualization.
 
-When I switched to the real input data, the visualization did not look as nice. With a small change, it was easy to use the scatter-plot visualization that shows a sample of the dataset and is better suited for bigger datasets. This allowed me to get a better view of what the height map in the actual input looked like:
+When I switched to the real input data, the visualization did not look as nice. With a small change, it was easy to use the scatter-plot visualization that shows a sample of the dataset and is better suited for bigger datasets, allowing me to get a better view of what the height map in the actual input looked like:
 
 [![Day 12 - The Big Input Heightmap visualized](./day_12_big.png)](./day_12_big.png)
 
 *The workflow was slightly adapted to work with the newer version of Enso; the changes were minimal - `vector.tail` needed to be replaced with `vector.drop 1`, and `Data.read_file` is now `Data.read`.*
 
-## Some of the Challenges
-
 ## Conclusion
+
+Using the IDE daily to solve these puzzles rapidly drove the development and improvement of both it and the libraries. We added various new features and corrected many problems and bugs we found along the way. Some highlights are listed below:
+
+- Ability to drop a file on the IDE and have it parsed and ready to use.
+- New `Data.fetch` API to retrieve and parse data from the web.
+- Function to compute running statistics (for example, total) across a Vector.
+- Overhauled and enhanced JSON support.
+- Stabilized the visualization of data within the IDE.
+
+In the end, we managed to solve virtually every puzzle. We even [automated posting a scoreboard](link to png) of how we were doing to our discord conversation every day so the whole team could see.
+
+![Final Leaderboard](./leaderboard.jpg)
+
+Redo...
+Having managed to solve the challenges, Enso, as a general-purpose programming language, has grown a long way over the last year. Compared to solving similar problems in previous years within Alteryx some were much easier, and some were harder (giving us some hints on what we need to fix!). The IDE and API improvements over December made the solving experience smoother and more pleasant.
+
+Next year, we look forward to trying it again with a more open competition to the Enso community.
