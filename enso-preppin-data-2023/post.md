@@ -36,7 +36,7 @@ The final column was created using Enso expressions, an Excel formula-like synta
 
 Finally, the last task is aggregating the results to produce the three new tables. The `aggregate` function allows us to do this. It takes a vector of `Aggregate_Column` to create the summarised tables. These columns are either group bys or aggregate calculations. For example, `operator8.aggregate [Group_By "Bank", Group_By "Day of Week", Group_By "Type of Transaction", Sum "Value" "Value"]`.
 
-The final workflow looks like:
+The final workflow is shown below:
 
 ![Completed Week 1](./week1_completed.png)
 
@@ -46,8 +46,15 @@ The final workflow looks like:
 
 - https://preppindata.blogspot.com/2023/01/2023-week-2-international-bank-account.html
 
-For the second week challenge, we need to construct "IBAN" codes for a set of transactions. Two data files are provided - one with SWIFT codes for banks and one with a set of transaction.
+For the second challenge, we need to construct "IBAN" codes for a set of transactions. In this case, two input files are provided - one with SWIFT codes for banks and another with transaction data. There is one slight complication with bringing the data in. All the values are text in the "Swift Codes" file, so Enso doesn't automatically detect the headers. The `use_first_row_as_names" function renames the columns to the first value.
 
+![Input and Join](./input_join.png)
+
+Having read in the files, the next step is to join the two data sets. The `join` function allows you to specify the type of join (such as Inner, Left Outer, Full) and the columns to join on (defined as a Vector). If the two inputs have the same first column, it will, by default, automatically perform an inner join using this.
+
+![Tidy Columns](./tidy_columns.png)
+
+There is a small amount of preparation before creating the IBAN for each transaction. First, the transaction file has been automatically parsed, and the account numbers have been converted to integers. To use these values in the final expression, we need to convert them to text. Using the same process as for week one and using the `map` function with `.to_text` creates the required column. For the "Sort Code", we need to remove `-` from the values; a simple "replace" on each record covers this.
 
 
 

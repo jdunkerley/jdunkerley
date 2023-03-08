@@ -237,13 +237,13 @@ Note, you cannot use `numba` to help on this function as it doesn't yet have sup
 
 ## Comparing Approaches
 
-Now I have two approaches (as well as a reference C++ version), lets try a pricing a small portfolio of options:
+Now I have two approaches (as well as a reference C++ version), lets try a pricing a small portfolio of options and priced against an underlying with price of 100 , volatility of 20% and risk free of 5%:
 
 - 110 Call with a 1 year expiry: should be 6.04
 - 100 Put with a 1 year expiry: should be 5.57
 - 120 Call with a 2 year expiry: should be 7.93
 - 100 Put with a 2 year expiry: should be 6.61
-- 110 Call with a 1 year expiry and 115 knock out: should be ???
+- 110 Call with a 1 year expiry and 130 knock out: should be ???
 - 100 Put with a 1 year expiry and 95 knock out: should be ???
 - 110 Call with a 1 year expiry and 108 knock in: should be ???
 - 100 Put with a 1 year expiry and 102 knock in: should be ???
