@@ -54,9 +54,17 @@ Having read in the files, the next step is to join the two data sets. The `join`
 
 ![Tidy Columns](./tidy_columns.png)
 
-There is a small amount of preparation before creating the IBAN for each transaction. First, the transaction file has been automatically parsed, and the account numbers have been converted to integers. To use these values in the final expression, we need to convert them to text. Using the same process as for week one and using the `map` function with `.to_text` creates the required column. For the "Sort Code", we need to remove `-` from the values; a simple "replace" on each record covers this.
+There is a small amount of preparation before creating the IBAN for each transaction. First, the transaction file has been automatically parsed, and the account numbers have been converted to integers. To concatenate these values in the final expression, they must be converted to text. Using the same process as week one to create a derived value, the `map` function uses `.to_text` convert the vales. For the "Sort Code", we need to remove `-` from the values; a simple `replace` on each record covers this.
 
+![Create IBAN](./create_iban.png)
 
+The final step is to concatenate the various parts of the IBAN into a single value. I chose to use the expression syntax again here. 
+
+The final workflow is shown below:
+
+![Completed Week 2](./week2_completed.png)
+
+[Code](https://gist.github.com/jdunkerley/37653fed9c7c09bc8eed1e92852df235)
 
 ## Week 3 - Targets for DSB
 
