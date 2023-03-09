@@ -46,7 +46,7 @@ The final workflow is shown below:
 
 - https://preppindata.blogspot.com/2023/01/2023-week-2-international-bank-account.html
 
-For the second challenge, we need to construct "IBAN" codes for a set of transactions. In this case, two input files are provided - one with SWIFT codes for banks and another with transaction data. There is one slight complication with bringing the data in. All the values are text in the "Swift Codes" file, so Enso doesn't automatically detect the headers. The `use_first_row_as_names" function renames the columns to the first value.
+For the second challenge, we need to construct "IBAN" codes for a set of transactions. In this case, two input files are provided - one with SWIFT codes for banks and another with transaction data. There is one slight complication with bringing the data in. All the values are text in the "Swift Codes" file, so Enso doesn't automatically detect the headers. The `use_first_row_as_names` function renames the columns to the first value.
 
 ![Input and Join](./input_join.png)
 
