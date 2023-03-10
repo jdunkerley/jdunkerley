@@ -76,7 +76,7 @@ The final workflow is shown below:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/uDGCw0kzEpI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-For the final challenge in this post, some quarterly targets for the DSB were provided. This task builds on top of the work of week 1. The first step is to get the quarterly totals.
+For the final challenge in this post, the task is to compare the actual quarterly revenue of DSB against some provided targets. This task builds on top of the work of week 1. The first step is to get the quarterly totals.
 
 ![DSB Quarterly Totals](./dsb_quarters.png)
 
