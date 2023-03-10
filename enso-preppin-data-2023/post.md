@@ -100,4 +100,4 @@ The final workflow (built on top of part 1) is shown below:
 
 ## Summary
 
-Hopefully, these examples give you a feel of how to use Enso. If you want to try it, download a nightly release from our GitHub or look for the forthcoming beta release in a few months.
+Hopefully, these examples give you a feel of how to use Enso. If you want to try it, download a [nightly release](https://github.com/enso-org/enso/releases/latest/) from our GitHub or look for the forthcoming beta release in a few months.
