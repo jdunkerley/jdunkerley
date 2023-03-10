@@ -10,6 +10,8 @@ This blog was written using a recent nightly build; many features and functions 
 
 - https://preppindata.blogspot.com/2023/01/2023-week-1-data-source-bank.html
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/yhSqxkkhQVk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ![Parsing the Date](./parse_date.png)
 
 Loading a dataset into Enso is as simple as dragging the file onto the IDE, and it will then set up the first node and attempt to parse the data. However, Enso's default CSV parsing only recognizes dates in ISO format (`yyyy-MM-dd`). So to parse the 'Transaction Date' column, we need to select it (using the `get` method) and then parse it (using the `parse` method), and finally replace the original column in the table (with the `set` method).
@@ -46,6 +48,8 @@ The final workflow is shown below:
 
 - https://preppindata.blogspot.com/2023/01/2023-week-2-international-bank-account.html
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ne-Y9P_WvEk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 For the second challenge, we need to construct "IBAN" codes for a set of transactions. In this case, two input files are provided - one with SWIFT codes for banks and another with transaction data. There is one slight complication with bringing the data in. All the values are text in the "Swift Codes" file, so Enso doesn't automatically detect the headers. The `use_first_row_as_names` function renames the columns to the first value.
 
 ![Input and Join](./input_join.png)
@@ -69,6 +73,8 @@ The final workflow is shown below:
 ## Week 3 - Targets for DSB
 
 - https://preppindata.blogspot.com/2023/01/2023-week-3-targets-for-dsb.html
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uDGCw0kzEpI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 For the final challenge in this post, some quarterly targets for the DSB were provided. This task builds on top of the work of week 1. The first step is to get the quarterly totals.
 
