@@ -88,7 +88,7 @@ The `columns` parameter takes a list of columns to order by. To add an item to t
 
 The final step is to take the first five records. To do this, select the order by node and add a new node. If you type `take` it will show the method. You can either press enter at this point, and the method will be added, and you can configure it in similar ways to above. Alternatively, you can type `take 5` and press return, and it will add the new node selecting the required rows.
 
-![Completed Workflow](complete-workflow.png.png)
+![Completed Workflow](complete-workflow.png)
 
 ## Renaming the Project
 
