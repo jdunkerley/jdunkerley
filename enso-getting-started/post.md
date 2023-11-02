@@ -38,7 +38,7 @@ For now, we will look at the `data` method, which refers to a folder in the proj
 
 To access the specific file within a folder, use the `/` operator followed by a text value with the name. In Enso, text values can be either in single quotes (`'`) or double quotes (`"`). If using single quotes, then escape characters such as `\n` and `\t` are interpreted. If using double quotes, then they are not. So `enso_project.data/"Sample - Superstore_1.csv"` returns a `File` object representing this.
 
-To read the file into the Enso, use the `read` method. The spaces around the `.` operator means that it will process the expression to the left first and then call `read` on the result. The read method will attempt to deduce the format automatically based on the extension. 
+To read the file into Enso, use the `read` method. The spaces around the `.` operator means that it will process the expression to the left first and then call `read` on the result. The read method will attempt to deduce the format automatically based on the extension. 
 
 Now, take a quick look at the node itself:
 
@@ -52,7 +52,7 @@ Finally, within the node, you can see the code that was used to create it and pl
 
 ![Format Dropdown](format-dropdown.png)
 
-*Note: We are currently working on a new version of the IDE, which will have widgets (such as the dropdowns) for all parameters, but now, only some have them.*
+*Note: We are currently working on a new version of the IDE, which will have widgets (such as the dropdowns) for all parameters, but for now, only some have them.*
 
 ## Filtering the Data
 
@@ -60,19 +60,19 @@ Now that the data is loaded, we can start to process it. The first thing is to f
 
 ![Component Browser](component-browser.png)
 
-Doing this, creates a new node and open the component browser. The component browser allows you to search for methods to add to your graph. In this case, we are looking to filter the data, so either type `filter` or scroll up in the list to find the `filter` method. Click on it to add the text to the node. The component browser will search as you type, and you can press return when the required method is shown to add it.
+Doing this creates a new node and opens the component browser. The component browser allows you to search for methods to add to your graph. In this case, we are looking to filter the data, so either type `filter` or scroll up in the list to find the `filter` method. Click on it to add the method to the node. The component browser will search as you type, and you can press return when the required method is shown to add it.
 
 ![Filter Node](filter-node.png)
 
 The `filter` method takes two required parameters and one optional one. The first is the `column` within the table to filter, and the second is a `filter` condition to be checked. The optional parameter, `on_problems`, is a common argument to many functions specifying what to do if there are any problems with the data. For now, we will ignore this parameter. 
 
-Click on the `column` placeholder and then choose `Category` from the dropdown.
+Click on the `column` parameter and then choose `Category` from the dropdown.
 
 ![Column Dropdown](column-select.png)
 
 Next, click on the `filter` placeholder and choose `Equals`:
 
-![Filter Dropdown](filter-dropdown.png)
+![Filter Dropdown](image.png)
 
 To create a new node with a Text value of `Furniture`. If you click the `+` icon in the bottom left of the IDE, a new node will be created, and the component browser will be shown. In this case, type `"Furniture"` and press return. You can then drag from the bottom of this node and connect it to the `to` placeholder within the filter node.
 
@@ -88,7 +88,7 @@ The `columns` parameter takes a list of columns to order by. To add an item to t
 
 The final step is to take the first five records. To do this, select the order by node and add a new node. If you type `take` it will show the method. You can either press enter at this point, and the method will be added, and you can configure it in similar ways to above. Alternatively, you can type `take 5` and press return, and it will add the new node selecting the required rows.
 
-![Completed Workflow](complete-workflow.png)
+![Completed Workflow](image.png)
 
 ## Renaming the Project
 
@@ -98,10 +98,10 @@ The last thing to do is to rename the project. To do this, click on the second i
 
 ![New Project 1](new-project-1.png)
 
-Find the "New Project 1" entry and click the stop button. You can then rename it by using the right-click context menu or pressing Ctrl-R. Once renamed, you can click on the play button to rerun the graph.
+Find the "New Project 1" entry and click the stop button. You can then rename it by using the right-click context menu or pressing Ctrl-R. Once renamed, you can click on the play button to reopen the project.
 
 ## Wrapping Up
 
-This post has worked through a very basic example of using Enso to read and process a CSV file. The next post will look into parsing some of the columns and aggregating the results.
+In this post we worked through reading a CSV file and doing some initial data processing in Enso. Next time, we will dive into parsing data from some of the columns and aggregating the results.
 
-I hope you will try out Enso and let us know what you think. If you have any questions, please join our [Discord]https://discord.com/invite/enso) server or comment below.
+I hope you will try out Enso and let us know what you think. If you have any questions, please join our [Discord](https://discord.com/invite/enso) server or comment below.
