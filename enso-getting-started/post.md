@@ -74,7 +74,7 @@ Next, click on the `filter` placeholder and choose `Equals`:
 
 ![Filter Dropdown](filter-dropdown.png)
 
-The filter node now needs a value for the right side of the equals condition. For this case, the goal is to filter when equal to `Furniture`. There are two ways to do this - edit the node and type value (I will cover this in another post) or add a new node providing a constant value of `Furniture`. To create this new node, click the `+` icon in the bottom left of the IDE. A new node is added, and the component browser is opened. In this case, type `"Furniture"` (please note including the quotation marks) and press return. You can then drag from the bottom of this node and connect it to the `to` placeholder within the filter node.
+The filter node now needs a value for the right side of the equals condition. For this case, the goal is to filter when equal to `Furniture`. There are two ways to do this - edit the node and type value (I will cover this in another post) or add a new node providing a constant value of `Furniture`. To create this new node, click the `+` icon in the bottom left of the IDE. A new node is added, and the component browser is opened. In this case, type `"Furniture"` (please make sure to include the quotation marks in this node) and press return. You can then drag from the bottom of this node and connect it to the `to` placeholder within the filter node.
 
 ![Furniture Node](constant-value.gif)
 
