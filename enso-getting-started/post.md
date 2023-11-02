@@ -72,7 +72,7 @@ Click on the `column` placeholder and then choose `Category` from the dropdown.
 
 Next, click on the `filter` placeholder and choose `Equals`:
 
-![Filter Dropdown](image.png)
+![Filter Dropdown](filter-dropdown.png)
 
 To create a new node with a Text value of `Furniture`. If you click the `+` icon in the bottom left of the IDE, a new node will be created, and the component browser will be shown. In this case, type `"Furniture"` and press return. You can then drag from the bottom of this node and connect it to the `to` placeholder within the filter node.
 
@@ -88,7 +88,7 @@ The `columns` parameter takes a list of columns to order by. To add an item to t
 
 The final step is to take the first five records. To do this, select the order by node and add a new node. If you type `take` it will show the method. You can either press enter at this point, and the method will be added, and you can configure it in similar ways to above. Alternatively, you can type `take 5` and press return, and it will add the new node selecting the required rows.
 
-![Completed Workflow](image.png)
+![Completed Workflow](complete-workflow.png)
 
 ## Renaming the Project
 
@@ -104,4 +104,4 @@ Find the "New Project 1" entry and click the stop button. You can then rename it
 
 This post has worked through a very basic example of using Enso to read and process a CSV file. The next post will look into parsing some of the columns and aggregating the results.
 
-I hope you will try out Enso and let us know what you think. If you have any questions, please join our [Discord](https://discord.com/invite/enso) server or comment below.
+I hope you will try out Enso and let us know what you think. If you have any questions, please join our [Discord]https://discord.com/invite/enso) server or comment below.
