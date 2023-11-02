@@ -72,9 +72,9 @@ Click on the `column` parameter and then choose `Category` from the dropdown.
 
 Next, click on the `filter` placeholder and choose `Equals`:
 
-![Filter Dropdown](image.png)
+![Filter Dropdown](filter-dropdown.png)
 
-To create a new node with a Text value of `Furniture`. If you click the `+` icon in the bottom left of the IDE, a new node will be created, and the component browser will be shown. In this case, type `"Furniture"` and press return. You can then drag from the bottom of this node and connect it to the `to` placeholder within the filter node.
+The filter node now needs a value for the right side of the equals condition. For this case, the goal is to filter when equal to `Furniture`. There are two ways to do this - edit the node and type value (I will cover this in another post) or add a new node providing a constant value of `Furniture`. To create this new node, click the `+` icon in the bottom left of the IDE. A new node is added, and the component browser is opened. In this case, type `"Furniture"` (please note including the quotation marks) and press return. You can then drag from the bottom of this node and connect it to the `to` placeholder within the filter node.
 
 ![Furniture Node](constant-value.gif)
 
@@ -88,7 +88,7 @@ The `columns` parameter takes a list of columns to order by. To add an item to t
 
 The final step is to take the first five records. To do this, select the order by node and add a new node. If you type `take` it will show the method. You can either press enter at this point, and the method will be added, and you can configure it in similar ways to above. Alternatively, you can type `take 5` and press return, and it will add the new node selecting the required rows.
 
-![Completed Workflow](image.png)
+![Completed Workflow](complete-workflow.png.png)
 
 ## Renaming the Project
 
