@@ -9,6 +9,11 @@
             "language": "markdown",
             "scheme": "file",
             "pattern": "enso-preppin-data-2023/post.md"
+        },
+        {
+            "language": "markdown",
+            "scheme": "file",
+            "pattern": "enso-getting-started/post.md"
         }
     ]
 }
