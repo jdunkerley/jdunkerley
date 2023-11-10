@@ -89,7 +89,7 @@ In a later post, I will fully cover how to handle warnings and errors.
 
 ![Select Columns](./select-columns.gif)
 
-Add three new entries to the `columns` argument and choose the required columns from the dropdowns under each. The `select_columns` function will return a new table containing only the columns you have selected. 
+Add three new entries to the `columns` argument and choose the required columns from the dropdowns under each. The `select_columns` function will return a new table containing only the columns you have selected.
 
 By default, the columns will be in the same order as the source table. Choose `True` from the `reorder` dropdown to return the columns in the order of the select list. The names are matched case-sensitively. To allow case differences, choose `Insensitive` from the `case_sensitivity` dropdown.
 
