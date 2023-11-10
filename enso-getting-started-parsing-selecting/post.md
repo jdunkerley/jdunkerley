@@ -1,8 +1,8 @@
 ## Getting Started With Enso - Parsing, Selecting and Grouping
 
-In this post, I will build on top of the first steps in the [last post](https://jdunkerley.co.uk/2023/11/02/getting-started-with-enso/) and go over how to parse values in the dataset, select down to just the columns we are interested in, and finally aggregate the data. The previous post covered installing Enso and then loading in some data. 
+In this post, I will build on top of my [last post](https://jdunkerley.co.uk/2023/11/02/getting-started-with-enso/) and go over how to parse values in the dataset, select down to just the columns we are interested in, and finally aggregate the data. The previous post covered installing Enso and then loading in some data. 
 
-This post starts from the workflow created in the last post, still using the [Kaggle Superstore Dataset](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final). If you have not read that post, I recommend you do so before continuing. The workflow can be downloaded from [here](https://www.dropbox.com/scl/fi/doq5ksb38ky0b1oww4q11/Enso_Getting_Started_1.enso-project?rlkey=yb75gl7197wdkjgd71vgavaye&dl=0).
+This post starts from the workflow created in the last post, still using the [Kaggle Superstore Dataset](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final). If you have not read that post, I recommend you do so before continuing. That workflow can be downloaded from [here](https://www.dropbox.com/scl/fi/doq5ksb38ky0b1oww4q11/Enso_Getting_Started_1.enso-project?rlkey=yb75gl7197wdkjgd71vgavaye&dl=0).
 
 ![Initial Workflow](./initial-workflow.png)
 
@@ -12,7 +12,7 @@ The goal of this workflow will be to get a table of the total sales by category 
 
 ![Table Info](./table-info.gif)
 
-Let's start by taking a look at the structure of the data. We can do this using the `info` function on the first node. To add this node, select the first node and press Return or drag out from the bottom of that node. Then, in the new node, type `info` or choose it from the component browser. This function returns a new table containing the metadata about the table. In this case:
+Let's start by taking a look at the structure of the data. We can do this using the `info` function on the first node. To add this node, select the first node and press Return or drag out from the bottom of the first node. Then, in the new node, type `info` or choose it from the component browser. This function returns a new table containing the metadata about the table. In this case:
 
 Column | Items Count | Value Type
 ---|---|---
@@ -109,11 +109,11 @@ Using the same process to add a new column for the year, the table now has all t
 
 ## Grouping and Aggregating
 
-The last step to produce the table is to aggregate the data. Add a new `aggregate` node connected to the `set` function, which added the year. This function takes a list of `Aggregate_Columns`, which define the grouping (via `Aggregate_Column.Group_By`) and the aggregations (such as the sum of sales). In this case, we want to group by `Category`, `Year`, and `Month` and then sum the `Sales`.
+The last step to produce the table is to aggregate the data. Add a new `aggregate` node connected to the `set` function, which added the year. This function takes a list of `Aggregate_Columns`, which define the grouping (via `Aggregate_Column.Group_By`) and the method we've chosen for aggregation (such as the sum of sales). In this case, we want to group by `Category`, `Year`, and `Month` and then sum the `Sales`.
 
 ![Aggregate](./aggregate.png)
 
-Add four entries into the `columns` argument and then select group by for the first three and sum for the last. Then, choose the appropriate columns from the dropdowns. The `aggregate` function will return a new table with the aggregated data. *This function does tend to get quite long. Later versions of the IDE should show this better.*
+Add four entries into the `columns` argument and then select group by for the first three and sum for the last. Then, choose the appropriate columns from the dropdowns. The `aggregate` function will return a new table with the aggregated data. *This function does tend to be quite verbose. Later versions of the IDE should offer a more concise view of the configured aggregate function.*
 
 The grouped table is not returned in a specific order. To sort the data into the required order, use the `order_by` function as shown in the previous post. The completed process is shown below.
 
