@@ -1,8 +1,8 @@
 ## Getting Started With Enso - Parsing, Selecting and Grouping
 
-The [previous post](https://jdunkerley.co.uk/2023/11/02/getting-started-with-enso/) looked at installing Enso and then loading in some data. In this post, I will build on top of those first steps and go over how to parse values in the dataset, select down to just the columns we are interested in, and finally aggregate the data.
+In this post, I will build on top of the first steps in the [last post](https://jdunkerley.co.uk/2023/11/02/getting-started-with-enso/) and go over how to parse values in the dataset, select down to just the columns we are interested in, and finally aggregate the data. The previous post covered installing Enso and then loading in some data. 
 
-It starts from the workflow created in the last post using the [Kaggle Superstore Dataset](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final). If you have not read that post, I recommend you do so before continuing. The workflow can be downloaded from [here](https://www.dropbox.com/scl/fi/doq5ksb38ky0b1oww4q11/Enso_Getting_Started_1.enso-project?rlkey=yb75gl7197wdkjgd71vgavaye&dl=0).
+This post starts from the workflow created in the last post, still using the [Kaggle Superstore Dataset](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final). If you have not read that post, I recommend you do so before continuing. The workflow can be downloaded from [here](https://www.dropbox.com/scl/fi/doq5ksb38ky0b1oww4q11/Enso_Getting_Started_1.enso-project?rlkey=yb75gl7197wdkjgd71vgavaye&dl=0).
 
 ![Initial Workflow](./initial-workflow.png)
 
