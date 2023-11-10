@@ -44,9 +44,9 @@ At first glance, the `Postal Code` column appears to be a number (US 5-digit Zip
 
 ![Parse Node](./parse-start.png)
 
-Once we have added the node, the next step is to choose the columns we are interested in and to specify the target type. Clicking on the right of the `columns` placeholder will add a new column name, then choose `Postal Code` from the dropdown. Finally, choose `Integer` from the `type` dropdown.
+Once we have added the node, the next step is to choose the columns we are interested in and to specify the target type. Click on the right of the `column` placeholder to add a new name, then pick `Postal Code` from the dropdown. Finally, select `Integer` from the `type` dropdown.
 
-![Parse Postal Code](./parse-code.png)
+![Parse Postal Code](./parse-code.gif)
 
  In this dataset, the date fields are stored in US format without leading zeros. Enso uses similar [format strings to .Net](https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings) to specify how to parse or format dates. The table below is not an exhaustive list but gives some key date specifiers.
  
