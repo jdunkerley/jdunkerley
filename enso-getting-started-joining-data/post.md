@@ -60,17 +60,17 @@ The `Table.transpose` method converts a column-based table (like the result abov
 
 ![Expand Column](expand_column.png)
 
-This method takes the column name to expand (the `column` parameter). Optionally, it takes (as does `Table.from_objects`) a set of fields to extract from each object (the `fields` parameter). If you don't provide this then a union of all fields is produced. Finally, the `prefix` parameter controls adding a prefix to new column names. By default, it will add the name of the source column, but in this case, just the value is fine. Now back to a second transpose:
+This method takes the column name to expand (the `column` parameter). Optionally, it takes (as does `Table.from_objects`) a set of fields to extract from each object (the `fields` parameter). If you don't provide this then a union of all fields is produced. Finally, the `prefix` parameter controls adding a prefix to new column names. By default, it will add the name of the source column, but in this case, just the value is needed. Now back to a second transpose:
 
 ![Second Transpose](second_transpose.png)
 
-This time, a `key_column` entry is needed to keep the `Category` as a column. You can specify any number of columns which should not be transposed. The `value_column_name` allows us to change the output from `Value` to `Target`. Finally, also specifying the `attribute_column_name` as `Year`. The result is a table with three columns - `Category`, `Year`, and `Target`. The `Target` column contains the sales targets for each month as a `Vector`, so the next step is to expand this into rows (using the `expand_to_rows` method`) and then finally add a `Month` column (using a row number function):
+This time, a `key_column` entry is needed to keep the `Category` as a column. You can specify any number of columns which should not be transposed. The `value_column_name` allows us to change the output from `Value` to `Target`. Finally, also set the `attribute_column_name` as `Year`. The result is a table with three columns - `Category`, `Year`, and `Target`. The `Target` column contains the sales targets for each month as a `Vector`, so the next step is to expand this into rows (using the `expand_to_rows` method`) and then finally add a `Month` column (using a row number function):
 
 ![Expand to Rows](expand_to_rows.png)
 
 The `expand_to_rows` column takes the column to expand. In this case, the column is expanded to a set of rows, each containing a single value from the Vectors. Any other column's value is repeated for each new row added. The second parameter (`at_least_one_row`) ensures that if a value is `Nothing` or an empty `Vector`, then a single row is added with a `Nothing` value.
 
-The `add_row_number` function allows the creation of an index column. By default, this will be called `Row` and start numbering from 1. The `name` parameter allows changing the output name. The initial value and increment can be set using the `from` and `step` parameters. The next two options allow adding a grouping (in this case, by `Category` and `Year`) and finally allow for applying an ordering if desired.
+The `add_row_number` function allows the creation of an index column. By default, this will be called `Row` and start numbering from 1. The `name` parameter allows changing the output name. The initial value and increment can be set using the `from` and `step` parameters. The following two options enable adding a grouping (in this case, by `Category` and `Year`) and finally allow for applying an ordering if desired.
 
 The final process for downloading and reshaping the sales targets is:
 
