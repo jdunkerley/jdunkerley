@@ -1,10 +1,10 @@
 ## Getting Started With Enso - JSON and Joins
 
-In this post, I use the results from the [last post](https://jdunkerley.co.uk/2023/11/10/getting-started-with-enso-parsing-selecting-and-aggregating/) to review how each category has done against some sales targets the company has set.
+In this post, I will use the results from the [last post](https://jdunkerley.co.uk/2023/11/10/getting-started-with-enso-parsing-selecting-and-aggregating/) to review how each category has performed against sales targets the company has set.
 
 The completed workflow from that post can be downloaded from [GitHub](https://github.com/jdunkerley/jdunkerley/raw/master/enso-getting-started-parsing-selecting/Enso_Getting_Started_2.enso-project).
 
-The sales targets are stored in a JSON file, so they must first be parsed and then joined to the results from the last post. The raw JSON file can be downloaded from [GitHub](https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/enso-getting-started-joining-data/sales_targets.json). Based on the 2014 data, they have category-level monthly targets for 2015 until 2017.
+The sales targets are stored in a JSON file, so they must first be parsed and then joined to the results from the last post. The raw JSON file can be downloaded from [GitHub](https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/enso-getting-started-joining-data/sales_targets.json). Based on the 2014 data, they have category-level monthly targets from 2015 until 2017.
 
 
 ## Downloading the Sales Targets
@@ -28,7 +28,7 @@ Let's take a look at the JSON file:
 }
 ```
 
-Each category is listed as a key in the JSON object. The value for each category is another JSON object with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are various ways to read data from a URL in Enso; a straightforward way is the `Data.fetch` method:
+Each category is listed as a key in the JSON object. The value for each category is another JSON object with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are multiple ways to read data from a URL in Enso; a straightforward option I'll use today is the `Data.fetch` method:
 
 ![Data.fetch](data_fetch.png)
 
@@ -44,11 +44,11 @@ In this case, we want to parse the response as JSON, so leave the default value 
 
 ## Working with JSON
 
-One of Enso's strengths is the ability to use a variety of programming languages. Most functions are written in Enso's native language, but other languages are also used. For example, the `Json.parse` method is written principally in JavaScript. The returned object is a `JS_Object`, a wrapper around an underlying JavaScript object, which works like any other Enso object. For example, the `field_names` method gets all the keys of the object:
+One of Enso's strengths is the ability to use a variety of programming languages within a project. Most functions are written in Enso's native language, but other languages are also used. For example, the `Json.parse` method is written principally in JavaScript. The returned object is a `JS_Object`, a wrapper around an underlying JavaScript object, which works like any other Enso object. For example, the `field_names` method gets all the keys of the object:
 
 ![JS_Object field_names](js_object_fields.png)
 
-In this case, the goal is to convert it into a table. The `Table.from_objects` function is designed to convert various things into a Table. One of the things it can convert is a `JS_Object`:
+In this case, the goal is to convert the JS_Object into a table. The `Table.from_objects` function is designed to convert various things into a Table:`:
 
 ![Table.from_objects](table_from_objects.png)
 
