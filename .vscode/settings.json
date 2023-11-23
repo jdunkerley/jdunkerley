@@ -19,6 +19,11 @@
             "language": "markdown",
             "scheme": "file",
             "pattern": "enso-getting-started-parsing-selecting/post.md"
+        },
+        {
+            "language": "markdown",
+            "scheme": "file",
+            "pattern": "enso-getting-started-joining-data/post.md"
         }
     ]
 }
