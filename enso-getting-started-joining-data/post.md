@@ -2,7 +2,9 @@
 
 In this post, we will use the results from the [last post](https://jdunkerley.co.uk/2023/11/10/getting-started-with-enso-parsing-selecting-and-aggregating/) and look at how each category has done against some sales targets the company has set.
 
-The sales targets are stored in a JSON file, so we will need to parse that and then join it to the results from the last post. The raw JSON file can be download from ...
+The completed workflow from that post can be downloaded from [GitHub]().
+
+The sales targets are stored in a JSON file, so we will need to parse that and then join it to the results from the last post. The raw JSON file can be download from [GitHub](https://raw.githubusercontent.com/jdunkerley/jdunkerley/master/enso-getting-started-joining-data/sales_targets.json).
 
 
 ## Downloading and Parsing the Sales Targets
@@ -22,4 +24,4 @@ Let's take a look at the JSON file:
 }
 ```
 
-Each category is listed as a key in the JSON object. The value for each category is another JSON object with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are a 
+Each category is listed as a key in the JSON object. The value for each category is another JSON object with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are various ways to read data from a URL in Enso, 
