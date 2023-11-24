@@ -28,13 +28,17 @@ Let's take a look at the JSON file:
 }
 ```
 
+<<<<<<< Updated upstream
 Each category is listed as a key in the JSON object. The value for each category is another JSON object with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are multiple ways to read data from a URL in Enso; a straightforward option I'll use today is the `Data.fetch` method:
+=======
+Each category is listed as a key in the JSON object. The value for each category is another JSON object, with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are various ways to read data from a URL in Enso; a straightforward way is the `Data.fetch` method:
+>>>>>>> Stashed changes
 
 ![Data.fetch](data_fetch.png)
 
 This method will download from the specified `uri`. The other parameters are optional, but let's go through them. The `method` argument specifies the HTTP verb used - by default, `GET` is used; however, you can choose another. Please note that only verbs are allowed, which should not change things on the server. There is a `Data.post` method that accepts the other ones.
 
-The `headers` argument specifies any HTTP headers you want to send with the request. These are passed as a `Vector`` of pairs of `Text`` values. For this request, there is no need to specify any headers.
+The `headers` argument specifies any HTTP headers you want to send with the request. These are passed as a `Vector` of pairs of `Text` values. For this request, there is no need to specify any headers.
 
 Finally, the `try_auto_parse_response` controls how Enso handles the response from the server. If true (the default), Enso parses the response based on the `Content-Type` header. If false, then the response will be returned as a `Response` object. In both cases, a data flow error will be returned if the status code indicates an error (i.e., not 200 - 299).
 
@@ -48,7 +52,11 @@ One of Enso's strengths is the ability to use a variety of programming languages
 
 ![JS_Object field_names](js_object_fields.png)
 
+<<<<<<< Updated upstream
 In this case, the goal is to convert the JS_Object into a table. The `Table.from_objects` function is designed to convert various things into a Table:`:
+=======
+Here, the goal is to convert it into a table. The `Table.from_objects` function will change various things into a table. One of the things it can convert is a `JS_Object`.
+>>>>>>> Stashed changes
 
 ![Table.from_objects](table_from_objects.png)
 
@@ -60,11 +68,11 @@ The `Table.transpose` method converts a column-based table (like the result abov
 
 ![Expand Column](expand_column.png)
 
-This method takes the column name to expand (the `column` parameter). Optionally, it takes (as does `Table.from_objects`) a set of fields to extract from each object (the `fields` parameter). If you don't provide this then a union of all fields is produced. Finally, the `prefix` parameter controls adding a prefix to new column names. By default, it will add the name of the source column, but in this case, just the value is needed. Now back to a second transpose:
+The first parameter is the column name to expand (the `column` parameter). The second argument, `fields`, can optionally provide a set of names to extract from each object (this is also the case for `Table.from_objects`). If not set, then a union of all fields is produced. Finally, the `prefix` parameter controls adding a prefix to new column names. By default, it will add the name of the source column, but in this case, just the value is needed. Now, back to a second transpose:
 
 ![Second Transpose](second_transpose.png)
 
-This time, a `key_column` entry is needed to keep the `Category` as a column. You can specify any number of columns which should not be transposed. The `value_column_name` allows us to change the output from `Value` to `Target`. Finally, also set the `attribute_column_name` as `Year`. The result is a table with three columns - `Category`, `Year`, and `Target`. The `Target` column contains the sales targets for each month as a `Vector`, so the next step is to expand this into rows (using the `expand_to_rows` method`) and then finally add a `Month` column (using a row number function):
+This time, a `key_column` entry is needed to keep the `Category` as a column. You can specify any number of columns which should not be transposed. The `value_column_name` allows us to change the output from `Value` to `Target`. Finally, also set the `attribute_column_name` as `Year`. The result is a table with three columns - `Category`, `Year`, and `Target`. The `Target` column contains the sales targets for each month as a `Vector`, so the next step is to expand this into rows (using the `expand_to_rows` method) and then finally add a `Month` column (using a row number function):
 
 ![Expand to Rows](expand_to_rows.png)
 
@@ -72,7 +80,7 @@ The `expand_to_rows` column takes the column to expand. In this case, the column
 
 The `add_row_number` function allows the creation of an index column. By default, this will be called `Row` and start numbering from 1. The `name` parameter allows changing the output name. The initial value and increment can be set using the `from` and `step` parameters. The following two options enable adding a grouping (in this case, by `Category` and `Year`) and finally allow for applying an ordering if desired.
 
-The final process for downloading and reshaping the sales targets is:
+The final process for downloading and reshaping the sales targets looks like this.
 
 ![Download and Reshape](json_restructure.png)
 
