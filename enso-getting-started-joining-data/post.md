@@ -95,7 +95,11 @@ The first argument, `right`, takes a table to join with the self table. In this 
 
 Most of these joins are the same as you get in SQL. The `Left Exclusive` and `Right Exclusive` joins are additions that allow you to get the rows that were not successfully joined. These can be hugely useful to ensure no data is lost. Another feature to note is that the `join_kind` also determines the set of columns returned. For example, the `Left Exclusive` join only returns columns from the left input because no rows from the `right` input matched. The `Inner` join excludes the equality columns, as they are the same in both inputs. For this example, the `Inner` join will work perfectly.
 
-The following parameter, `on`, specifies how to match the rows between the inputs. By default, it will attempt to match the first column in the left input with a column in the right with the same name. It takes a Vector of `Join_Condition`, which allows either an `Equals` condition or a `Between` (the left table contains a value between two columns in the right). In this case, the `Category`, `Year`, and `Month` values must be equal. Add three `Equals` conditions to the `on` parameter and then choose the name from the dropdown on each `left` parameter. By default, the `right` parameter will be the same as the `left` one, but you can change this if needed (though the current UI does not support a dropdown on the right side). Once done, an error will be shown:
+The following parameter, `on`, specifies how to match the rows between the inputs. By default, it will attempt to match the first column in the left input with a column in the right with the same name. It takes a Vector of `Join_Condition`, which allows either an `Equals` condition or a `Between` (the left table contains a value between two columns in the right).
+
+The `right_prefix` argument adds a prefix to clashing column names from the `right` table. The default value, `"Right`, "is added if a column exists in both tables. You can specify whatever prefix you wish to use. If the name is still not unique, a number is added to the end, and a warning is raised. The `on_problems` parameter works as in other functions to handle how warnings are dealt with.
+
+In this case, the `Category`, `Year`, and `Month` values must be equal. Add three `Equals` conditions to the `on` parameter and then choose the name from the dropdown on each `left` parameter. By default, the `right` parameter will be the same as the `left` one, but you can change this if needed (though the current UI does not support a dropdown on the right side). Once done, an error will be shown:
 
 ![Join Error](join_error.png)
 
@@ -133,6 +137,6 @@ In this post, we have looked at many powerful features in Enso for reading and r
 - `Table.join`: joining two tables together.
 - `Table.cross_tab`: creating a summary table from a table.
 
-The completed workflow from this post can be downloaded from [GitHub]().
+The completed workflow from this post can be downloaded from [GitHub](https://github.com/jdunkerley/jdunkerley/raw/master/enso-getting-started-joining-data/Enso_Getting_Started_3.enso-project). As always, I hope you will consider trying out [Enso](https://github.com/enso-org/enso/releases/latest). If you have any questions, please join our [Discord](https://discord.com/invite/enso) server or comment below.
 
-I'm going to take a break from this series for December to concentrate on solving Advent of Code in Enso, but more on that later in the week. I'll be back in January with the next post in this series.
+I will take a break from this series for December to concentrate on solving Advent of Code in Enso, but more on that later in the week. I'll be back in January with the next post in this series.
