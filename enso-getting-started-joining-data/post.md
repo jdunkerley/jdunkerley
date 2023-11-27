@@ -28,11 +28,7 @@ Let's take a look at the JSON file:
 }
 ```
 
-<<<<<<< Updated upstream
-Each category is listed as a key in the JSON object. The value for each category is another JSON object with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are multiple ways to read data from a URL in Enso; a straightforward option I'll use today is the `Data.fetch` method:
-=======
-Each category is listed as a key in the JSON object. The value for each category is another JSON object, with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are various ways to read data from a URL in Enso; a straightforward way is the `Data.fetch` method:
->>>>>>> Stashed changes
+Each category is listed as a key in the JSON object. The value for each category is another JSON object, with the years as keys and the sales targets as arrays. The first task is to load this into Enso. There are multiple ways to read data from a URL in Enso; a straightforward option is the `Data.fetch` method:
 
 ![Data.fetch](data_fetch.png)
 
@@ -52,11 +48,7 @@ One of Enso's strengths is the ability to use a variety of programming languages
 
 ![JS_Object field_names](js_object_fields.png)
 
-<<<<<<< Updated upstream
-In this case, the goal is to convert the JS_Object into a table. The `Table.from_objects` function is designed to convert various things into a Table:`:
-=======
-Here, the goal is to convert it into a table. The `Table.from_objects` function will change various things into a table. One of the things it can convert is a `JS_Object`.
->>>>>>> Stashed changes
+In this case, the goal is to convert the JS_Object into a table. The `Table.from_objects` function will change various things, including `JS_Object`, into a table.
 
 ![Table.from_objects](table_from_objects.png)
 
@@ -76,7 +68,7 @@ This time, a `key_column` entry is needed to keep the `Category` as a column. Yo
 
 ![Expand to Rows](expand_to_rows.png)
 
-The `expand_to_rows` column takes the column to expand. In this case, the column is expanded to a set of rows, each containing a single value from the Vectors. Any other column's value is repeated for each new row added. The second parameter (`at_least_one_row`) ensures that if a value is `Nothing` or an empty `Vector`, then a single row is added with a `Nothing` value.
+The `expand_to_rows` column's first argument again specifies the column to expand. In this case, the column is expanded to a set of rows, each containing a single value from the Vectors. Any other column's value is repeated for each new row added. The second parameter (`at_least_one_row`) ensures that if a value is `Nothing` or an empty `Vector`, then a single row is added with a `Nothing` value.
 
 The `add_row_number` function allows the creation of an index column. By default, this will be called `Row` and start numbering from 1. The `name` parameter allows changing the output name. The initial value and increment can be set using the `from` and `step` parameters. The following two options enable adding a grouping (in this case, by `Category` and `Year`) and finally allow for applying an ordering if desired.
 
