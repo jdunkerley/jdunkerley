@@ -1,6 +1,6 @@
 ## Getting Started With Enso - JSON and Joins
 
-In this post, I will use the results from the [last post](https://jdunkerley.co.uk/2023/11/10/getting-started-with-enso-parsing-selecting-and-aggregating/) to review how each category has performed against sales targets the company has set.
+In this post, I will use the results from the [last post](https://jdunkerley.co.uk/2023/11/10/getting-started-with-enso-parsing-selecting-and-aggregating/) to review how each category has performed against the sales targets the company has set.
 
 The completed workflow from that post can be downloaded from [GitHub](https://github.com/jdunkerley/jdunkerley/raw/master/enso-getting-started-parsing-selecting/Enso_Getting_Started_2.enso-project).
 
@@ -36,7 +36,7 @@ This method will download from the specified `uri`. The other parameters are opt
 
 The `headers` argument specifies any HTTP headers you want to send with the request. These are passed as a `Vector` of pairs of `Text` values. For this request, there is no need to specify any headers.
 
-Finally, the `try_auto_parse_response` controls how Enso handles the response from the server. If true (the default), Enso parses the response based on the `Content-Type` header. If false, then the response will be returned as a `Response` object. In both cases, a data flow error will be returned if the status code indicates an error (i.e., not 200 - 299).
+Finally, the `try_auto_parse_response` controls how Enso handles the response from the server. If true (the default), Enso parses the body based on the `Content-Type` header. If false, then the reply will be returned as a `Response` object. In both cases, a data flow error will be returned if the status code indicates an error (i.e., not 200 - 299).
 
 ![GitHub fetch](fetch_from_github.png)
 
@@ -68,7 +68,7 @@ This time, a `key_column` entry is needed to keep the `Category` as a column. Yo
 
 ![Expand to Rows](expand_to_rows.png)
 
-The `expand_to_rows` column's first argument again specifies the column to expand. In this case, the column is expanded to a set of rows, each containing a single value from the Vectors. Any other column's value is repeated for each new row added. The second parameter (`at_least_one_row`) ensures that if a value is `Nothing` or an empty `Vector`, then a single row is added with a `Nothing` value.
+The `expand_to_rows` column's first argument again specifies the column to work upon. In this case, if a cell contains a set of values (such as a Vector), it is expanded to new rows, each having a single value from the set, with the values from the other columns repeated for each new row added. The current row is added to the output table if the cell is a single value. The second parameter (`at_least_one_row`) controls whether to add a row for an empty `Vector`; if `False` (the default), these rows are dropped; if `True`, then the current row, with the input cell replaced with `Nothing`, is added.
 
 The `add_row_number` function allows the creation of an index column. By default, this will be called `Row` and start numbering from 1. The `name` parameter allows changing the output name. The initial value and increment can be set using the `from` and `step` parameters. The following two options enable adding a grouping (in this case, by `Category` and `Year`) and finally allow for applying an ordering if desired.
 
@@ -78,3 +78,61 @@ The final process for downloading and reshaping the sales targets looks like thi
 
 ## Joining the Data
 
+The targets are now easy to work with and can be joined to the results from the previous post. Dragging out from the results and adding a `join` node looks like:
+
+![Join function](join_start.png)
+
+The first argument, `right`, takes a table to join with the self table. In this case, connect the output from the restructure process to this. The second argument, `join_kind``, controls the type of join to perform. `The default is a left-outer join - all rows from the left input (`self`) and the matching rows from `right` are returned. Enso supports the following join types:
+
+&nbsp; | Join Kind | Left Rows | Right Rows | Columns Returned
+--- | --- | --- | --- | ---
+![Left Exclusive](join_left_exclusive.png) | Left Exclusive | All | Non-Matching | Left Only
+![Left Outer](join_left_outer.png) | Left Outer | All | Matching | All
+![Inner](join_inner.png) | Inner | Matching | Matching | All excluding equality columns
+![Right Outer](join_right_outer.png) | Right Outer | Matching | All | All
+![Right Exclusive](join_right_exclusive.png) | Right Exclusive | Non-Matching | All | Right Only
+![Full Outer](join_full_outer.png) | Full Outer | All | All | All
+
+Most of these joins are the same as you get in SQL. The `Left Exclusive` and `Right Exclusive` joins are additions that allow you to get the rows that were not successfully joined. These can be hugely useful to ensure no data is lost. Another feature to note is that the `join_kind` also determines the set of columns returned. For example, the `Left Exclusive` join only returns columns from the left input because no rows from the `right` input matched. The `Inner` join excludes the equality columns, as they are the same in both inputs. For this example, the `Inner` join will work perfectly.
+
+The following parameter, `on`, specifies how to match the rows between the inputs. By default, it will attempt to match the first column in the left input with a column in the right with the same name. It takes a Vector of `Join_Condition`, which allows either an `Equals` condition or a `Between` (the left table contains a value between two columns in the right). In this case, the `Category`, `Year`, and `Month` values must be equal. Add three `Equals` conditions to the `on` parameter and then choose the name from the dropdown on each `left` parameter. By default, the `right` parameter will be the same as the `left` one, but you can change this if needed (though the current UI does not support a dropdown on the right side). Once done, an error will be shown:
+
+![Join Error](join_error.png)
+
+The error is because the `Year` column is a `Text` value in the restructured table but an `Integer` in the results table. The `parse` function can be added before this join node to convert the `Year` column to an `Integer` (there is no need to select a type as it will automatically determine all are `Integer` values):
+
+![Configured Join](join_configured.png)
+
+## Creating the Summary Table
+
+The table now has `Target` and `Sum Sales` (from the previous post) columns; the next step is to add a column with the difference between the two (using the `set` method):
+
+![Versus Sales Targets](vs_sales_targets.png)
+
+First, using the `cast` to convert the new column to `Integer` values removes the decimal places. This can then be fed into the `cross_tab` method, which can be used to create a summary table.
+
+![Cross Tab](cross_tab.png)
+
+The first argument, `group_by`, specifies a set of columns to group the data by. In this case, the `Year` and `Month` columns are used. The second argument, `name_column`, tells the method where to get the new column names. The third argument, `values`, sets how to compute the value for each cell. The default is to count the number of rows in each group, but you can choose any aggregation function. In this case, the `sum` function adds the values in the `Sales vs Target` column.
+
+One final step is to order the results `Year` and `Month`. The complete process of building the summary table looks like this:
+
+![Summary Table Process](summary_process.png)
+
+## Wrapping Up
+
+In this post, we have looked at many powerful features in Enso for reading and restructuring data. Building on top of the methods introduced before, this time we have seen:
+
+- `Data.fetch`: reading and parsing data from the web.
+- `Json.parse`: parsing JSON data from a `Text`` value.
+- `Table.from_objects`: converting objects into a table.
+- `Table.transpose`: converting a column-based table to a row-based one.
+- `Table.expand_column`: expanding a column of objects into multiple columns.
+- `Table.expand_to_rows`: expanding a column of lists into multiple rows.
+- `Table.add_row_number`: adding an index column to a table.
+- `Table.join`: joining two tables together.
+- `Table.cross_tab`: creating a summary table from a table.
+
+The completed workflow from this post can be downloaded from [GitHub]().
+
+I'm going to take a break from this series for December to concentrate on solving Advent of Code in Enso, but more on that later in the week. I'll be back in January with the next post in this series.
