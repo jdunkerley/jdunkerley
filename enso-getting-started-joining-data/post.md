@@ -82,7 +82,7 @@ The targets are now easy to work with and can be joined to the results from the 
 
 ![Join function](join_start.png)
 
-The first argument, `right`, takes a table to join with the self table. In this case, connect the output from the restructure process to this. The second argument, `join_kind`, controls the type of join to perform. The default is a left-outer join - all rows from the left input (`self`) and the matching rows from `right` are returned. Enso supports the following join types:
+The first argument, `right`, takes a table to join with the self table. In this The first argument, `right`, takes a table to join with the self table. In this case, connect the output from the restructure process to this. The second argument, `join_kind`, controls the type of join to perform. The default is a left-outer join - all rows from the left input (`self`) and the matching rows from `right` are returned. Enso supports the following join types:
 
 &nbsp; | Join Kind | Left Rows | Right Rows | Columns Returned
 --- | --- | --- | --- | ---
