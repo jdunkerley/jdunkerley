@@ -82,7 +82,7 @@ The targets are now easy to work with and can be joined to the results from the 
 
 ![Join function](join_start.png)
 
-The first argument, `right`, takes a table to join with the self table. In this case, connect the output from the restructure process to this. The second argument, `join_kind``, controls the type of join to perform. `The default is a left-outer join - all rows from the left input (`self`) and the matching rows from `right` are returned. Enso supports the following join types:
+The first argument, `right`, takes a table to join with the self table. In this case, connect the output from the restructure process to this. The second argument, `join_kind`, controls the type of join to perform. The default is a left-outer join - all rows from the left input (`self`) and the matching rows from `right` are returned. Enso supports the following join types:
 
 &nbsp; | Join Kind | Left Rows | Right Rows | Columns Returned
 --- | --- | --- | --- | ---
@@ -97,7 +97,7 @@ Most of these joins are the same as you get in SQL. The `Left Exclusive` and `Ri
 
 The following parameter, `on`, specifies how to match the rows between the inputs. By default, it will attempt to match the first column in the left input with a column in the right with the same name. It takes a Vector of `Join_Condition`, which allows either an `Equals` condition or a `Between` (the left table contains a value between two columns in the right).
 
-The `right_prefix` argument adds a prefix to clashing column names from the `right` table. The default value, `"Right`, "is added if a column exists in both tables. You can specify whatever prefix you wish to use. If the name is still not unique, a number is added to the end, and a warning is raised. The `on_problems` parameter works as in other functions to handle how warnings are dealt with.
+The `right_prefix` argument adds a prefix to clashing column names from the `right` table. The default value, `"Right "`, is added if a column exists in both tables. You can specify whatever prefix you wish to use. If the name is still not unique, a number is added to the end, and a warning is raised. The `on_problems` parameter works as in other functions to handle how warnings are dealt with.
 
 In this case, the `Category`, `Year`, and `Month` values must be equal. Add three `Equals` conditions to the `on` parameter and then choose the name from the dropdown on each `left` parameter. By default, the `right` parameter will be the same as the `left` one, but you can change this if needed (though the current UI does not support a dropdown on the right side). Once done, an error will be shown:
 
