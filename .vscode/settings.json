@@ -24,6 +24,11 @@
             "language": "markdown",
             "scheme": "file",
             "pattern": "enso-getting-started-joining-data/post.md"
+        },
+        {
+            "language": "markdown",
+            "scheme": "file",
+            "pattern": "enso-advent-of-code-2023/post.md"
         }
     ]
 }
