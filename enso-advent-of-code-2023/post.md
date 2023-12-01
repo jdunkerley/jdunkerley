@@ -1,6 +1,6 @@
 # Solving Advent of Code 2023 in Enso
 
-![Advent of Code 2023](advent-2023.png)
+![Advent of Code 2023](aoc1Header.png)
 
 So it's that time of the year again - it's even snowing here in London as I write this. That means it's time for the [Advent of Code](https://adventofcode.com/). For those who haven't heard of it, this is a fantastic set of 25 puzzles released one by one every day in December until Christmas Day. Each puzzle has two related parts - usually a simple case first, and the second a more complex version. The problems are language agnostic, so they can be solved in any language you like.
 
