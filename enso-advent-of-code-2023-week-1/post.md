@@ -52,7 +52,7 @@ What is happening in these components is picking the `Value` column (where the t
 
 The `running` function works across all the rows and doesn't reset for each line. To correct this, I calculated the minimum `StartChar` for each line and subtracted it from the `StartChar` and `EndChar` columns. This correction uses the `aggregate` function to create the minimum per line and then `lookup_and_replace` to return the minimum value to the original table.
 
-![Day 3 Part 1](day3_part1.png).
+![Day 3 Part 1](day3_part1.png)
 
 Having built this table, the next step is splitting it into the numbers and the symbols. Using the `parse` function on the `Value` column and ignoring the error, replaces the symbols with `Nothing` and converts the digits to numbers. The `filter` function can then split the table. After this split, we can join between the two sets but need to do four different joins:
 
@@ -67,5 +67,22 @@ The final steps are to ensure no duplicates of the numbers using the `distinct` 
 
 ![Day 3 Part 2](day3_part2.png).
 
-For part 2, the symbol needed a slight change (filtering to just `'*'`) and a slightly different final computation. In this case, the unique set is around the symbol, not the number. Additionally, only instances where two numbers match are kept and multiplied before being summed.
+For part 2, the filter for the symbol needed a slight change (when equal to `'*'`) and a different final computation. In this case, the unique set is around the symbol, not a number. Additionally, only instances where two numbers match are kept and multiplied before being summed.
+
+## [Day 4 - Scratchcards!](https://adventofcode.com/2023/day/4)
+- [Enso Project file](https://github.com/jdunkerley/adventofcode/raw/master/2023/AoC_2023_4.enso-project)
+
+The first part of this challenge was straightforward. I parsed the input into two tables - one for the card values and one for the winning values. Then, join the two tables on the card number and value against winners and count the rows per card.
+
+For part 2, I needed to use Enso's ability to create a grouped function. You can create a set of nodes and then group them using `Ctrl+G` (or `Cmd+G` on a Mac). This grouping creates a new function that can be used in the workflow. The grouped function can be edited by double-clicking on it.
+
+![Day 4 Grouped Function](day4_grouped_function.png)
+
+This function takes two inputs. `operator16` has the count of winning numbers for each card, and `number1` tells the function which card to use. The function builds a `Vector` of which cards should be duplicated. So, in the test case with six cards and the first card winning four numbers, the result is `[1, 1, 1, 1, 1, 0]`. It includes the first card being played as well. Mapping over all the cards creates a `Vector` of `Vector`s of the cards to add.
+
+A similar grouped function determines how many times each card was played. It does this by folding over the result of the previous function and adding the counts together.
+
+## [Day 5: If You Give A Seed A Fertilizer](https://adventofcode.com/2023/day/5)
+- [Enso Project file](https://github.com/jdunkerley/adventofcode/raw/master/2023/AoC_2023_5.enso-project)
+
 
