@@ -1,6 +1,6 @@
 # Solving Advent of Code 2023 in Enso (part 2)
 
-So that's the end of the first whole week of Advent of Code 2023. I've managed to get all the stars so far. In this post, I'll give some of the details of my solutions. 
+As 2024
 
 ## Parsing the Inputs
 
