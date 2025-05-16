@@ -32,3 +32,18 @@ I then do a couple more transformations to the data:
 
 ![Parsed data](./parsed-data.jpg)
 
+## Comparing year by year
+
+Now we have the data in a nice format, we can start to do some analysis. I want to change the data to a row based format with `year`, `month` and `rainfall` columns. A transpose function will rotate the data and then we can convert the month name to a season as well. I created a lookup table (using `Table.input`) to convert the month names to number and seasons. I then use a `merge` function to join the data with the lookup table. This gives us a table with the year, month, season and rainfall values.
+
+![Structured data](./structured-data.jpg)
+
+As December is in the winter, need to add a `season year` column to the data. This is just the year, unless it is December, in which case it is the next year. Using a `set` component with an [expression](https://help.enso.org/docs/using-enso/expression-syntax) of `if [month]="dec" then [year]+1 else [year]` to make the new column.
+
+![Final Tidy](./final-tidy.jpg)
+
+Finally, in preparing the data, need to add a row for May 2025. As this is not currently in the monthly data. Based on the article, the average for Spring 2025 is 80mm, so for May this comes out as just 2.7mm. Using another look up table and merge function we can update this value and then filter out the future rows (where the rainfall is `Nothing`).
+
+![By Year](./by-year.jpg)
+
+To create the yearly data, filter down to the interesting months (here March, April and May). Using another look up table and linked to a `filter` where `month Is_In` allows you to do this easily. Then aggregate by `season year` creating the total rainfall for each year.
