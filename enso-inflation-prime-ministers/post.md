@@ -1,4 +1,4 @@
-# Using Enso to Analyze UK Prime Ministers and Inflation
+# Using Enso to Analyse UK Prime Ministers and Inflation
 
 ![UK Prime Ministers and Inflation](inflation-prime-ministers.png)
 
@@ -120,7 +120,7 @@ To compute the annualised inflation rate during each Prime Minister's time in of
 
 To calculate the number of months in between the first and last inflation data points, a simple expression using the Date Diff function can be used.
 
-*To make the expressions clearer, I also used a simple expression to divide the end value and the start value.*
+*To make the expressions clearer, I also used a simple expression to divide the end value by the start value.*
 
 ![Compute Annualised Inflation](compute-inflation.jpg)
 
