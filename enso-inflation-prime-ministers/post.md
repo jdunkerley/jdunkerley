@@ -4,6 +4,10 @@
 
 One of Enso's strengths is its ability to easily gather and process data from various sources, particularly web-based APIs. In this post, using Enso, I'll show how to combine data from [FRED](https://fred.stlouisfed.org/) and [Wikipedia](https://www.wikipedia.org/) to create a dataset of UK Prime Ministers and the annualised inflation rate during their time in office.
 
+My goal is to create a table of Prime Ministers, their start and end dates, and the annualised inflation rate during their time in office. Something that looks like this:
+
+![Target Table](target-table.png)
+
 ## Setting up access to the FRED API
 
 The FRED is a fantastic source of economic data. It provides a free API to access its data, which makes it easy to gather data using Enso. First, you'll need to sign up for a free API key from [FRED](https://fred.stlouisfed.org/docs/api/api_key.html).
