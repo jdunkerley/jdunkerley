@@ -1,6 +1,6 @@
 # Using Enso to Analyze Fund Performance
 
-In this post, I'll demonstrate how to use Enso to analyze the performance of a hypothetical investment account.  Starting from a daily valuation and transaction history, we'll create a return series, compare against a benchmark, and finally compare against inflation data to see the real return of the account.
+In this post, I'll demonstrate how to use Enso to analyze the performance of a hypothetical investment account.  Starting from a daily valuation and transaction history, we'll create a return series and convert it into an index to show monthly returns and statistics.
 
 ## The Input Data
 
@@ -33,13 +33,38 @@ Where `coalesce([CashValue],0)` ensures that if there is no cash transaction on 
 
 Note, Enso warns that the first row includes a division by zero, as there is no previous day valuation. This is expected, and we can filter out this row in the next step. If you choose to `Ignore` in the `on_problems` dropdown, the warning will disappear.
 
+This series excludes fees as they were in the cash transactions. These can be easily included by altering the formula to be the maximum of 0 and the `CashValue`: 
+
+```
+Return = ([AccountValue] - max(0, coalesce([CashValue],0))) / coalesce(offset([AccountValue], -1), 0) - 1
+```
+
 Finally on the data prep, remove the first row (using `drop (First 1)`) and the extra columns we no longer need, leaving just the date and return columns (using `select_columns ["Date", "Return"]`).
 
-## Computing Monthly Returns
+## Computing an Index Series
 
-To compare the fund's performance against a benchmark, we need to compute the monthly returns from the daily return series. We can do this by grouping the data by month and calculating the cumulative return for each month.
+In order to allow for comparing the fund returns and other analysis, it is useful to convert to a series where the current value of £1 invested at the start is given. The value can be computed by multiplying the daily returns plus 1. As we want to get a daily series, the `running` function combined with logarithms allows us to do this:
+
+![Daily Value](lagrida_latex_editor.png)
+
+![Value Series](image-3.png)
+
+## Computing Monthly Statistics
+
+To compare the fund's performance against a benchmark, we need to compute the monthly returns from the value series. 
 
 Adding a `Month` column to the data, equal to the first day of the month for each date, allows us to group by this new column. There are a couple of ways to produce this, but the simplest is to use the `first_of_month` function.
 
-As Enso doesn't have a built-in aggregate product function, will need to use logarithms to compute the cumulative return. The formula for cumulative return using logarithms is just the sum of the log(1 + daily return) for each day in the month, and then converting back to a return using the exponential function:
+Next, we can compute various aggregates such as the final index value, the standard deviation and the average return. Using the final index combined with an offset, it is easy to compute the monthly return.
 
+![Monthly stats](image-4.png)
+
+Finally, to make things easier to read, we can format the values to make them more readable:
+
+![Final table](image-5.png)
+
+## Wrapping Up
+
+In this post, we've walked through how to tidy up and join a valuation series and transaction report to create an index series. Then, finally, we put together a few monthly series.
+
+In the next post, will look at comparing this with an index and adjusting for inflation as well as computing some drawdown statistics.
