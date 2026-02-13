@@ -1,6 +1,8 @@
-# Using Enso to Analyze Fund Performance
+# Using Enso to Analyse Fund Performance
 
-In this post, I'll demonstrate how to use Enso to analyze the performance of a hypothetical investment account.  Starting from a daily valuation and transaction history, we'll create a return series and convert it into an index to show monthly returns and statistics.
+![Enso Fund Analysis](./Enso%20Fund%20Performance.png)
+
+In this post, I'll demonstrate how to use Enso to analyse the performance of a hypothetical investment account.  Starting from a daily valuation and transaction history, we'll create a return series and convert it into an index to show monthly returns and statistics.
 
 ## The Input Data
 
@@ -9,7 +11,7 @@ For this analysis, we have two input data files:
 - Daily Valuations: A CSV file (`FundValues.csv`) containing the daily valuation of the investment account.
 - Transactions: An Excel workbook (`CashTransactions.xlsx`) containing the transaction history of the account, including deposits and withdrawals.
 
-In the hypothetical example, there are monthly investments of £1,000 made on the first business day of each month. There are annual fees of 0.5% charged on the total account value, 14th of each month. The account starts with an initial investment of £20,000.
+In the hypothetical example, £1,000 is invested on the first business day of each month. There are annual fees of 0.5% charged on the total account value, 14th of each month. The account starts with an initial investment of £20,000.
 
 Let's load the data into Enso - using `Data.read` (or by dropping the files into the Enso workspace).
 
@@ -17,7 +19,7 @@ Let's load the data into Enso - using `Data.read` (or by dropping the files into
 
 ## Computing Daily Returns
 
-To compute the daily returns of the fund, we need to account for both the changes in valuation and the cash flows (deposits and withdrawals). Firstly, joining the two datasets on the date field allows us to see both the valuation and any transactions on the same date. As there may be dates with no transactions, we use a left join to ensure all valuation dates are retained. Then, we sort the data by date to ensure chronological order.
+To compute the fund's daily returns, we need to account for both changes in valuation and cash flows (deposits and withdrawals). Firstly, joining the two datasets on the date field allows us to see both the valuation and any transactions on the same date. Because there may be dates with no transactions, we use a left join to retain all valuation dates. Then, we sort the data by date to ensure chronological order.
 
 ![Joined Data](image-1.png)
 
@@ -31,7 +33,7 @@ Where `coalesce([CashValue],0)` ensures that if there is no cash transaction on 
 
 ![Return series](image-2.png)
 
-Note, Enso warns that the first row includes a division by zero, as there is no previous day valuation. This is expected, and we can filter out this row in the next step. If you choose to `Ignore` in the `on_problems` dropdown, the warning will disappear.
+Note: Enso warns that the first row contains a division by zero because there is no previous-day valuation. This is expected, and we can filter out this row in the next step. If you choose to `Ignore` in the `on_problems` dropdown, the warning will disappear.
 
 This series excludes fees as they were in the cash transactions. These can be easily included by altering the formula to be the maximum of 0 and the `CashValue`: 
 
@@ -53,7 +55,7 @@ In order to allow for comparing the fund returns and other analysis, it is usefu
 
 To compare the fund's performance against a benchmark, we need to compute the monthly returns from the value series. 
 
-Adding a `Month` column to the data, equal to the first day of the month for each date, allows us to group by this new column. There are a couple of ways to produce this, but the simplest is to use the `first_of_month` function.
+Adding a `Month` column to the data, set to the first day of each month, allows us to group by it. There are a couple of ways to produce this, but the simplest is to use the `first_of_month` function.
 
 Next, we can compute various aggregates such as the final index value, the standard deviation and the average return. Using the final index combined with an offset, it is easy to compute the monthly return.
 
@@ -67,4 +69,8 @@ Finally, to make things easier to read, we can format the values to make them mo
 
 In this post, we've walked through how to tidy up and join a valuation series and transaction report to create an index series. Then, finally, we put together a few monthly series.
 
-In the next post, will look at comparing this with an index and adjusting for inflation as well as computing some drawdown statistics.
+If you'd like to try this yourself, you can download a trial of Enso from the [Enso website](https://www.ensoanalytics.com/). The data files used in this project are available from my GitHub repository:
+
+- [FundValues.csv](
+
+In the next post, will look at comparing this with an index, adjusting for inflation, and computing some draw-down statistics.
