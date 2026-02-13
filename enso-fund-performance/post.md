@@ -76,6 +76,6 @@ If you'd like to try this yourself, you can download a trial of Enso from the [E
 
 The completed Enso project file is also available on GitHub:
 
-- [Enso Project]()
+- [Enso Project](https://github.com/jdunkerley/jdunkerley/blob/master/enso-fund-performance/Fund%20Performance%20Blog.enso-project)
 
 In the next post, will look at comparing this with an index, adjusting for inflation, and computing some draw-down statistics.
