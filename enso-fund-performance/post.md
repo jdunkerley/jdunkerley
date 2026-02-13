@@ -71,6 +71,11 @@ In this post, we've walked through how to tidy up and join a valuation series an
 
 If you'd like to try this yourself, you can download a trial of Enso from the [Enso website](https://www.ensoanalytics.com/). The data files used in this project are available from my GitHub repository:
 
-- [FundValues.csv](
+- [FundValues.csv](https://github.com/jdunkerley/jdunkerley/blob/master/enso-fund-performance/FundValues.csv)
+- [CashTransactions.xlsx](https://github.com/jdunkerley/jdunkerley/blob/master/enso-fund-performance/CashTransactions.xlsx)
+
+The completed Enso project file is also available on GitHub:
+
+- [Enso Project]()
 
 In the next post, will look at comparing this with an index, adjusting for inflation, and computing some draw-down statistics.
