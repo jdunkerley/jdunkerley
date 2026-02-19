@@ -43,3 +43,35 @@ Next, we need to reset the count of days when the value recovers to a new peak. 
 Again, we can then compute the maximum value in this series to get the maximum drawdown duration:
 
 ![Maximum drawdown duration](image-5.png)
+ 
+ ## Joining to a Benchmark
+
+To compare the fund's performance against a benchmark, we can download historical price data for a relevant index. In this case, I chose to use the FTSE 100 index as a benchmark for UK equity performance. We can download the historical prices for the FTSE 100 from [this link](https://uk.investing.com/indices/uk-100-historical-data) (due to the rights of the data, I can't share it directly, but you can download it yourself from the link).
+
+![FTSE 100 Raw Data](image-6.png)
+
+The downloaded CSV is a set of formatted values, so first we need to clean the data and parse to value. First, using the `use_first_row_as_names` function will name the columns. Then a couple of `parse` functions will convert the columns to the correct type.
+
+![Parsing the FTSE 100 data](image-7.png)
+
+Let's again convert the price series into an index series. We can do this using the expression `[Price]/(first([Price]))` to create an index that starts at 1 on the first day (once we have sorted the data by date), and then grows according to the price changes.
+
+We can then join this back to the original index series for the fund, using a `merge` function to add the benchmark index. Followed by a `fill_nothing` to carry forward the last value of the benchmark index when there are missing values (e.g., due to non-trading days). Finally, we can compute the benchmark return using a formula of `coalesce([BenchmarkIndex]/offset([BenchmarkIndex],-1)-1,0)`.
+
+![Merged with the fund data](image-8.png)
+
+**ToDo: Plot Versus FTSE 100**
+
+## Computing Correlation Between Fund and Benchmark
+
+**ToDo: Add correlation section here**
+
+## Computing Excess Returns and Sharpe Ratio
+
+**ToDo: Add Risk Free Rate and Sharpe Ratio section here**
+
+Now that we have joined the benchmark to the fund data, it is simple to compute the excess return of the fund over the benchmark by subtracting the benchmark return from the fund return. We can then compute a daily sharpe ratio by dividing the excess return by the standard deviation of the excess return. This can then be annualised by multiplying by the square root of 252 (the number of trading days in a year).
+
+![Excess returns and Sharpe ratio](image-9.png)
+
+Finally, we can compute the correlation between the fund returns and the benchmark returns using the `correlation` function. This will give us a measure of how closely the fund's performance tracks that of the benchmark.
