@@ -60,11 +60,13 @@ We can then join this back to the original index series for the fund, using a `m
 
 ![Merged with the fund data](image-8.png)
 
-**ToDo: Plot Versus FTSE 100**
+We can now compute the correlation between the fund returns and the benchmark returns. The Pearson correlation coefficient measures the linear relationship between two variables, in this case, the fund returns and the benchmark returns. A correlation of 1 indicates a perfect positive linear relationship, -1 indicates a perfect negative linear relationship, and 0 indicates no linear relationship. To compute this in Enso, first we get the `Return` column form the table and then the `Benchmark Return` column. We can then use the `compute_bulk` function to create a table with the correlation between these two series.
 
-## Computing Correlation Between Fund and Benchmark
+![Series correlation](image-9.png)
 
-**ToDo: Add correlation section here**
+Finally, we can make a scatter plot of the fund returns against the benchmark returns to visually inspect the relationship between the two. This can be done by selecting the three columns (`Date`, `Value` and `BenchmarkIndex`) and then choosing the Scatter Plot option in the visualisation menu.
+
+![Scatter plot of fund versus index](image-10.png)
 
 ## Computing Excess Returns and Sharpe Ratio
 
@@ -72,6 +74,19 @@ We can then join this back to the original index series for the fund, using a `m
 
 Now that we have joined the benchmark to the fund data, it is simple to compute the excess return of the fund over the benchmark by subtracting the benchmark return from the fund return. We can then compute a daily sharpe ratio by dividing the excess return by the standard deviation of the excess return. This can then be annualised by multiplying by the square root of 252 (the number of trading days in a year).
 
-![Excess returns and Sharpe ratio](image-9.png)
-
 Finally, we can compute the correlation between the fund returns and the benchmark returns using the `correlation` function. This will give us a measure of how closely the fund's performance tracks that of the benchmark.
+
+## Wrapping Up
+
+In this post, we have looked at how to take the index and return series we had created and compute some drawdown statistics, as well as how to join the fund data to a benchmark and compute the correlation. 
+
+Finally, we also looked at how to compute excess returns over a risk free rate and compute a Sharpe ratio to measure the risk-adjusted performance of the fund.
+
+If you'd like to try this yourself, you can download a trial of Enso from the [Enso website](https://www.ensoanalytics.com/). The data files used in this project are available from my GitHub repository:
+
+- [index.csv](https://raw.githubusercontent.com/jdunkerley/jdunkerley/refs/heads/master/enso-fund-performance-2/index.csv)
+
+The completed Enso project file is also available on GitHub:
+
+**ToDo: Add link to completed Enso project file here**
+- [Enso Project](https://github.com/jdunkerley/jdunkerley/blob/master/enso-fund-performance-2/Fund%20Performance%20Blog.enso-project)
