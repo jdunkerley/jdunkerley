@@ -8,11 +8,11 @@ We'll start this analysis using the index and return series we created in the la
 
 ## Maximum Drawdown
 
-The maximum drawdown is the largest percentage decline from a peak to a trough in the value of an investment. More formally, if <em>V<sub>t</sub></em> is the value of the investment at time <em>t</em>, then the drawdown can be expressed as:
+The maximum drawdown is the largest percentage decline from a peak to a trough in the value of an investment. More formally, if <em>v<sub>t</sub></em> is the value of the investment at time <em>t</em>, then the drawdown can be expressed as:
 
 ![d_t = 1-\frac{v_t}{Max^{0}_{t}(v_i)}](latex_drawdown.png)
 
-As <em>V<sub>t</sub></em> will be between 0 and the maximum value, the drawdown will be between 0 and 1, where 0 indicates no drawdown and 1 indicates a complete loss of value. To compute this in Enso, we can use the `running` function to keep track of the maximum value seen so far, and then apply a formula to compute the drawdown at each time step.
+As <em>v<sub>t</sub></em> will be between 0 and the maximum value, the drawdown will be between 0 and 1, where 0 indicates no drawdown and 1 indicates a complete loss of value. To compute this in Enso, we can use the `running` function to keep track of the maximum value seen so far, and then apply a formula to compute the drawdown at each time step.
 
 ![Drawdown series](image-1.png)
 
